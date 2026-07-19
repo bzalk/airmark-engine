@@ -380,3 +380,13 @@ test("axis orient right: age labels on the spine edge of the reversed pyramid ha
   invalid.graphic.encoding.y.axis.orient = "diagonal";
   assert.throws(() => layout(invalid), /orient 'diagonal' invalid/);
 });
+
+test("deny by default: expression-string filter throws a named error, never a TypeError", async () => {
+  const { applyTransforms } = await import("../dist/index.js");
+  assert.throws(
+    () => applyTransforms([{ sex: "male" }], [{ filter: "datum.sex === 'male'" }]),
+    /expression strings are not part of AIRMark/,
+  );
+  assert.throws(() => applyTransforms([{}], [{ filter: null }]), /structured object/);
+  assert.throws(() => applyTransforms([{}], [{ filter: [{ field: "x", equal: 1 }] }]), /structured object/);
+});

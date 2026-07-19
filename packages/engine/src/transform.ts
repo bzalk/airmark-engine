@@ -5,6 +5,12 @@
 import { Channel, Encoding, Predicate, Row, Transform, niceTicks } from "./core.js";
 
 export function matchPredicate(p: Predicate, row: Row): boolean {
+  if (p === null || typeof p !== "object" || Array.isArray(p)) {
+    throw new Error(
+      `airmark-engine: filter predicate must be a structured object, got ${Array.isArray(p) ? "array" : typeof p}` +
+      (typeof p === "string" ? ` (${JSON.stringify(String(p).slice(0, 60))}) — expression strings are not part of AIRMark; use {"field": …, "equal"/"oneOf"/"range"/… }` : ""),
+    );
+  }
   if ("and" in p) return p.and.every((q) => matchPredicate(q, row));
   if ("or" in p) return p.or.some((q) => matchPredicate(q, row));
   if ("not" in p) return !matchPredicate(p.not, row);
