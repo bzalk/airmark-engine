@@ -2,6 +2,10 @@
 
 Pure, deterministic AIRMark layout engine. It accepts a validated AIRMark graphic, trusted broker rows, dimensions, and a resolved theme, then returns a portable JSON scene graph.
 
+```bash
+npm install @airspec/airmark-engine
+```
+
 ```ts
 import { layout } from "@airspec/airmark-engine";
 

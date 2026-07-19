@@ -29,11 +29,20 @@ Determinism is enforced by construction: no locale, no clock, no randomness, coo
 
 | Package | What | Deps |
 | --- | --- | --- |
-| `@airspec/airmark-engine` | `layout(input) → SceneGraph`. Marks: bar (vertical/horizontal/binned/**stacked/grouped**), line/area (**multi-series**), point, rule, text overlay, **arc/pie/donut**; layers; **facets (small multiples with shared scales)**; **legends**; **temporal axes** (UTC tick ladder); channel aggregates + explicit `aggregate`/`timeUnit`/`fold`/`sort`/`bin` transforms; structured-predicate filters; selection `condition` resolution; axes/grid/titles; **`layoutGrid`** for the AIRspec §8 document grid (charts beside/above each other). | none |
-| `@airspec/airmark-svg` | `toSVG(scene) → string` | engine |
-| `@airspec/airmark-react` | `<AirmarkChart {...input} onSelect={…} />` | engine, React ≥18 (peer) |
+| [`@airspec/airmark-engine`](https://www.npmjs.com/package/@airspec/airmark-engine) | `layout(input) → SceneGraph`. Marks: bar (vertical/horizontal/binned/**stacked/grouped**), line/area (**multi-series**), point, rule, text overlay, **arc/pie/donut**; layers; **facets (small multiples with shared scales)**; **legends**; **temporal axes** (UTC tick ladder); channel aggregates + explicit `aggregate`/`timeUnit`/`fold`/`sort`/`bin` transforms; structured-predicate filters; selection `condition` resolution; axes/grid/titles; **`layoutGrid`** for the AIRspec §8 document grid (charts beside/above each other). | none |
+| [`@airspec/airmark-svg`](https://www.npmjs.com/package/@airspec/airmark-svg) | `toSVG(scene) → string` | engine |
+| [`@airspec/airmark-react`](https://www.npmjs.com/package/@airspec/airmark-react) | `<AirmarkChart {...input} onSelect={…} />` | engine, React ≥18 (peer) |
 
 ## Quickstart
+
+Install the package for your target renderer:
+
+```bash
+npm install @airspec/airmark-react
+# or: npm install @airspec/airmark-engine @airspec/airmark-svg
+```
+
+To work on this repository:
 
 ```bash
 npm install

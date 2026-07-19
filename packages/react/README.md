@@ -2,6 +2,10 @@
 
 Thin React renderer for AIRMark graphics, backed by `@airspec/airmark-engine`.
 
+```bash
+npm install @airspec/airmark-react
+```
+
 ```tsx
 import { AirmarkChart } from "@airspec/airmark-react";
 

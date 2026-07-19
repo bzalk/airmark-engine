@@ -29,7 +29,7 @@ The engine is published first because both adapters depend on its exact version.
 
 ## Trusted publishing
 
-After the first release creates each package on npm, configure a trusted publisher for each package in npm package settings:
+Each package is configured with the following trusted publisher:
 
 ```text
 Provider:        GitHub Actions
@@ -40,7 +40,7 @@ Environment:     (none)
 Allowed action:  npm publish
 ```
 
-The workflow uses npm's short-lived OIDC credentials, publishes provenance automatically, and requires no long-lived npm token in GitHub.
+The workflow uses npm's short-lived OIDC credentials, publishes provenance automatically, and requires no long-lived npm token in GitHub. The trust relationships can be audited with `npm trust list <package>` using npm 11.5.1 or newer.
 
 ## Subsequent releases
 
