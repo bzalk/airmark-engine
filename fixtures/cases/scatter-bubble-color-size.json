@@ -1,0 +1,459 @@
+{
+  "name": "scatter-bubble-color-size",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "mark": {
+        "type": "circle",
+        "opacity": 0.75
+      },
+      "encoding": {
+        "x": {
+          "field": "price",
+          "type": "quantitative",
+          "title": "Price (USD)",
+          "axis": {
+            "format": {
+              "type": "currency",
+              "maximumFractionDigits": 0
+            }
+          }
+        },
+        "y": {
+          "field": "rating",
+          "type": "quantitative",
+          "title": "Rating",
+          "scale": {
+            "zero": false
+          },
+          "axis": {
+            "grid": true
+          }
+        },
+        "size": {
+          "field": "stock",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "category",
+          "type": "nominal"
+        }
+      }
+    },
+    "rows": [
+      {
+        "title": "beauty-0",
+        "category": "beauty",
+        "price": 35.36,
+        "rating": 3.9,
+        "stock": 121
+      },
+      {
+        "title": "beauty-1",
+        "category": "beauty",
+        "price": 35.33,
+        "rating": 4.64,
+        "stock": 50
+      },
+      {
+        "title": "beauty-2",
+        "category": "beauty",
+        "price": 23.31,
+        "rating": 3.78,
+        "stock": 49
+      },
+      {
+        "title": "beauty-3",
+        "category": "beauty",
+        "price": 19.24,
+        "rating": 3.26,
+        "stock": 25
+      },
+      {
+        "title": "beauty-4",
+        "category": "beauty",
+        "price": 39.24,
+        "rating": 4.73,
+        "stock": 12
+      },
+      {
+        "title": "beauty-5",
+        "category": "beauty",
+        "price": 41.79,
+        "rating": 3.49,
+        "stock": 117
+      },
+      {
+        "title": "beauty-6",
+        "category": "beauty",
+        "price": 44.43,
+        "rating": 4.04,
+        "stock": 42
+      },
+      {
+        "title": "beauty-7",
+        "category": "beauty",
+        "price": 43.04,
+        "rating": 4.58,
+        "stock": 18
+      },
+      {
+        "title": "beauty-8",
+        "category": "beauty",
+        "price": 17.68,
+        "rating": 2.98,
+        "stock": 63
+      },
+      {
+        "title": "beauty-9",
+        "category": "beauty",
+        "price": 41.98,
+        "rating": 4.45,
+        "stock": 85
+      },
+      {
+        "title": "beauty-10",
+        "category": "beauty",
+        "price": 34.82,
+        "rating": 4.61,
+        "stock": 134
+      },
+      {
+        "title": "beauty-11",
+        "category": "beauty",
+        "price": 25.51,
+        "rating": 3.24,
+        "stock": 3
+      },
+      {
+        "title": "beauty-12",
+        "category": "beauty",
+        "price": 44.81,
+        "rating": 3.64,
+        "stock": 73
+      },
+      {
+        "title": "beauty-13",
+        "category": "beauty",
+        "price": 33.31,
+        "rating": 3.88,
+        "stock": 23
+      },
+      {
+        "title": "electronics-0",
+        "category": "electronics",
+        "price": 1178.59,
+        "rating": 3.29,
+        "stock": 60
+      },
+      {
+        "title": "electronics-1",
+        "category": "electronics",
+        "price": 964.17,
+        "rating": 2.57,
+        "stock": 146
+      },
+      {
+        "title": "electronics-2",
+        "category": "electronics",
+        "price": 1242.92,
+        "rating": 3.5,
+        "stock": 76
+      },
+      {
+        "title": "electronics-3",
+        "category": "electronics",
+        "price": 825.16,
+        "rating": 4.9,
+        "stock": 2
+      },
+      {
+        "title": "electronics-4",
+        "category": "electronics",
+        "price": 634.85,
+        "rating": 4.82,
+        "stock": 15
+      },
+      {
+        "title": "electronics-5",
+        "category": "electronics",
+        "price": 916.99,
+        "rating": 4.95,
+        "stock": 103
+      },
+      {
+        "title": "electronics-6",
+        "category": "electronics",
+        "price": 861.77,
+        "rating": 3.92,
+        "stock": 52
+      },
+      {
+        "title": "electronics-7",
+        "category": "electronics",
+        "price": 1256.36,
+        "rating": 3.17,
+        "stock": 24
+      },
+      {
+        "title": "electronics-8",
+        "category": "electronics",
+        "price": 742.33,
+        "rating": 2.54,
+        "stock": 106
+      },
+      {
+        "title": "electronics-9",
+        "category": "electronics",
+        "price": 1233.84,
+        "rating": 2.79,
+        "stock": 65
+      },
+      {
+        "title": "electronics-10",
+        "category": "electronics",
+        "price": 1177.72,
+        "rating": 2.53,
+        "stock": 121
+      },
+      {
+        "title": "electronics-11",
+        "category": "electronics",
+        "price": 1276.72,
+        "rating": 2.94,
+        "stock": 145
+      },
+      {
+        "title": "electronics-12",
+        "category": "electronics",
+        "price": 607.22,
+        "rating": 3.77,
+        "stock": 35
+      },
+      {
+        "title": "electronics-13",
+        "category": "electronics",
+        "price": 861.15,
+        "rating": 3.46,
+        "stock": 103
+      },
+      {
+        "title": "groceries-0",
+        "category": "groceries",
+        "price": 12.84,
+        "rating": 3.03,
+        "stock": 71
+      },
+      {
+        "title": "groceries-1",
+        "category": "groceries",
+        "price": 22.15,
+        "rating": 4.94,
+        "stock": 79
+      },
+      {
+        "title": "groceries-2",
+        "category": "groceries",
+        "price": 24.96,
+        "rating": 2.55,
+        "stock": 49
+      },
+      {
+        "title": "groceries-3",
+        "category": "groceries",
+        "price": 12.28,
+        "rating": 4.64,
+        "stock": 149
+      },
+      {
+        "title": "groceries-4",
+        "category": "groceries",
+        "price": 6.11,
+        "rating": 4.97,
+        "stock": 56
+      },
+      {
+        "title": "groceries-5",
+        "category": "groceries",
+        "price": 13.27,
+        "rating": 2.52,
+        "stock": 86
+      },
+      {
+        "title": "groceries-6",
+        "category": "groceries",
+        "price": 21.44,
+        "rating": 3.47,
+        "stock": 21
+      },
+      {
+        "title": "groceries-7",
+        "category": "groceries",
+        "price": 5.89,
+        "rating": 3.96,
+        "stock": 64
+      },
+      {
+        "title": "groceries-8",
+        "category": "groceries",
+        "price": 4.33,
+        "rating": 3.42,
+        "stock": 118
+      },
+      {
+        "title": "groceries-9",
+        "category": "groceries",
+        "price": 6.67,
+        "rating": 3.97,
+        "stock": 149
+      },
+      {
+        "title": "groceries-10",
+        "category": "groceries",
+        "price": 6.85,
+        "rating": 3.47,
+        "stock": 41
+      },
+      {
+        "title": "groceries-11",
+        "category": "groceries",
+        "price": 10.53,
+        "rating": 3.07,
+        "stock": 65
+      },
+      {
+        "title": "groceries-12",
+        "category": "groceries",
+        "price": 19.23,
+        "rating": 2.9,
+        "stock": 143
+      },
+      {
+        "title": "groceries-13",
+        "category": "groceries",
+        "price": 8.13,
+        "rating": 4.88,
+        "stock": 125
+      },
+      {
+        "title": "furniture-0",
+        "category": "furniture",
+        "price": 590.76,
+        "rating": 3.55,
+        "stock": 28
+      },
+      {
+        "title": "furniture-1",
+        "category": "furniture",
+        "price": 205.06,
+        "rating": 3.78,
+        "stock": 67
+      },
+      {
+        "title": "furniture-2",
+        "category": "furniture",
+        "price": 305.96,
+        "rating": 4.26,
+        "stock": 67
+      },
+      {
+        "title": "furniture-3",
+        "category": "furniture",
+        "price": 448.24,
+        "rating": 4.76,
+        "stock": 127
+      },
+      {
+        "title": "furniture-4",
+        "category": "furniture",
+        "price": 348.88,
+        "rating": 2.94,
+        "stock": 19
+      },
+      {
+        "title": "furniture-5",
+        "category": "furniture",
+        "price": 218.59,
+        "rating": 3.7,
+        "stock": 20
+      },
+      {
+        "title": "furniture-6",
+        "category": "furniture",
+        "price": 338.57,
+        "rating": 4.79,
+        "stock": 54
+      },
+      {
+        "title": "furniture-7",
+        "category": "furniture",
+        "price": 704.21,
+        "rating": 2.67,
+        "stock": 107
+      },
+      {
+        "title": "furniture-8",
+        "category": "furniture",
+        "price": 467.65,
+        "rating": 2.65,
+        "stock": 47
+      },
+      {
+        "title": "furniture-9",
+        "category": "furniture",
+        "price": 339.93,
+        "rating": 3.83,
+        "stock": 35
+      },
+      {
+        "title": "furniture-10",
+        "category": "furniture",
+        "price": 191.91,
+        "rating": 2.85,
+        "stock": 117
+      },
+      {
+        "title": "furniture-11",
+        "category": "furniture",
+        "price": 884.78,
+        "rating": 4.14,
+        "stock": 135
+      },
+      {
+        "title": "furniture-12",
+        "category": "furniture",
+        "price": 575.86,
+        "rating": 2.85,
+        "stock": 10
+      },
+      {
+        "title": "furniture-13",
+        "category": "furniture",
+        "price": 840.4,
+        "rating": 3.69,
+        "stock": 93
+      }
+    ],
+    "width": 760,
+    "height": 420,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    }
+  },
+  "invariants": [
+    "linear x axis with currency tick labels and title",
+    "y nice ticks (NOT one per distinct value), no forced zero",
+    "bubble radius area-proportional to stock in [2,12]",
+    "palette by category + legend"
+  ]
+}

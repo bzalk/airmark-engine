@@ -1,0 +1,1567 @@
+{
+  "width": 760,
+  "height": 420,
+  "nodes": [
+    {
+      "type": "line",
+      "x1": 48.38,
+      "y1": 373.6,
+      "x2": 662.32,
+      "y2": 373.6,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 48.38,
+      "y1": 300.68,
+      "x2": 662.32,
+      "y2": 300.68,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 48.38,
+      "y1": 227.76,
+      "x2": 662.32,
+      "y2": 227.76,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 48.38,
+      "y1": 154.84,
+      "x2": 662.32,
+      "y2": 154.84,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 48.38,
+      "y1": 81.92,
+      "x2": 662.32,
+      "y2": 81.92,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 48.38,
+      "y1": 9,
+      "x2": 662.32,
+      "y2": 9,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 63.89,
+      "cy": 169.42,
+      "r": 10.83,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-0",
+          "category": "beauty",
+          "price": 35.36,
+          "rating": 3.9,
+          "stock": 121
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 63.87,
+      "cy": 61.5,
+      "r": 7.05,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-1",
+          "category": "beauty",
+          "price": 35.33,
+          "rating": 4.64,
+          "stock": 50
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 58.6,
+      "cy": 186.92,
+      "r": 6.98,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-2",
+          "category": "beauty",
+          "price": 23.31,
+          "rating": 3.78,
+          "stock": 49
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 56.82,
+      "cy": 262.76,
+      "r": 5.09,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-3",
+          "category": "beauty",
+          "price": 19.24,
+          "rating": 3.26,
+          "stock": 25
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 65.59,
+      "cy": 48.38,
+      "r": 3.68,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-4",
+          "category": "beauty",
+          "price": 39.24,
+          "rating": 4.73,
+          "stock": 12
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 66.71,
+      "cy": 229.22,
+      "r": 10.65,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-5",
+          "category": "beauty",
+          "price": 41.79,
+          "rating": 3.49,
+          "stock": 117
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 67.86,
+      "cy": 149.01,
+      "r": 6.49,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-6",
+          "category": "beauty",
+          "price": 44.43,
+          "rating": 4.04,
+          "stock": 42
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 67.25,
+      "cy": 70.25,
+      "r": 4.39,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-7",
+          "category": "beauty",
+          "price": 43.04,
+          "rating": 4.58,
+          "stock": 18
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 56.13,
+      "cy": 303.6,
+      "r": 7.88,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-8",
+          "category": "beauty",
+          "price": 17.68,
+          "rating": 2.98,
+          "stock": 63
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 66.79,
+      "cy": 89.21,
+      "r": 9.11,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-9",
+          "category": "beauty",
+          "price": 41.98,
+          "rating": 4.45,
+          "stock": 85
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 63.65,
+      "cy": 65.88,
+      "r": 11.39,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-10",
+          "category": "beauty",
+          "price": 34.82,
+          "rating": 4.61,
+          "stock": 134
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 59.57,
+      "cy": 265.68,
+      "r": 2.23,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-11",
+          "category": "beauty",
+          "price": 25.51,
+          "rating": 3.24,
+          "stock": 3
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 68.03,
+      "cy": 207.34,
+      "r": 8.46,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-12",
+          "category": "beauty",
+          "price": 44.81,
+          "rating": 3.64,
+          "stock": 73
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 62.99,
+      "cy": 172.34,
+      "r": 4.9,
+      "fill": "#3264D6",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "beauty-13",
+          "category": "beauty",
+          "price": 33.31,
+          "rating": 3.88,
+          "stock": 23
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 565.23,
+      "cy": 258.39,
+      "r": 7.7,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-0",
+          "category": "electronics",
+          "price": 1178.59,
+          "rating": 3.29,
+          "stock": 60
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 471.2,
+      "cy": 363.39,
+      "r": 11.88,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-1",
+          "category": "electronics",
+          "price": 964.17,
+          "rating": 2.57,
+          "stock": 146
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 593.44,
+      "cy": 227.76,
+      "r": 8.63,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-2",
+          "category": "electronics",
+          "price": 1242.92,
+          "rating": 3.5,
+          "stock": 76
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 410.24,
+      "cy": 23.58,
+      "r": 2,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-3",
+          "category": "electronics",
+          "price": 825.16,
+          "rating": 4.9,
+          "stock": 2
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 326.78,
+      "cy": 35.25,
+      "r": 4.05,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-4",
+          "category": "electronics",
+          "price": 634.85,
+          "rating": 4.82,
+          "stock": 15
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 450.51,
+      "cy": 16.29,
+      "r": 10.01,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-5",
+          "category": "electronics",
+          "price": 916.99,
+          "rating": 4.95,
+          "stock": 103
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 426.29,
+      "cy": 166.51,
+      "r": 7.18,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-6",
+          "category": "electronics",
+          "price": 861.77,
+          "rating": 3.92,
+          "stock": 52
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 599.33,
+      "cy": 275.89,
+      "r": 5,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-7",
+          "category": "electronics",
+          "price": 1256.36,
+          "rating": 3.17,
+          "stock": 24
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 373.91,
+      "cy": 367.77,
+      "r": 10.15,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-8",
+          "category": "electronics",
+          "price": 742.33,
+          "rating": 2.54,
+          "stock": 106
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 589.45,
+      "cy": 331.31,
+      "r": 8,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-9",
+          "category": "electronics",
+          "price": 1233.84,
+          "rating": 2.79,
+          "stock": 65
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 564.84,
+      "cy": 369.22,
+      "r": 10.83,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-10",
+          "category": "electronics",
+          "price": 1177.72,
+          "rating": 2.53,
+          "stock": 121
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 608.26,
+      "cy": 309.43,
+      "r": 11.84,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-11",
+          "category": "electronics",
+          "price": 1276.72,
+          "rating": 2.94,
+          "stock": 145
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 314.66,
+      "cy": 188.38,
+      "r": 5.95,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-12",
+          "category": "electronics",
+          "price": 607.22,
+          "rating": 3.77,
+          "stock": 35
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 426.02,
+      "cy": 233.59,
+      "r": 10.01,
+      "fill": "#26A69A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "electronics-13",
+          "category": "electronics",
+          "price": 861.15,
+          "rating": 3.46,
+          "stock": 103
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 54.01,
+      "cy": 296.3,
+      "r": 8.35,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-0",
+          "category": "groceries",
+          "price": 12.84,
+          "rating": 3.03,
+          "stock": 71
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 58.09,
+      "cy": 17.75,
+      "r": 8.79,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-1",
+          "category": "groceries",
+          "price": 22.15,
+          "rating": 4.94,
+          "stock": 79
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 59.33,
+      "cy": 366.31,
+      "r": 6.98,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-2",
+          "category": "groceries",
+          "price": 24.96,
+          "rating": 2.55,
+          "stock": 49
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 53.77,
+      "cy": 61.5,
+      "r": 12,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-3",
+          "category": "groceries",
+          "price": 12.28,
+          "rating": 4.64,
+          "stock": 149
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 51.06,
+      "cy": 13.38,
+      "r": 7.45,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-4",
+          "category": "groceries",
+          "price": 6.11,
+          "rating": 4.97,
+          "stock": 56
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 54.2,
+      "cy": 370.68,
+      "r": 9.17,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-5",
+          "category": "groceries",
+          "price": 13.27,
+          "rating": 2.52,
+          "stock": 86
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 57.78,
+      "cy": 232.14,
+      "r": 4.7,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-6",
+          "category": "groceries",
+          "price": 21.44,
+          "rating": 3.47,
+          "stock": 21
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 50.96,
+      "cy": 160.67,
+      "r": 7.94,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-7",
+          "category": "groceries",
+          "price": 5.89,
+          "rating": 3.96,
+          "stock": 64
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 50.28,
+      "cy": 239.43,
+      "r": 10.7,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-8",
+          "category": "groceries",
+          "price": 4.33,
+          "rating": 3.42,
+          "stock": 118
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 51.3,
+      "cy": 159.22,
+      "r": 12,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-9",
+          "category": "groceries",
+          "price": 6.67,
+          "rating": 3.97,
+          "stock": 149
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 51.38,
+      "cy": 232.14,
+      "r": 6.41,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-10",
+          "category": "groceries",
+          "price": 6.85,
+          "rating": 3.47,
+          "stock": 41
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 53,
+      "cy": 290.47,
+      "r": 8,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-11",
+          "category": "groceries",
+          "price": 10.53,
+          "rating": 3.07,
+          "stock": 65
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 56.81,
+      "cy": 315.26,
+      "r": 11.76,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-12",
+          "category": "groceries",
+          "price": 19.23,
+          "rating": 2.9,
+          "stock": 143
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 51.95,
+      "cy": 26.5,
+      "r": 11.01,
+      "fill": "#F59E0B",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "groceries-13",
+          "category": "groceries",
+          "price": 8.13,
+          "rating": 4.88,
+          "stock": 125
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 307.45,
+      "cy": 220.47,
+      "r": 5.36,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-0",
+          "category": "furniture",
+          "price": 590.76,
+          "rating": 3.55,
+          "stock": 28
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 138.3,
+      "cy": 186.92,
+      "r": 8.12,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-1",
+          "category": "furniture",
+          "price": 205.06,
+          "rating": 3.78,
+          "stock": 67
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 182.55,
+      "cy": 116.92,
+      "r": 8.12,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-2",
+          "category": "furniture",
+          "price": 305.96,
+          "rating": 4.26,
+          "stock": 67
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 244.95,
+      "cy": 44,
+      "r": 11.09,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-3",
+          "category": "furniture",
+          "price": 448.24,
+          "rating": 4.76,
+          "stock": 127
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 201.37,
+      "cy": 309.43,
+      "r": 4.49,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-4",
+          "category": "furniture",
+          "price": 348.88,
+          "rating": 2.94,
+          "stock": 19
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 144.24,
+      "cy": 198.59,
+      "r": 4.6,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-5",
+          "category": "furniture",
+          "price": 218.59,
+          "rating": 3.7,
+          "stock": 20
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 196.85,
+      "cy": 39.63,
+      "r": 7.32,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-6",
+          "category": "furniture",
+          "price": 338.57,
+          "rating": 4.79,
+          "stock": 54
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 357.2,
+      "cy": 348.81,
+      "r": 10.2,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-7",
+          "category": "furniture",
+          "price": 704.21,
+          "rating": 2.67,
+          "stock": 107
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 253.46,
+      "cy": 351.72,
+      "r": 6.85,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-8",
+          "category": "furniture",
+          "price": 467.65,
+          "rating": 2.65,
+          "stock": 47
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 197.45,
+      "cy": 179.63,
+      "r": 5.95,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-9",
+          "category": "furniture",
+          "price": 339.93,
+          "rating": 3.83,
+          "stock": 35
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 132.54,
+      "cy": 322.56,
+      "r": 10.65,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-10",
+          "category": "furniture",
+          "price": 191.91,
+          "rating": 2.85,
+          "stock": 117
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 436.38,
+      "cy": 134.42,
+      "r": 11.43,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-11",
+          "category": "furniture",
+          "price": 884.78,
+          "rating": 4.14,
+          "stock": 135
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 300.91,
+      "cy": 322.56,
+      "r": 3.41,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-12",
+          "category": "furniture",
+          "price": 575.86,
+          "rating": 2.85,
+          "stock": 10
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 416.92,
+      "cy": 200.05,
+      "r": 9.52,
+      "fill": "#DC5A5A",
+      "opacity": 0.75,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "title": "furniture-13",
+          "category": "furniture",
+          "price": 840.4,
+          "rating": 3.69,
+          "stock": 93
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 48.38,
+      "y1": 9,
+      "x2": 48.38,
+      "y2": 373.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 44.38,
+      "y1": 373.6,
+      "x2": 48.38,
+      "y2": 373.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 40.38,
+      "y": 377.45,
+      "content": "2.5",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 44.38,
+      "y1": 300.68,
+      "x2": 48.38,
+      "y2": 300.68,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 40.38,
+      "y": 304.53,
+      "content": "3",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 44.38,
+      "y1": 227.76,
+      "x2": 48.38,
+      "y2": 227.76,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 40.38,
+      "y": 231.61,
+      "content": "3.5",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 44.38,
+      "y1": 154.84,
+      "x2": 48.38,
+      "y2": 154.84,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 40.38,
+      "y": 158.69,
+      "content": "4",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 44.38,
+      "y1": 81.92,
+      "x2": 48.38,
+      "y2": 81.92,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 40.38,
+      "y": 85.77,
+      "content": "4.5",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 44.38,
+      "y1": 9,
+      "x2": 48.38,
+      "y2": 9,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 40.38,
+      "y": 12.85,
+      "content": "5",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 11.2,
+      "y": 191.3,
+      "content": "Rating",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "title"
+      },
+      "angle": -90
+    },
+    {
+      "type": "line",
+      "x1": 48.38,
+      "y1": 373.6,
+      "x2": 662.32,
+      "y2": 373.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 48.38,
+      "y1": 373.6,
+      "x2": 48.38,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 48.38,
+      "y": 390.4,
+      "content": "$0",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 136.09,
+      "y1": 373.6,
+      "x2": 136.09,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 136.09,
+      "y": 390.4,
+      "content": "$200",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 223.79,
+      "y1": 373.6,
+      "x2": 223.79,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 223.79,
+      "y": 390.4,
+      "content": "$400",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 311.5,
+      "y1": 373.6,
+      "x2": 311.5,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 311.5,
+      "y": 390.4,
+      "content": "$600",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 399.2,
+      "y1": 373.6,
+      "x2": 399.2,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 399.2,
+      "y": 390.4,
+      "content": "$800",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 486.91,
+      "y1": 373.6,
+      "x2": 486.91,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 486.91,
+      "y": 390.4,
+      "content": "$1000",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 574.61,
+      "y1": 373.6,
+      "x2": 574.61,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 574.61,
+      "y": 390.4,
+      "content": "$1200",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 662.32,
+      "y1": 373.6,
+      "x2": 662.32,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 662.32,
+      "y": 390.4,
+      "content": "$1400",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 355.35,
+      "y": 416,
+      "content": "Price (USD)",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "title"
+      }
+    },
+    {
+      "type": "rect",
+      "x": 678.32,
+      "y": 9,
+      "width": 10,
+      "height": 10,
+      "fill": "#3264D6",
+      "rx": 2,
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 694.32,
+      "y": 18.35,
+      "content": "beauty",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "start",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "rect",
+      "x": 678.32,
+      "y": 26.6,
+      "width": 10,
+      "height": 10,
+      "fill": "#26A69A",
+      "rx": 2,
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 694.32,
+      "y": 35.95,
+      "content": "electronics",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "start",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "rect",
+      "x": 678.32,
+      "y": 44.2,
+      "width": 10,
+      "height": 10,
+      "fill": "#F59E0B",
+      "rx": 2,
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 694.32,
+      "y": 53.55,
+      "content": "groceries",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "start",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "rect",
+      "x": 678.32,
+      "y": 61.8,
+      "width": 10,
+      "height": 10,
+      "fill": "#DC5A5A",
+      "rx": 2,
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 694.32,
+      "y": 71.15,
+      "content": "furniture",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "start",
+      "meta": {
+        "role": "label"
+      }
+    }
+  ]
+}

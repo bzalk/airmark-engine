@@ -111,6 +111,7 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
   if (!quantCh || !isQuant(quantCh)) throw new Error("airmark-engine: a quantitative channel (field, aggregate, or bin) is required");
   const binned = prepared[0].data.binned;
   const temporal = !binned && nomCh?.type === "temporal";
+  const scatter = !binned && !temporal && !horizontal && xQ && yQ; // both quantitative
   if (temporal && prepared.some((p) => p.mark.type === "bar")) {
     throw new Error("airmark-engine: temporal-axis bars not implemented — use a nominal axis (e.g. timeUnit labels) or add a golden fixture");
   }
@@ -170,7 +171,7 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
 
   const domainNominal = shared?.domainNominal.length
     ? shared.domainNominal
-    : !binned && !temporal && nomField && nomCh
+    : !binned && !temporal && !scatter && nomField && nomCh
       ? nominalDomain(prepared[0].data.rows, nomField, nomCh.sort, quantField)
       : [];
 
@@ -202,7 +203,7 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
   } else {
     mLeft = (quantAxis !== null ? Math.min(maxQLabelW, 80) + tickLen + labelGap : 0) + (quantTitle ? textHeight(fs) + titleGap : 0) + 4;
     const angled = nomAxis?.labelAngle ? Math.abs(nomAxis.labelAngle) > 0 : false;
-    const nomLabelH = nomAxis !== null ? (angled ? Math.min(maxNomLabelW, 90) * 0.85 : textHeight(fs)) : (temporal ? textHeight(fs) + tickLen + labelGap : 0);
+    const nomLabelH = nomAxis !== null ? (angled ? Math.min(maxNomLabelW, 90) * 0.85 : textHeight(fs)) : (temporal || scatter ? textHeight(fs) + tickLen + labelGap : 0);
     mBottom = nomLabelH + (nomAxis !== null ? tickLen + labelGap : 0) + (nomTitle ? textHeight(fs) + titleGap : 0) + 4;
   }
   const plot: Rect = { x: r2(rect.x + mLeft), y: r2(rect.y + mTop), w: r2(Math.max(10, rect.w - mLeft - mRight)), h: r2(Math.max(10, rect.h - mTop - mBottom)) };
@@ -219,6 +220,17 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
     for (const r of prepared[0].data.rows) { bLo = Math.min(bLo, num(r.__bin0)); bHi = Math.max(bHi, num(r.__bin1)); }
     const bt = niceTicks(bLo, bHi, plot.w, {});
     binScale = linearScale({ ...bt, niceMin: bLo, niceMax: bHi }, [plot.x, plot.x + plot.w]);
+  }
+  let xLin: LinearScale | null = null;
+  if (scatter) {
+    let xLo = Infinity, xHi = -Infinity;
+    for (const p of prepared) {
+      const f = p.data.xField!;
+      for (const r of p.data.rows) { const v = num(r[f]); if (Number.isFinite(v)) { xLo = Math.min(xLo, v); xHi = Math.max(xHi, v); } }
+    }
+    if (!Number.isFinite(xLo)) { xLo = 0; xHi = 1; }
+    const xt = niceTicks(xLo, xHi, plot.w, { includeZero: x0?.scale?.zero === true, nice: x0?.scale?.nice !== false, tickCount: (x0?.axis && x0.axis !== null ? x0.axis.tickCount : undefined) });
+    xLin = linearScale(xt, [plot.x, plot.x + plot.w]);
   }
   let tScale: { scale: (v: number) => number; ticks: number[]; labels: string[] } | null = null;
   if (temporal) {
@@ -297,6 +309,7 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
     const selFields = p.unit.selections?.[0]?.fields;
     const meta = (datum: Row): Meta => ({ role: "mark", datum, ...(selMeta ? { selection: selMeta, fields: selFields } : {}) });
     const nomPos = (r: Row): number => {
+      if (scatter && xLin && nF) return xLin.scale(num(r[nF]));
       if (temporal && tScale && nF) return tScale.scale(parseTemporal(r[nF]));
       if (binScale) return binScale.scale((num(r.__bin0) + num(r.__bin1)) / 2);
       return nScale && nF ? nScale.center(r[nF]) : 0;
@@ -347,10 +360,36 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
         break;
       }
       case "point": case "circle": case "square": case "tick": {
+        const sizeCh = asChannel(enc.size);
+        let sLo = 0, sHi = 1;
+        if (sizeCh?.field) {
+          sLo = Infinity; sHi = -Infinity;
+          for (const rrow of p.data.rows) { const v = num(rrow[sizeCh.field]); if (Number.isFinite(v)) { sLo = Math.min(sLo, v); sHi = Math.max(sHi, v); } }
+          if (!Number.isFinite(sLo) || sLo === sHi) { sLo = 0; sHi = 1; }
+        }
+        const R_MIN = 2, R_MAX = 12; // normative: area-linear in the size field
+        const radius = (rrow: Row): number => {
+          if (sizeCh?.field) {
+            const t = (num(rrow[sizeCh.field]) - sLo) / (sHi - sLo);
+            return r2(Math.sqrt(R_MIN * R_MIN + t * (R_MAX * R_MAX - R_MIN * R_MIN)));
+          }
+          return p.mark.size ? r2(Math.sqrt(p.mark.size)) : 3.5;
+        };
+        if (p.mark.type === "tick") {
+          const half = 6;
+          for (const rrow of p.data.rows) {
+            const qp = r2(qScale.scale(num(rrow[qF])));
+            const np = r2(nomPos(rrow));
+            push(horizontal || scatter
+              ? { type: "line", x1: nF && (scatter || horizontal) ? (horizontal ? qp : np) : np, y1: r2((horizontal ? np : qp) - half), x2: nF && (scatter || horizontal) ? (horizontal ? qp : np) : np, y2: r2((horizontal ? np : qp) + half), stroke: resolveFill(p.mark, rrow), strokeWidth: 2, ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), meta: meta(rrow) }
+              : { type: "line", x1: r2(np - half), y1: qp, x2: r2(np + half), y2: qp, stroke: resolveFill(p.mark, rrow), strokeWidth: 2, ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), meta: meta(rrow) });
+          }
+          break;
+        }
         for (const rrow of p.data.rows) {
           const qp = qScale.scale(num(rrow[qF]));
           const np = nomPos(rrow);
-          push({ type: "circle", cx: r2(horizontal ? qp : np), cy: r2(horizontal ? np : qp), r: p.mark.size ? Math.sqrt(p.mark.size) : 3.5, fill: resolveFill(p.mark, rrow), ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), meta: meta(rrow) });
+          push({ type: "circle", cx: r2(horizontal ? qp : np), cy: r2(horizontal ? np : qp), r: radius(rrow), fill: resolveFill(p.mark, rrow), ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), meta: meta(rrow) });
         }
         break;
       }
@@ -483,6 +522,17 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
       push(axisText(p, plot.y + plot.h + tickLen + labelGap + fs * 0.8, tScale!.labels[i], "middle"));
     });
     if (nomTitle) push(axisText(plot.x + plot.w / 2, rect.y + rect.h - 4, String(nomTitle), "middle", { meta: { role: "title" } }));
+  }
+  if (scatter && xLin && x0?.axis !== null) {
+    const xAxisCfg = x0?.axis ?? {};
+    push({ type: "line", x1: plot.x, y1: r2(plot.y + plot.h), x2: r2(plot.x + plot.w), y2: r2(plot.y + plot.h), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
+    for (const t of xLin.ticksInfo.ticks) {
+      const p = r2(xLin.scale(t));
+      push({ type: "line", x1: p, y1: r2(plot.y + plot.h), x2: p, y2: r2(plot.y + plot.h + tickLen), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
+      push(axisText(p, plot.y + plot.h + tickLen + labelGap + fs * 0.8, formatValue(t, xAxisCfg.format, xLin.ticksInfo.step), "middle"));
+    }
+    const xt = x0?.title ?? xAxisCfg.title;
+    if (xt) push(axisText(plot.x + plot.w / 2, rect.y + rect.h - 4, String(xt), "middle", { meta: { role: "title" } }));
   }
   if (binned && binScale && (x0?.axis !== null)) {
     push({ type: "line", x1: plot.x, y1: r2(plot.y + plot.h), x2: r2(plot.x + plot.w), y2: r2(plot.y + plot.h), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });

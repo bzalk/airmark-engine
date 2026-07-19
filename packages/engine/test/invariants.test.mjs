@@ -231,3 +231,30 @@ test("boxplot: normative quartiles, whisker fences, outliers, composition", asyn
   assert.ok(premiumOut.some((o) => o.cy < premiumBox.y) && premiumOut.some((o) => o.cy > premiumBox.y + premiumBox.height),
     "Premium outliers on both sides of the box");
 });
+
+test("scatter: linear x axis, nice y ticks, area-proportional size, legend", () => {
+  const input = load("scatter-bubble-color-size");
+  const scene = layout(input);
+  const pts = scene.nodes.filter((n) => n.type === "circle" && n.meta?.role === "mark");
+  assert.equal(pts.length, input.rows.length);
+  // x axis: linear currency ticks + title (the exact defects from the app screenshot)
+  const labels = scene.nodes.filter((n) => n.type === "text").map((n) => n.content);
+  assert.ok(labels.some((l) => /^\$\d/.test(l)), "currency x tick labels present: " + labels.filter(l=>l.startsWith("$")).join(","));
+  assert.ok(labels.includes("Price (USD)"), "x axis title emitted");
+  // y: nice ticks, not one-per-distinct-rating; zero not forced
+  const yTickLabels = labels.filter((l) => /^[2-5](\.\d)?$/.test(l));
+  assert.ok(yTickLabels.length <= 8, "y uses nice ticks, got: " + yTickLabels.join(","));
+  assert.ok(!labels.includes("0"), "scale.zero:false respected");
+  // x positions correlate with price (monotone check on extremes)
+  const cheapest = input.rows.reduce((a, b) => (b.price < a.price ? b : a));
+  const dearest  = input.rows.reduce((a, b) => (b.price > a.price ? b : a));
+  const px = (t) => pts.find((p) => p.meta.datum.title === t.title).cx;
+  assert.ok(px(dearest) > px(cheapest) + 100, "linear x spread, not banding");
+  // size: radii in [2,12], area-linear -> max stock has max radius
+  const rs = pts.map((p) => p.r);
+  assert.ok(Math.min(...rs) >= 2 - 1e-9 && Math.max(...rs) <= 12 + 1e-9);
+  const maxStock = input.rows.reduce((a, b) => (b.stock > a.stock ? b : a));
+  assert.ok(Math.abs(px && pts.find((p) => p.meta.datum.title === maxStock.title).r - 12) < 0.01, "largest stock -> r = 12");
+  // legend: one swatch per category
+  assert.equal(scene.nodes.filter((n) => n.type === "rect" && n.meta?.role === "label").length, 4);
+});
