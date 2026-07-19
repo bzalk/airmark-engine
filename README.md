@@ -86,6 +86,18 @@ Goldens are contract: regenerate only with a reviewed rationale, never to silenc
 
 Current fixtures (17): vertical/horizontal/reversed bars, horizontal tick strips, uniform-bar text overlays, binned histograms, layered bar+line, selection-condition highlighting, stacked bars, grouped bars, pie + donut, multi-series temporal lines with legends, faceted small multiples, boxplots, linear bubble scatters, and logarithmic scatters — plus grid-layout tests. Known-unimplemented (throwing, awaiting fixtures): legends inside facets, temporal-axis bars, `stack`/`window`/`pivot`/`flatten` explicit transforms, `errorband`/`errorbar`, interval-selection brushing, `sqrt`/`pow` scales.
 
+## Fixture gallery index
+
+[`fixtures/manifest.json`](./fixtures/manifest.json) is the generated, machine-readable index for galleries, chart pickers, and example discovery. Every fixture appears even without curated metadata, so new proven capabilities cannot silently disappear from the index. Categories are free-form and capability tags are derived from each fixture's graphic.
+
+To add or update an entry:
+
+1. Add the fixture case, invariant tests, and golden as usual.
+2. Optionally add its title, category, blurb, `documentExample`, or `pairWith` metadata in `scripts/gen-gallery-manifest.mjs`.
+3. Run `npm run gallery:gen` and commit the fixture and generated manifest together.
+
+Never edit the manifest directly. CI runs `npm run gallery:check` and rejects stale generated output.
+
 ## Relationship to AIRspec
 
 `SCENEGRAPH.md` is drafted here and moves to the [AIRspec repository](https://github.com/bzalk/AIRspec) (with the golden fixtures) once stabilized — fixtures are contract, engines are implementations. This repo versions against spec releases ("implements AIRspec 1.1"). Nothing in AIRspec requires this engine; it exists so implementers don't re-fight solved layout bugs.

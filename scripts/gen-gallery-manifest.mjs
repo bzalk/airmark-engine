@@ -11,7 +11,7 @@ const META = {
   "bar-stacked-zero":                   { title: "Stacked bars",                    category: "Bars",       blurb: "stack: zero with color segments and legend." },
   "bar-grouped-xoffset":                { title: "Grouped bars",                    category: "Bars",       blurb: "xOffset inner bands, one palette color per group." },
   "bar-selection-condition-highlight":  { title: "Selectable bars (highlight)",     category: "Interaction",blurb: "Point selection with condition color: picked vs muted." },
-  "bar-horizontal-reversed-x-pyramid":  { title: "Population pyramid (half)",       category: "Diverging",  blurb: "scale.reverse mirrored axis — pair two of these for a full pyramid.", pairWith: "https://github.com/bzalk/AIRspec/blob/main/conformance/valid/v05-mirrored-pyramid.json" },
+  "bar-horizontal-reversed-x-pyramid":  { title: "Population pyramid (half)",       category: "Diverging",  blurb: "scale.reverse mirrored axis — pair two of these for a full pyramid.", documentExample: "https://github.com/bzalk/AIRspec/blob/main/conformance/valid/v05-mirrored-pyramid.json" },
   "histogram-binned-count":             { title: "Histogram",                       category: "Distribution", blurb: "bin: maxbins with count aggregation on nice-step edges." },
   "boxplot-price-by-category":          { title: "Box plot",                        category: "Distribution", blurb: "Normative R-7 quartiles, 1.5×IQR whiskers, outlier points." },
   "tick-strip-horizontal":              { title: "Strip plot",                      category: "Distribution", blurb: "Tick marks on a quantitative axis per category row." },
@@ -58,7 +58,8 @@ for (const f of readdirSync("fixtures/cases").filter((f) => f.endsWith(".json"))
     invariants: c.invariants ?? [],
     engineCase: `${RAW}/cases/${f}`,
     golden: `${RAW}/golden/${f}`,
-    ...(m.pairWith ? { documentExample: m.pairWith } : {}),
+    ...(m.documentExample ? { documentExample: m.documentExample } : {}),
+    ...(m.pairWith ? { pairWith: m.pairWith } : {}),
   });
 }
 const manifest = {
@@ -71,5 +72,15 @@ const manifest = {
   },
   charts: entries,
 };
-writeFileSync("fixtures/manifest.json", JSON.stringify(manifest, null, 2) + "\n");
-console.log(`manifest: ${entries.length} chart types across ${new Set(entries.map((e) => e.category)).size} categories`);
+const output = JSON.stringify(manifest, null, 2) + "\n";
+if (process.argv.includes("--check")) {
+  const current = readFileSync("fixtures/manifest.json", "utf8");
+  if (current !== output) {
+    console.error("fixtures/manifest.json is stale; run: npm run gallery:gen");
+    process.exit(1);
+  }
+  console.log(`manifest current: ${entries.length} chart types across ${new Set(entries.map((e) => e.category)).size} categories`);
+} else {
+  writeFileSync("fixtures/manifest.json", output);
+  console.log(`manifest: ${entries.length} chart types across ${new Set(entries.map((e) => e.category)).size} categories`);
+}

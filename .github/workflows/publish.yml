@@ -34,6 +34,9 @@ jobs:
       - name: Check golden fixtures
         run: npm run goldens:check
 
+      - name: Check gallery manifest
+        run: npm run gallery:check
+
       - name: Verify release version
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}

@@ -11,7 +11,8 @@
     "test": "npm run build && node --test packages/engine/test/*.test.mjs packages/react/test/*.test.mjs",
     "goldens:gen": "npm run build && node scripts/gen-goldens.mjs",
     "goldens:check": "npm run build && node scripts/run-fixtures.mjs",
-    "gallery:gen": "node scripts/gen-gallery-manifest.mjs"
+    "gallery:gen": "node scripts/gen-gallery-manifest.mjs",
+    "gallery:check": "node scripts/gen-gallery-manifest.mjs --check"
   },
   "devDependencies": {
     "@types/react": "^18.3.0",
