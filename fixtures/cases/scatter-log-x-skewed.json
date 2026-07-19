@@ -1,0 +1,462 @@
+{
+  "name": "scatter-log-x-skewed",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "mark": {
+        "type": "circle",
+        "opacity": 0.75
+      },
+      "encoding": {
+        "x": {
+          "field": "price",
+          "type": "quantitative",
+          "title": "Price (USD, log)",
+          "scale": {
+            "type": "log"
+          },
+          "axis": {
+            "format": {
+              "type": "currency",
+              "maximumFractionDigits": 0
+            }
+          }
+        },
+        "y": {
+          "field": "rating",
+          "type": "quantitative",
+          "title": "Rating",
+          "scale": {
+            "zero": false
+          },
+          "axis": {
+            "grid": true
+          }
+        },
+        "size": {
+          "field": "stock",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "category",
+          "type": "nominal"
+        }
+      }
+    },
+    "rows": [
+      {
+        "title": "beauty-0",
+        "category": "beauty",
+        "price": 31.44,
+        "rating": 4.46,
+        "stock": 135
+      },
+      {
+        "title": "beauty-1",
+        "category": "beauty",
+        "price": 8.07,
+        "rating": 3.0,
+        "stock": 90
+      },
+      {
+        "title": "beauty-2",
+        "category": "beauty",
+        "price": 44.87,
+        "rating": 3.22,
+        "stock": 39
+      },
+      {
+        "title": "beauty-3",
+        "category": "beauty",
+        "price": 27.99,
+        "rating": 2.77,
+        "stock": 107
+      },
+      {
+        "title": "beauty-4",
+        "category": "beauty",
+        "price": 16.75,
+        "rating": 3.17,
+        "stock": 29
+      },
+      {
+        "title": "beauty-5",
+        "category": "beauty",
+        "price": 35.48,
+        "rating": 4.74,
+        "stock": 7
+      },
+      {
+        "title": "beauty-6",
+        "category": "beauty",
+        "price": 26.91,
+        "rating": 3.0,
+        "stock": 20
+      },
+      {
+        "title": "beauty-7",
+        "category": "beauty",
+        "price": 41.66,
+        "rating": 2.78,
+        "stock": 118
+      },
+      {
+        "title": "beauty-8",
+        "category": "beauty",
+        "price": 19.32,
+        "rating": 4.33,
+        "stock": 27
+      },
+      {
+        "title": "beauty-9",
+        "category": "beauty",
+        "price": 20.41,
+        "rating": 2.75,
+        "stock": 110
+      },
+      {
+        "title": "beauty-10",
+        "category": "beauty",
+        "price": 34.74,
+        "rating": 3.49,
+        "stock": 78
+      },
+      {
+        "title": "beauty-11",
+        "category": "beauty",
+        "price": 26.97,
+        "rating": 3.76,
+        "stock": 42
+      },
+      {
+        "title": "beauty-12",
+        "category": "beauty",
+        "price": 36.26,
+        "rating": 4.88,
+        "stock": 61
+      },
+      {
+        "title": "beauty-13",
+        "category": "beauty",
+        "price": 35.54,
+        "rating": 3.94,
+        "stock": 29
+      },
+      {
+        "title": "beauty-14",
+        "category": "beauty",
+        "price": 36.66,
+        "rating": 3.48,
+        "stock": 37
+      },
+      {
+        "title": "beauty-15",
+        "category": "beauty",
+        "price": 8.66,
+        "rating": 3.73,
+        "stock": 142
+      },
+      {
+        "title": "beauty-16",
+        "category": "beauty",
+        "price": 32.63,
+        "rating": 2.52,
+        "stock": 118
+      },
+      {
+        "title": "beauty-17",
+        "category": "beauty",
+        "price": 41.05,
+        "rating": 3.99,
+        "stock": 135
+      },
+      {
+        "title": "groceries-0",
+        "category": "groceries",
+        "price": 10.12,
+        "rating": 3.75,
+        "stock": 96
+      },
+      {
+        "title": "groceries-1",
+        "category": "groceries",
+        "price": 9.14,
+        "rating": 3.85,
+        "stock": 48
+      },
+      {
+        "title": "groceries-2",
+        "category": "groceries",
+        "price": 17.92,
+        "rating": 3.11,
+        "stock": 8
+      },
+      {
+        "title": "groceries-3",
+        "category": "groceries",
+        "price": 9.85,
+        "rating": 3.63,
+        "stock": 69
+      },
+      {
+        "title": "groceries-4",
+        "category": "groceries",
+        "price": 18.77,
+        "rating": 3.69,
+        "stock": 117
+      },
+      {
+        "title": "groceries-5",
+        "category": "groceries",
+        "price": 8.67,
+        "rating": 4.34,
+        "stock": 120
+      },
+      {
+        "title": "groceries-6",
+        "category": "groceries",
+        "price": 9.34,
+        "rating": 3.27,
+        "stock": 13
+      },
+      {
+        "title": "groceries-7",
+        "category": "groceries",
+        "price": 2.47,
+        "rating": 3.28,
+        "stock": 109
+      },
+      {
+        "title": "groceries-8",
+        "category": "groceries",
+        "price": 2.92,
+        "rating": 2.67,
+        "stock": 131
+      },
+      {
+        "title": "groceries-9",
+        "category": "groceries",
+        "price": 9.57,
+        "rating": 4.89,
+        "stock": 46
+      },
+      {
+        "title": "groceries-10",
+        "category": "groceries",
+        "price": 9.3,
+        "rating": 3.19,
+        "stock": 23
+      },
+      {
+        "title": "groceries-11",
+        "category": "groceries",
+        "price": 3.4,
+        "rating": 3.58,
+        "stock": 121
+      },
+      {
+        "title": "groceries-12",
+        "category": "groceries",
+        "price": 16.8,
+        "rating": 3.01,
+        "stock": 122
+      },
+      {
+        "title": "groceries-13",
+        "category": "groceries",
+        "price": 17.7,
+        "rating": 4.21,
+        "stock": 19
+      },
+      {
+        "title": "groceries-14",
+        "category": "groceries",
+        "price": 9.15,
+        "rating": 4.87,
+        "stock": 41
+      },
+      {
+        "title": "groceries-15",
+        "category": "groceries",
+        "price": 1.17,
+        "rating": 3.46,
+        "stock": 76
+      },
+      {
+        "title": "groceries-16",
+        "category": "groceries",
+        "price": 19.05,
+        "rating": 4.82,
+        "stock": 147
+      },
+      {
+        "title": "groceries-17",
+        "category": "groceries",
+        "price": 11.37,
+        "rating": 3.39,
+        "stock": 66
+      },
+      {
+        "title": "fragrances-0",
+        "category": "fragrances",
+        "price": 41.06,
+        "rating": 3.77,
+        "stock": 17
+      },
+      {
+        "title": "fragrances-1",
+        "category": "fragrances",
+        "price": 22.46,
+        "rating": 3.2,
+        "stock": 55
+      },
+      {
+        "title": "fragrances-2",
+        "category": "fragrances",
+        "price": 26.42,
+        "rating": 3.23,
+        "stock": 121
+      },
+      {
+        "title": "fragrances-3",
+        "category": "fragrances",
+        "price": 95.17,
+        "rating": 2.84,
+        "stock": 84
+      },
+      {
+        "title": "fragrances-4",
+        "category": "fragrances",
+        "price": 100.42,
+        "rating": 4.51,
+        "stock": 145
+      },
+      {
+        "title": "fragrances-5",
+        "category": "fragrances",
+        "price": 108.45,
+        "rating": 4.31,
+        "stock": 80
+      },
+      {
+        "title": "fragrances-6",
+        "category": "fragrances",
+        "price": 84.1,
+        "rating": 4.2,
+        "stock": 75
+      },
+      {
+        "title": "fragrances-7",
+        "category": "fragrances",
+        "price": 84.6,
+        "rating": 3.92,
+        "stock": 124
+      },
+      {
+        "title": "fragrances-8",
+        "category": "fragrances",
+        "price": 113.57,
+        "rating": 4.68,
+        "stock": 59
+      },
+      {
+        "title": "fragrances-9",
+        "category": "fragrances",
+        "price": 35.44,
+        "rating": 3.65,
+        "stock": 31
+      },
+      {
+        "title": "fragrances-10",
+        "category": "fragrances",
+        "price": 71.3,
+        "rating": 4.67,
+        "stock": 68
+      },
+      {
+        "title": "fragrances-11",
+        "category": "fragrances",
+        "price": 91.74,
+        "rating": 4.24,
+        "stock": 85
+      },
+      {
+        "title": "laptops-0",
+        "category": "laptops",
+        "price": 1159.22,
+        "rating": 2.97,
+        "stock": 86
+      },
+      {
+        "title": "laptops-1",
+        "category": "laptops",
+        "price": 2441.91,
+        "rating": 2.74,
+        "stock": 137
+      },
+      {
+        "title": "laptops-2",
+        "category": "laptops",
+        "price": 1399.5,
+        "rating": 4.04,
+        "stock": 94
+      },
+      {
+        "title": "laptops-3",
+        "category": "laptops",
+        "price": 687.34,
+        "rating": 3.59,
+        "stock": 119
+      },
+      {
+        "title": "laptops-4",
+        "category": "laptops",
+        "price": 1686.94,
+        "rating": 3.42,
+        "stock": 77
+      },
+      {
+        "title": "laptops-5",
+        "category": "laptops",
+        "price": 1024.02,
+        "rating": 2.72,
+        "stock": 59
+      },
+      {
+        "title": "laptops-6",
+        "category": "laptops",
+        "price": 1283.71,
+        "rating": 4.93,
+        "stock": 44
+      },
+      {
+        "title": "laptops-7",
+        "category": "laptops",
+        "price": 1439.8,
+        "rating": 4.29,
+        "stock": 29
+      }
+    ],
+    "width": 760,
+    "height": 420,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    }
+  },
+  "invariants": [
+    "decade ticks $1,$10,$100,$1000 (plus 2/5 fills if sparse)",
+    "cheap items spread across left decades instead of collapsing at zero",
+    "laptops occupy the right decade",
+    "log requires positive domain (negative/zero -> error)"
+  ]
+}

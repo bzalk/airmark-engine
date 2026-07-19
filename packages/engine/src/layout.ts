@@ -7,7 +7,7 @@
 import {
   BandScale, Channel, DEFAULT_THEME, Graphic, LayoutInput, LinearScale,
   MarkDef, MeasureText, Meta, Row, SceneGraph, SceneNode, TextNode, Theme,
-  UnitGraphic, arcPath, bandScale, boxStats, defaultMeasureText, formatTick, formatValue,
+  UnitGraphic, arcPath, bandScale, boxStats, defaultMeasureText, formatTick, formatValue, logScale, LogScale,
   linearScale, niceTicks, parseTemporal, r2, textHeight, timeTicks, truncateToFit,
 } from "./core.js";
 import { applyTransforms, nominalDomain, resolveLayerData, ResolvedLayerData } from "./transform.js";
@@ -208,9 +208,22 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
   }
   const plot: Rect = { x: r2(rect.x + mLeft), y: r2(rect.y + mTop), w: r2(Math.max(10, rect.w - mLeft - mRight)), h: r2(Math.max(10, rect.h - mTop - mBottom)) };
 
-  // ---------- Scales ----------
-  const qTicks = niceTicks(qLo, qHi, horizontal ? plot.w : plot.h, { includeZero: hasBars || !!stackMode || quantCh.scale?.zero === true, nice: quantCh.scale?.nice !== false, tickCount: quantAxis?.tickCount });
-  const qScale: LinearScale = horizontal ? linearScale(qTicks, [plot.x, plot.x + plot.w]) : linearScale(qTicks, [plot.y + plot.h, plot.y]);
+  // ---------- Scales (deny-by-default on scale.type) ----------
+  const checkScaleType = (c: Channel | undefined, allowLog: boolean): "linear" | "log" => {
+    const t = c?.scale?.type;
+    if (t === undefined || t === "linear") return "linear";
+    if (t === "log" && allowLog) {
+      if (hasBars || stackMode) throw new Error("airmark-engine: log scale with bar/stacked marks not supported (bars need a meaningful zero)");
+      return "log";
+    }
+    throw new Error(`airmark-engine: scale type '${t}' not implemented — add a golden fixture (supported: linear, log for point/line axes)`);
+  };
+  const qType = checkScaleType(quantCh, true);
+  const qTicksLinear = niceTicks(qLo, qHi, horizontal ? plot.w : plot.h, { includeZero: hasBars || !!stackMode || quantCh.scale?.zero === true, nice: quantCh.scale?.nice !== false, tickCount: quantAxis?.tickCount });
+  const qLog: LogScale | null = qType === "log" ? logScale(qLo, qHi, horizontal ? [plot.x, plot.x + plot.w] : [plot.y + plot.h, plot.y], quantCh.scale?.nice !== false) : null;
+  const qTicks = qLog ? { niceMin: qLog.domain[0], niceMax: qLog.domain[1], step: qLog.domain[0], ticks: qLog.ticks } : qTicksLinear;
+  const qScaleLin: LinearScale = horizontal ? linearScale(qTicksLinear, [plot.x, plot.x + plot.w]) : linearScale(qTicksLinear, [plot.y + plot.h, plot.y]);
+  const qScale = qLog ? { ...qScaleLin, scale: qLog.scale } : qScaleLin;
   const nScale: BandScale | null = !binned && !temporal && domainNominal.length ? bandScale(domainNominal, horizontal ? plot.y : plot.x, horizontal ? plot.h : plot.w) : null;
   const offScale: BandScale | null = offField && nScale ? bandScale(nominalDomain(prepared[0].data.rows, offField, null), 0, nScale.bandwidth, 0.1, 0.05) : null;
 
@@ -229,8 +242,15 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
       for (const r of p.data.rows) { const v = num(r[f]); if (Number.isFinite(v)) { xLo = Math.min(xLo, v); xHi = Math.max(xHi, v); } }
     }
     if (!Number.isFinite(xLo)) { xLo = 0; xHi = 1; }
-    const xt = niceTicks(xLo, xHi, plot.w, { includeZero: x0?.scale?.zero === true, nice: x0?.scale?.nice !== false, tickCount: (x0?.axis && x0.axis !== null ? x0.axis.tickCount : undefined) });
-    xLin = linearScale(xt, [plot.x, plot.x + plot.w]);
+    const xType = checkScaleType(x0, true);
+    if (xType === "log") {
+      const lg = logScale(xLo, xHi, [plot.x, plot.x + plot.w], x0?.scale?.nice !== false);
+      xLin = { kind: "linear", domain: lg.domain, range: lg.range, scale: lg.scale,
+               ticksInfo: { niceMin: lg.domain[0], niceMax: lg.domain[1], step: lg.domain[0], ticks: lg.ticks } };
+    } else {
+      const xt = niceTicks(xLo, xHi, plot.w, { includeZero: x0?.scale?.zero === true, nice: x0?.scale?.nice !== false, tickCount: (x0?.axis && x0.axis !== null ? x0.axis.tickCount : undefined) });
+      xLin = linearScale(xt, [plot.x, plot.x + plot.w]);
+    }
   }
   let tScale: { scale: (v: number) => number; ticks: number[]; labels: string[] } | null = null;
   if (temporal) {
@@ -475,7 +495,7 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
     for (let i = 0; i < qTicks.ticks.length; i++) {
       const t = qTicks.ticks[i];
       const p = r2(qScale.scale(t));
-      const label = formatValue(stackMode === "normalize" ? t * 100 : t, qFmt, qTicks.step * (stackMode === "normalize" ? 100 : 1));
+      const label = formatValue(stackMode === "normalize" ? t * 100 : t, qFmt, (qLog ? t : qTicks.step) * (stackMode === "normalize" ? 100 : 1));
       if (horizontal) {
         push({ type: "line", x1: p, y1: r2(plot.y + plot.h), x2: p, y2: r2(plot.y + plot.h + tickLen), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
         push(axisText(p, plot.y + plot.h + tickLen + labelGap + fs * 0.8, label, "middle"));
@@ -529,7 +549,7 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
     for (const t of xLin.ticksInfo.ticks) {
       const p = r2(xLin.scale(t));
       push({ type: "line", x1: p, y1: r2(plot.y + plot.h), x2: p, y2: r2(plot.y + plot.h + tickLen), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
-      push(axisText(p, plot.y + plot.h + tickLen + labelGap + fs * 0.8, formatValue(t, xAxisCfg.format, xLin.ticksInfo.step), "middle"));
+      push(axisText(p, plot.y + plot.h + tickLen + labelGap + fs * 0.8, formatValue(t, xAxisCfg.format, x0?.scale?.type === "log" ? t : xLin.ticksInfo.step), "middle"));
     }
     const xt = x0?.title ?? xAxisCfg.title;
     if (xt) push(axisText(plot.x + plot.w / 2, rect.y + rect.h - 4, String(xt), "middle", { meta: { role: "title" } }));

@@ -290,3 +290,26 @@ test("horizontal tick strip: vertical segments at price positions on category ro
   assert.equal(new Set(ticks.map((t) => t.stroke)).size, 3);
   assert.equal(scene.nodes.filter((n) => n.type === "rect" && n.meta?.role === "label").length, 0, "legend:null respected");
 });
+
+test("log x scatter: decade ticks, skewed data spread, deny unsupported types", () => {
+  const input = load("scatter-log-x-skewed");
+  const scene = layout(input);
+  const labels = scene.nodes.filter((n) => n.type === "text").map((n) => n.content);
+  for (const expected of ["$1", "$10", "$100", "$1000"]) {
+    assert.ok(labels.includes(expected), `decade tick ${expected} present; got: ${labels.filter(l=>l.startsWith("$")).join(",")}`);
+  }
+  const pts = scene.nodes.filter((n) => n.type === "circle" && n.meta?.role === "mark");
+  // On a linear axis the $1-$20 groceries would collapse into <1% of width;
+  // on log they must span a meaningful share of the plot.
+  const groc = pts.filter((p) => p.meta.datum.category === "groceries").map((p) => p.cx);
+  const all = pts.map((p) => p.cx);
+  const plotW = Math.max(...all) - Math.min(...all);
+  assert.ok((Math.max(...groc) - Math.min(...groc)) / plotW > 0.15, "cheap items spread on log axis");
+  // laptops sit right of every grocery
+  const minLap = Math.min(...pts.filter((p) => p.meta.datum.category === "laptops").map((p) => p.cx));
+  assert.ok(minLap > Math.max(...groc), "expensive decade separated");
+  // deny-by-default: sqrt not implemented -> throw; log with nonpositive -> throw
+  const g = input.graphic;
+  assert.throws(() => layout({ ...input, graphic: { ...g, encoding: { ...g.encoding, x: { ...g.encoding.x, scale: { type: "sqrt" } } } } }), /not implemented/);
+  assert.throws(() => layout({ ...input, rows: [...input.rows, { title: "free", category: "beauty", price: 0, rating: 3, stock: 5 }] }), /positive domain/);
+});

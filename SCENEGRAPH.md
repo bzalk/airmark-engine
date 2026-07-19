@@ -89,7 +89,11 @@ position(i) = round2(start + step*paddingOuter + i*step)
 
 Temporal axes use a fixed step ladder over UTC epoch milliseconds: `1s, 5s, 15s, 30s, 1m, 5m, 15m, 30m, 1h, 3h, 6h, 12h, 1d, 2d, 7d`, then calendar-aware `1/3/6 months` and `1, 2, 5, 10, …` years. The engine picks the first ladder step where `span/step ≤ targetCount` (`targetCount = clamp(floor(L/80), 2, 10)`); month/year ticks fall on UTC month/year boundaries walked from the floored start. Label format is chosen by the realized step: ≥ ~1 year → `YYYY`; ≥ ~1 month → `MMM YYYY`; ≥ 1 day → `MMM D`; else `HH:mm` — UTC, English 3-letter months, ASCII digits. Temporal parsing accepts ISO strings (with `YYYY` and `YYYY-MM` normalized to the 1st) and epoch numbers; anything else is an error.
 
-### 4.5 Formatting
+### 4.5 Log scale
+
+`scale.type: "log"` (point/line/scatter axes only; bars and stacks reject it — they need a meaningful zero) requires a strictly positive domain and errors otherwise. Nice domain snaps to the enclosing powers of 10; ticks fall on every in-domain `10^k`, adding `2·10^k` and `5·10^k` when fewer than four decades are visible. Position is linear in `log10(v)`. `sqrt`/`pow` remain unimplemented (engines MUST error, not fall back to linear).
+
+### 4.6 Formatting
 
 Numeric and temporal tick/label formatting is engine-owned and locale-free: ASCII digits, `.` decimal separator, no grouping separators in Draft 1.0; temporal labels use UTC and the shortest of `YYYY`, `MMM YYYY`, `MMM D`, `HH:mm` that distinguishes adjacent ticks (`MMM` = English 3-letter). AIRspec §11 format objects, when present, are applied by the engine using these same locale-free rules.
 

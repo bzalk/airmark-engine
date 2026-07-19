@@ -275,3 +275,31 @@ export function boxStats(values: number[]): BoxStats {
   }
   return { q1, median, q3, whiskerLo, whiskerHi, outliers };
 }
+
+// ---------- Log scale (SCENEGRAPH.md §4.6 — normative) ----------
+// Domain must be positive. Nice domain snaps to enclosing powers of 10.
+// Ticks: every 10^k in-domain; if fewer than 4, add 2·10^k and 5·10^k in-domain.
+export function logTicks(dmin: number, dmax: number, nice = true): { lo: number; hi: number; ticks: number[] } {
+  if (dmin <= 0) throw new Error("airmark-engine: log scale requires a positive domain (got min " + dmin + "); filter zero/negative values or use a linear scale");
+  if (dmin === dmax) dmax = dmin * 10;
+  const lo = nice ? Math.pow(10, Math.floor(Math.log10(dmin))) : dmin;
+  const hi = nice ? Math.pow(10, Math.ceil(Math.log10(dmax))) : dmax;
+  const decades: number[] = [];
+  for (let k = Math.ceil(Math.log10(lo) - 1e-9); k <= Math.floor(Math.log10(hi) + 1e-9); k++) decades.push(Math.pow(10, k));
+  let ticks = decades.filter((t) => t >= lo - 1e-9 && t <= hi * (1 + 1e-9));
+  if (ticks.length < 4) {
+    const extra: number[] = [];
+    for (const d of decades) for (const m of [2, 5]) { const t = d * m; if (t >= lo && t <= hi) extra.push(t); }
+    ticks = [...ticks, ...extra].sort((a, b) => a - b);
+  }
+  return { lo, hi, ticks };
+}
+
+export type LogScale = { kind: "log"; domain: [number, number]; range: [number, number]; scale: (v: number) => number; ticks: number[] };
+export function logScale(dmin: number, dmax: number, range: [number, number], nice = true): LogScale {
+  const t = logTicks(dmin, dmax, nice);
+  const l0 = Math.log10(t.lo), l1 = Math.log10(t.hi);
+  const [r0, r1] = range;
+  const k = l1 === l0 ? 0 : (r1 - r0) / (l1 - l0);
+  return { kind: "log", domain: [t.lo, t.hi], range, ticks: t.ticks, scale: (v) => r0 + (Math.log10(v) - l0) * k };
+}
