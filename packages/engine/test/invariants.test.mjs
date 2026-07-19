@@ -326,3 +326,29 @@ test("color scale.range: custom range overrides theme palette; scheme denied", (
   g.encoding.color.scale = { scheme: "category10" };
   assert.throws(() => layout({ ...input, graphic: g }), /scheme not implemented/);
 });
+
+test("scale.reverse: flipped quantitative range (pyramid left panel) and band reversal", () => {
+  const input = load("bar-horizontal-reversed-x-pyramid");
+  const scene = layout(input);
+  const bars = marks(scene, "rect");
+  assert.equal(bars.length, 9);
+  // zero baseline at the RIGHT: all bars end at the same right edge
+  const rights = bars.map((b) => b.x + b.width);
+  const baseline = rights[0];
+  for (const r of rights) assert.ok(Math.abs(r - baseline) < 0.02, "bars right-aligned on the zero baseline");
+  // larger population extends further LEFT
+  const big = bars.find((b) => b.meta.datum.age === "30-34");
+  const small = bars.find((b) => b.meta.datum.age === "0-4");
+  assert.ok(big.x < small.x, "larger value reaches further left");
+  // tick labels mirrored: the '0' tick label is the rightmost numeric label
+  const numLabels = scene.nodes.filter((n) => n.type === "text" && /^\d+$/.test(n.content));
+  const zero = numLabels.find((n) => n.content === "0");
+  assert.ok(zero && numLabels.every((n) => n.x <= zero.x + 0.01), "0 at the right edge");
+  // band reversal composes with sort
+  const g = JSON.parse(JSON.stringify(input.graphic));
+  g.encoding.y.scale = { reverse: true };
+  const flipped = layout({ ...input, graphic: g });
+  const orderA = [...bars].sort((a, b) => a.y - b.y).map((b) => b.meta.datum.age);
+  const orderB = [...marks(flipped, "rect")].sort((a, b) => a.y - b.y).map((b) => b.meta.datum.age);
+  assert.deepEqual(orderB, [...orderA].reverse(), "nominal reverse flips resolved domain order");
+});

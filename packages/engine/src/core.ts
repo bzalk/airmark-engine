@@ -31,7 +31,7 @@ export type Channel = {
   title?: string | null;
   axis?: null | { title?: string | null; labelAngle?: number; labelLimit?: number; orient?: string; grid?: boolean; ticks?: boolean; tickCount?: number; format?: FormatObject };
   legend?: null | Record<string, unknown>;
-  scale?: { type?: string; domain?: Array<number | string>; range?: string[]; scheme?: string; zero?: boolean; nice?: boolean; padding?: number };
+  scale?: { type?: string; domain?: Array<number | string>; range?: string[]; scheme?: string; zero?: boolean; nice?: boolean; padding?: number; reverse?: boolean };
   format?: FormatObject;
   value?: unknown;
   condition?: { selection: string; value?: unknown; field?: string; type?: string };

@@ -1,0 +1,92 @@
+{
+  "name": "bar-horizontal-reversed-x-pyramid",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "mark": {
+        "type": "bar",
+        "color": "#3264D6",
+        "cornerRadiusEnd": 2
+      },
+      "encoding": {
+        "y": {
+          "field": "age",
+          "type": "nominal",
+          "sort": null,
+          "title": "Age Group"
+        },
+        "x": {
+          "field": "population",
+          "type": "quantitative",
+          "title": "Population (thousands)",
+          "scale": {
+            "zero": true,
+            "reverse": true
+          },
+          "axis": {
+            "tickCount": 5
+          }
+        }
+      }
+    },
+    "rows": [
+      {
+        "age": "0-4",
+        "population": 62
+      },
+      {
+        "age": "5-9",
+        "population": 55
+      },
+      {
+        "age": "10-14",
+        "population": 58
+      },
+      {
+        "age": "15-19",
+        "population": 48
+      },
+      {
+        "age": "20-24",
+        "population": 190
+      },
+      {
+        "age": "25-29",
+        "population": 410
+      },
+      {
+        "age": "30-34",
+        "population": 455
+      },
+      {
+        "age": "35-39",
+        "population": 270
+      },
+      {
+        "age": "40-44",
+        "population": 150
+      }
+    ],
+    "width": 420,
+    "height": 380,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    }
+  },
+  "invariants": [
+    "x range flipped: zero at the RIGHT edge, values grow leftward",
+    "bars right-aligned at the shared baseline",
+    "tick labels mirrored (0 rightmost)",
+    "the male half of a population pyramid"
+  ]
+}

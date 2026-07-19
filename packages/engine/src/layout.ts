@@ -169,11 +169,12 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
     if (!Number.isFinite(qLo)) { qLo = 0; qHi = 1; }
   }
 
-  const domainNominal = shared?.domainNominal.length
+  let domainNominal = shared?.domainNominal.length
     ? shared.domainNominal
     : !binned && !temporal && !scatter && nomField && nomCh
       ? nominalDomain(prepared[0].data.rows, nomField, nomCh.sort, quantField)
       : [];
+  if (nomCh?.scale?.reverse === true) domainNominal = [...domainNominal].reverse();
 
   // ---------- Legend reservation ----------
   const colorCh = asChannel(prepared[0].unit.encoding.color);
@@ -220,9 +221,13 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
   };
   const qType = checkScaleType(quantCh, true);
   const qTicksLinear = niceTicks(qLo, qHi, horizontal ? plot.w : plot.h, { includeZero: hasBars || !!stackMode || quantCh.scale?.zero === true, nice: quantCh.scale?.nice !== false, tickCount: quantAxis?.tickCount });
-  const qLog: LogScale | null = qType === "log" ? logScale(qLo, qHi, horizontal ? [plot.x, plot.x + plot.w] : [plot.y + plot.h, plot.y], quantCh.scale?.nice !== false) : null;
+  const qRev = quantCh.scale?.reverse === true;
+  const qRange: [number, number] = horizontal
+    ? (qRev ? [plot.x + plot.w, plot.x] : [plot.x, plot.x + plot.w])
+    : (qRev ? [plot.y, plot.y + plot.h] : [plot.y + plot.h, plot.y]);
+  const qLog: LogScale | null = qType === "log" ? logScale(qLo, qHi, qRange, quantCh.scale?.nice !== false) : null;
   const qTicks = qLog ? { niceMin: qLog.domain[0], niceMax: qLog.domain[1], step: qLog.domain[0], ticks: qLog.ticks } : qTicksLinear;
-  const qScaleLin: LinearScale = horizontal ? linearScale(qTicksLinear, [plot.x, plot.x + plot.w]) : linearScale(qTicksLinear, [plot.y + plot.h, plot.y]);
+  const qScaleLin: LinearScale = linearScale(qTicksLinear, qRange);
   const qScale = qLog ? { ...qScaleLin, scale: qLog.scale } : qScaleLin;
   const nScale: BandScale | null = !binned && !temporal && domainNominal.length ? bandScale(domainNominal, horizontal ? plot.y : plot.x, horizontal ? plot.h : plot.w) : null;
   const offScale: BandScale | null = offField && nScale ? bandScale(nominalDomain(prepared[0].data.rows, offField, null), 0, nScale.bandwidth, 0.1, 0.05) : null;
@@ -243,13 +248,14 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
     }
     if (!Number.isFinite(xLo)) { xLo = 0; xHi = 1; }
     const xType = checkScaleType(x0, true);
+    const xRange: [number, number] = x0?.scale?.reverse === true ? [plot.x + plot.w, plot.x] : [plot.x, plot.x + plot.w];
     if (xType === "log") {
-      const lg = logScale(xLo, xHi, [plot.x, plot.x + plot.w], x0?.scale?.nice !== false);
+      const lg = logScale(xLo, xHi, xRange, x0?.scale?.nice !== false);
       xLin = { kind: "linear", domain: lg.domain, range: lg.range, scale: lg.scale,
                ticksInfo: { niceMin: lg.domain[0], niceMax: lg.domain[1], step: lg.domain[0], ticks: lg.ticks } };
     } else {
       const xt = niceTicks(xLo, xHi, plot.w, { includeZero: x0?.scale?.zero === true, nice: x0?.scale?.nice !== false, tickCount: (x0?.axis && x0.axis !== null ? x0.axis.tickCount : undefined) });
-      xLin = linearScale(xt, [plot.x, plot.x + plot.w]);
+      xLin = linearScale(xt, xRange);
     }
   }
   let tScale: { scale: (v: number) => number; ticks: number[]; labels: string[] } | null = null;
