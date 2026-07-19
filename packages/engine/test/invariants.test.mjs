@@ -390,3 +390,21 @@ test("deny by default: expression-string filter throws a named error, never a Ty
   assert.throws(() => applyTransforms([{}], [{ filter: null }]), /got null/);
   assert.throws(() => applyTransforms([{}], [{ filter: [{ field: "x", equal: 1 }] }]), /structured object/);
 });
+
+test("explicit scale.domain: exact bounds honored, not nice-rounded (mirrored-pair guarantee)", () => {
+  const base = { width: 400, height: 300, rows: [{ age: "a", pop: 407 }, { age: "b", pop: 62 }],
+    graphic: { mark: "bar", encoding: { y: { field: "age", type: "nominal", sort: null },
+      x: { field: "pop", type: "quantitative", scale: { zero: true, domain: [0, 1000] } } } } };
+  const s = layout(base);
+  const ticks = s.nodes.filter((n) => n.type === "text" && /^\d+$/.test(n.content)).map((n) => +n.content);
+  assert.equal(Math.max(...ticks), 1000, "domain max 1000 honored (nice would give 500)");
+  // the 407 bar occupies ~40.7% of the 62 bar's plot... compare ratio to domain
+  const bars = s.nodes.filter((n) => n.type === "rect");
+  const b407 = bars.find((b) => b.meta.datum.pop === 407), b62 = bars.find((b) => b.meta.datum.pop === 62);
+  assert.ok(Math.abs(b407.width / b62.width - 407 / 62) < 0.05, "lengths proportional within the declared domain");
+  // shared-domain guarantee: two layouts with different data but same domain give equal px-per-unit
+  const other = JSON.parse(JSON.stringify(base)); other.rows = [{ age: "a", pop: 95 }, { age: "b", pop: 73 }];
+  const s2 = layout(other);
+  const b95 = s2.nodes.filter((n) => n.type === "rect").find((b) => b.meta.datum.pop === 95);
+  assert.ok(Math.abs(b407.width / 407 - b95.width / 95) < 0.01, "identical domains -> identical px-per-unit across charts");
+});

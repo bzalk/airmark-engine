@@ -186,7 +186,7 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
   const quantAxis = quantCh.axis === null ? null : (quantCh.axis ?? {});
   const nomAxis = nomCh ? (nomCh.axis === null ? null : (nomCh.axis ?? {})) : null;
   const tickLen = 4, labelGap = 4, titleGap = 8;
-  const provisional = niceTicks(qLo, qHi, horizontal ? rect.w : rect.h, { includeZero: hasBars || !!stackMode || quantCh.scale?.zero === true, nice: quantCh.scale?.nice !== false, tickCount: quantAxis?.tickCount });
+  const provisional = niceTicks(qLo, qHi, horizontal ? rect.w : rect.h, { includeZero: hasBars || !!stackMode || quantCh.scale?.zero === true, nice: quantCh.scale?.nice !== false, tickCount: quantAxis?.tickCount, domain: quantCh.scale?.domain });
   const qFmt = quantAxis?.format ?? (stackMode === "normalize" ? { type: "percent", maximumFractionDigits: 0 } : undefined);
   const qLabels = provisional.ticks.map((t) => formatValue(stackMode === "normalize" ? t * 100 : t, qFmt, provisional.step * (stackMode === "normalize" ? 100 : 1)));
   const maxQLabelW = qLabels.reduce((m, l) => Math.max(m, measure(l, fs)), 0);
@@ -233,12 +233,14 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
     throw new Error(`airmark-engine: scale type '${t}' not implemented — add a golden fixture (supported: linear, log for point/line axes)`);
   };
   const qType = checkScaleType(quantCh, true);
-  const qTicksLinear = niceTicks(qLo, qHi, horizontal ? plot.w : plot.h, { includeZero: hasBars || !!stackMode || quantCh.scale?.zero === true, nice: quantCh.scale?.nice !== false, tickCount: quantAxis?.tickCount });
+  const qTicksLinear = niceTicks(qLo, qHi, horizontal ? plot.w : plot.h, { includeZero: hasBars || !!stackMode || quantCh.scale?.zero === true, nice: quantCh.scale?.nice !== false, tickCount: quantAxis?.tickCount, domain: quantCh.scale?.domain });
   const qRev = quantCh.scale?.reverse === true;
   const qRange: [number, number] = horizontal
     ? (qRev ? [plot.x + plot.w, plot.x] : [plot.x, plot.x + plot.w])
     : (qRev ? [plot.y, plot.y + plot.h] : [plot.y + plot.h, plot.y]);
-  const qLog: LogScale | null = qType === "log" ? logScale(qLo, qHi, qRange, quantCh.scale?.nice !== false) : null;
+  const qDom = quantCh.scale?.domain;
+  const [qdLo, qdHi] = qDom && qDom.length === 2 && typeof qDom[0] === "number" && typeof qDom[1] === "number" ? [qDom[0] as number, qDom[1] as number] : [qLo, qHi];
+  const qLog: LogScale | null = qType === "log" ? logScale(qdLo, qdHi, qRange, quantCh.scale?.nice !== false && !qDom) : null;
   const qTicks = qLog ? { niceMin: qLog.domain[0], niceMax: qLog.domain[1], step: qLog.domain[0], ticks: qLog.ticks } : qTicksLinear;
   const qScaleLin: LinearScale = linearScale(qTicksLinear, qRange);
   const qScale = qLog ? { ...qScaleLin, scale: qLog.scale } : qScaleLin;
@@ -267,7 +269,7 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
       xLin = { kind: "linear", domain: lg.domain, range: lg.range, scale: lg.scale,
                ticksInfo: { niceMin: lg.domain[0], niceMax: lg.domain[1], step: lg.domain[0], ticks: lg.ticks } };
     } else {
-      const xt = niceTicks(xLo, xHi, plot.w, { includeZero: x0?.scale?.zero === true, nice: x0?.scale?.nice !== false, tickCount: (x0?.axis && x0.axis !== null ? x0.axis.tickCount : undefined) });
+      const xt = niceTicks(xLo, xHi, plot.w, { includeZero: x0?.scale?.zero === true, nice: x0?.scale?.nice !== false, tickCount: (x0?.axis && x0.axis !== null ? x0.axis.tickCount : undefined), domain: x0?.scale?.domain });
       xLin = linearScale(xt, xRange);
     }
   }

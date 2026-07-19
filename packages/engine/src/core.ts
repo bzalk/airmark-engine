@@ -94,8 +94,15 @@ export const truncateToFit = (content: string, maxWidth: number, fontSize: numbe
 
 // SCENEGRAPH.md §4.1 — normative tick/nice-domain algorithm
 export type TickResult = { niceMin: number; niceMax: number; step: number; ticks: number[] };
-export function niceTicks(dmin: number, dmax: number, axisLengthPx: number, opts?: { includeZero?: boolean; nice?: boolean; tickCount?: number }): TickResult {
+export function niceTicks(dmin: number, dmax: number, axisLengthPx: number, opts?: { includeZero?: boolean; nice?: boolean; tickCount?: number; domain?: Array<number | string> }): TickResult {
   let lo = dmin, hi = dmax;
+  // Explicit scale.domain overrides the data extent exactly (SCENEGRAPH §4.1):
+  // ticks are computed within it and the bounds are not nice-rounded.
+  const dom = opts?.domain;
+  if (dom && dom.length === 2 && typeof dom[0] === "number" && typeof dom[1] === "number") {
+    const t = niceTicks(dom[0], dom[1], axisLengthPx, { tickCount: opts?.tickCount, nice: false });
+    return { niceMin: dom[0], niceMax: dom[1], step: t.step, ticks: t.ticks };
+  }
   if (opts?.includeZero) { lo = Math.min(lo, 0); hi = Math.max(hi, 0); }
   if (lo === hi) hi = lo + 1;
   const targetCount = opts?.tickCount ?? clamp(Math.floor(axisLengthPx / 50), 2, 10);
