@@ -199,3 +199,35 @@ test("document grid: spans, wrapping, row heights, responsive collapse", () => {
   const mobile = layoutGrid(items.map((i) => ({ ...i, spanMobile: 12 })), { containerWidth: 390 });
   assert.deepEqual(mobile.boxes.map((b) => b.row), [0, 1, 2, 3], "mobile: every item wraps to its own row");
 });
+
+test("boxplot: normative quartiles, whisker fences, outliers, composition", async () => {
+  const { boxStats } = await import("../dist/index.js");
+  // Normative R-7 check: [1..9] -> q1=3, med=5, q3=7 ; [1,2,3,4] -> q1=1.75, med=2.5, q3=3.25
+  const a = boxStats([1,2,3,4,5,6,7,8,9]);
+  assert.deepEqual([a.q1, a.median, a.q3], [3, 5, 7]);
+  const b = boxStats([1,2,3,4]);
+  assert.deepEqual([b.q1, b.median, b.q3], [1.75, 2.5, 3.25]);
+  // Fence: outlier excluded from whiskers
+  const c = boxStats([10,11,12,13,14,50]);
+  assert.ok(c.outliers.includes(50) && c.whiskerHi <= 14);
+
+  const input = load("boxplot-price-by-category");
+  const scene = layout(input);
+  const boxes = scene.nodes.filter((n) => n.type === "rect" && n.meta?.role === "mark");
+  assert.equal(boxes.length, 3);
+  const order = [...boxes].sort((x, y) => x.x - y.x).map((bx) => bx.meta.datum.category);
+  assert.deepEqual(order, ["Economy", "Standard", "Premium"], "explicit sort array honored");
+  for (const bx of boxes) {
+    const d = bx.meta.datum;
+    assert.ok(d.q1 < d.median && d.median < d.q3, "median inside box");
+    // white median line within the box's vertical extent
+    const med = scene.nodes.find((n) => n.type === "line" && n.stroke === "#FFFFFF" && n.meta?.datum?.category === d.category);
+    assert.ok(med.y1 >= bx.y - 0.01 && med.y1 <= bx.y + bx.height + 0.01, "median line inside box rect");
+  }
+  const outliers = scene.nodes.filter((n) => n.type === "circle" && n.meta?.datum?.outlier);
+  assert.ok(outliers.length >= 3, "injected outliers rendered as points");
+  const premiumBox = boxes.find((bx) => bx.meta.datum.category === "Premium");
+  const premiumOut = outliers.filter((o) => o.meta.datum.category === "Premium");
+  assert.ok(premiumOut.some((o) => o.cy < premiumBox.y) && premiumOut.some((o) => o.cy > premiumBox.y + premiumBox.height),
+    "Premium outliers on both sides of the box");
+});

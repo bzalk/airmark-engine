@@ -249,3 +249,29 @@ export function arcPath(cx: number, cy: number, r0: number, r1: number, a0: numb
   } else d += `L${r2(cx)},${r2(cy)}`;
   return d + "Z";
 }
+
+// ---------- Box plot statistics (SCENEGRAPH.md §6.5 — normative) ----------
+// Quartiles use linear interpolation on the sorted sample (R-7 / "inclusive"):
+// q(p) = s[floor(h)] + (h - floor(h)) * (s[ceil(h)] - s[floor(h)]), h = (n-1)p.
+export type BoxStats = { q1: number; median: number; q3: number; whiskerLo: number; whiskerHi: number; outliers: number[] };
+export function boxStats(values: number[]): BoxStats {
+  const s = [...values].sort((a, b) => a - b);
+  const n = s.length;
+  if (n === 0) throw new Error("airmark-engine: boxplot group has no numeric values");
+  const q = (p: number): number => {
+    const h = (n - 1) * p;
+    const lo = Math.floor(h), hi = Math.ceil(h);
+    return s[lo] + (h - lo) * (s[hi] - s[lo]);
+  };
+  const q1 = q(0.25), median = q(0.5), q3 = q(0.75);
+  const iqr = q3 - q1;
+  const loFence = q1 - 1.5 * iqr, hiFence = q3 + 1.5 * iqr;
+  // Whiskers extend to the most extreme data points WITHIN the fences.
+  let whiskerLo = q1, whiskerHi = q3;
+  const outliers: number[] = [];
+  for (const v of s) {
+    if (v < loFence || v > hiFence) outliers.push(v);
+    else { whiskerLo = Math.min(whiskerLo, v); whiskerHi = Math.max(whiskerHi, v); }
+  }
+  return { q1, median, q3, whiskerLo, whiskerHi, outliers };
+}

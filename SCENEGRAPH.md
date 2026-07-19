@@ -118,7 +118,16 @@ A color channel with a `field` and `legend ≠ null` reserves right margin `min(
 
 A `row`, `column`, or `facet` channel partitions rows by its field (panel order: `sort` if given, else ascending). Panel grids: `column` → one row of k panels; `row` → one column; `facet` → wrap at `ceil(sqrt(k))` columns; 16px gaps, and a bold panel title (`fontWeight 600`) centered 6px above each panel. **All panels share the quantitative extent, nominal domain, and color domain computed over the full dataset** — per-panel scales are non-conformant. Each panel then lays out independently within its rect with absolute coordinates.
 
-### 6.4 What is NOT in the graphic: document-level arrangement
+### 6.4 Composite marks: boxplot
+
+`boxplot` groups **raw rows** by the nominal channel's field and computes statistics in-engine (datasets stay simple `list` operations; broker aggregations are not involved). The statistics are normative for cross-language conformance:
+
+* Quartiles by linear interpolation on the sorted sample (R-7 / inclusive): `q(p) = s[⌊h⌋] + (h−⌊h⌋)(s[⌈h⌉]−s[⌊h⌋])` with `h = (n−1)p`.
+* Fences at `q1 − 1.5·IQR` and `q3 + 1.5·IQR`; whiskers extend to the most extreme data points **within** the fences; points beyond are outliers.
+
+Composition per category, in emission order: lower whisker rule, upper whisker rule, two whisker caps (half the box width), the box rect from `q1` to `q3` (width = `bandwidth × 0.7`, mark fill, axis-color stroke), a white 2px median line, then outlier circles (`r 2.5`, opacity 0.7). Box `meta.datum` carries the category plus `q1/median/q3/whiskerLo/whiskerHi` (rounded); outlier datum carries `value` and `outlier: true`. Both orientations follow the standard orientation rule. `errorbar`/`errorband` remain unimplemented pending fixtures.
+
+### 6.5 What is NOT in the graphic: document-level arrangement
 
 Multiple charts beside/above one another are **document layout** (AIRspec §8's 12-column grid), never in-graphic composition. Appendix A specifies the deterministic grid algorithm so hosts on any platform arrange components identically.
 

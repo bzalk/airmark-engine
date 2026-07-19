@@ -1,0 +1,821 @@
+{
+  "width": 640,
+  "height": 420,
+  "nodes": [
+    {
+      "type": "line",
+      "x1": 63.12,
+      "y1": 373.6,
+      "x2": 621,
+      "y2": 373.6,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 63.12,
+      "y1": 300.68,
+      "x2": 621,
+      "y2": 300.68,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 63.12,
+      "y1": 227.76,
+      "x2": 621,
+      "y2": 227.76,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 63.12,
+      "y1": 154.84,
+      "x2": 621,
+      "y2": 154.84,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 63.12,
+      "y1": 81.92,
+      "x2": 621,
+      "y2": 81.92,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 63.12,
+      "y1": 9,
+      "x2": 621,
+      "y2": 9,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 159.15,
+      "y1": 348.21,
+      "x2": 159.15,
+      "y2": 335.5,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Economy",
+          "q1": 104.49,
+          "median": 122.98,
+          "q3": 132.79,
+          "whiskerLo": 69.64,
+          "whiskerHi": 162.94
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 159.15,
+      "y1": 325.18,
+      "x2": 159.15,
+      "y2": 314.19,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Economy",
+          "q1": 104.49,
+          "median": 122.98,
+          "q3": 132.79,
+          "whiskerLo": 69.64,
+          "whiskerHi": 162.94
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 131.94,
+      "y1": 348.21,
+      "x2": 186.36,
+      "y2": 348.21,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Economy",
+          "q1": 104.49,
+          "median": 122.98,
+          "q3": 132.79,
+          "whiskerLo": 69.64,
+          "whiskerHi": 162.94
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 131.94,
+      "y1": 314.19,
+      "x2": 186.36,
+      "y2": 314.19,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Economy",
+          "q1": 104.49,
+          "median": 122.98,
+          "q3": 132.79,
+          "whiskerLo": 69.64,
+          "whiskerHi": 162.94
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 104.73,
+      "y": 325.18,
+      "width": 108.83,
+      "height": 10.32,
+      "fill": "#3264D6",
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "opacity": 0.85,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Economy",
+          "q1": 104.49,
+          "median": 122.98,
+          "q3": 132.79,
+          "whiskerLo": 69.64,
+          "whiskerHi": 162.94
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 104.73,
+      "y1": 328.76,
+      "x2": 213.57,
+      "y2": 328.76,
+      "stroke": "#FFFFFF",
+      "strokeWidth": 2,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Economy",
+          "q1": 104.49,
+          "median": 122.98,
+          "q3": 132.79,
+          "whiskerLo": 69.64,
+          "whiskerHi": 162.94
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 159.15,
+      "cy": 256.93,
+      "r": 2.5,
+      "fill": "#3264D6",
+      "opacity": 0.7,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Economy",
+          "value": 320,
+          "outlier": true
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 342.06,
+      "y1": 322.82,
+      "x2": 342.06,
+      "y2": 297.36,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Standard",
+          "q1": 209.11,
+          "median": 245.56,
+          "q3": 274.73,
+          "whiskerLo": 139.27,
+          "whiskerHi": 304.4
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 342.06,
+      "y1": 273.43,
+      "x2": 342.06,
+      "y2": 262.62,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Standard",
+          "q1": 209.11,
+          "median": 245.56,
+          "q3": 274.73,
+          "whiskerLo": 139.27,
+          "whiskerHi": 304.4
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 314.85,
+      "y1": 322.82,
+      "x2": 369.27,
+      "y2": 322.82,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Standard",
+          "q1": 209.11,
+          "median": 245.56,
+          "q3": 274.73,
+          "whiskerLo": 139.27,
+          "whiskerHi": 304.4
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 314.85,
+      "y1": 262.62,
+      "x2": 369.27,
+      "y2": 262.62,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Standard",
+          "q1": 209.11,
+          "median": 245.56,
+          "q3": 274.73,
+          "whiskerLo": 139.27,
+          "whiskerHi": 304.4
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 287.64,
+      "y": 273.43,
+      "width": 108.83,
+      "height": 23.93,
+      "fill": "#3264D6",
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "opacity": 0.85,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Standard",
+          "q1": 209.11,
+          "median": 245.56,
+          "q3": 274.73,
+          "whiskerLo": 139.27,
+          "whiskerHi": 304.4
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 287.64,
+      "y1": 284.07,
+      "x2": 396.48,
+      "y2": 284.07,
+      "stroke": "#FFFFFF",
+      "strokeWidth": 2,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Standard",
+          "q1": 209.11,
+          "median": 245.56,
+          "q3": 274.73,
+          "whiskerLo": 139.27,
+          "whiskerHi": 304.4
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 524.97,
+      "y1": 260.25,
+      "x2": 524.97,
+      "y2": 226.21,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "q1": 404.26,
+          "median": 445.04,
+          "q3": 477.33,
+          "whiskerLo": 310.9,
+          "whiskerHi": 570.74
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 524.97,
+      "y1": 199.57,
+      "x2": 524.97,
+      "y2": 165.51,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "q1": 404.26,
+          "median": 445.04,
+          "q3": 477.33,
+          "whiskerLo": 310.9,
+          "whiskerHi": 570.74
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 497.76,
+      "y1": 260.25,
+      "x2": 552.18,
+      "y2": 260.25,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "q1": 404.26,
+          "median": 445.04,
+          "q3": 477.33,
+          "whiskerLo": 310.9,
+          "whiskerHi": 570.74
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 497.76,
+      "y1": 165.51,
+      "x2": 552.18,
+      "y2": 165.51,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "q1": 404.26,
+          "median": 445.04,
+          "q3": 477.33,
+          "whiskerLo": 310.9,
+          "whiskerHi": 570.74
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 470.55,
+      "y": 199.57,
+      "width": 108.83,
+      "height": 26.64,
+      "fill": "#3264D6",
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "opacity": 0.85,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "q1": 404.26,
+          "median": 445.04,
+          "q3": 477.33,
+          "whiskerLo": 310.9,
+          "whiskerHi": 570.74
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 470.55,
+      "y1": 211.34,
+      "x2": 579.39,
+      "y2": 211.34,
+      "stroke": "#FFFFFF",
+      "strokeWidth": 2,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "q1": 404.26,
+          "median": 445.04,
+          "q3": 477.33,
+          "whiskerLo": 310.9,
+          "whiskerHi": 570.74
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 524.97,
+      "cy": 357.19,
+      "r": 2.5,
+      "fill": "#3264D6",
+      "opacity": 0.7,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "value": 45,
+          "outlier": true
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 524.97,
+      "cy": 286.45,
+      "r": 2.5,
+      "fill": "#3264D6",
+      "opacity": 0.7,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "value": 239.03,
+          "outlier": true
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 524.97,
+      "cy": 285.29,
+      "r": 2.5,
+      "fill": "#3264D6",
+      "opacity": 0.7,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "value": 242.2,
+          "outlier": true
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 524.97,
+      "cy": 282.28,
+      "r": 2.5,
+      "fill": "#3264D6",
+      "opacity": 0.7,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "value": 250.47,
+          "outlier": true
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 524.97,
+      "cy": 154.8,
+      "r": 2.5,
+      "fill": "#3264D6",
+      "opacity": 0.7,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "value": 600.1,
+          "outlier": true
+        }
+      }
+    },
+    {
+      "type": "circle",
+      "cx": 524.97,
+      "cy": 49.11,
+      "r": 2.5,
+      "fill": "#3264D6",
+      "opacity": 0.7,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "category": "Premium",
+          "value": 890,
+          "outlier": true
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 63.12,
+      "y1": 9,
+      "x2": 63.12,
+      "y2": 373.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 59.12,
+      "y1": 373.6,
+      "x2": 63.12,
+      "y2": 373.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 55.12,
+      "y": 377.45,
+      "content": "$0",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 59.12,
+      "y1": 300.68,
+      "x2": 63.12,
+      "y2": 300.68,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 55.12,
+      "y": 304.53,
+      "content": "$200",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 59.12,
+      "y1": 227.76,
+      "x2": 63.12,
+      "y2": 227.76,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 55.12,
+      "y": 231.61,
+      "content": "$400",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 59.12,
+      "y1": 154.84,
+      "x2": 63.12,
+      "y2": 154.84,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 55.12,
+      "y": 158.69,
+      "content": "$600",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 59.12,
+      "y1": 81.92,
+      "x2": 63.12,
+      "y2": 81.92,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 55.12,
+      "y": 85.77,
+      "content": "$800",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 59.12,
+      "y1": 9,
+      "x2": 63.12,
+      "y2": 9,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 55.12,
+      "y": 12.85,
+      "content": "$1000",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 11.2,
+      "y": 191.3,
+      "content": "Price",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "title"
+      },
+      "angle": -90
+    },
+    {
+      "type": "line",
+      "x1": 63.12,
+      "y1": 373.6,
+      "x2": 621,
+      "y2": 373.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 159.15,
+      "y1": 373.6,
+      "x2": 159.15,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 159.15,
+      "y": 390.4,
+      "content": "Economy",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 342.06,
+      "y1": 373.6,
+      "x2": 342.06,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 342.06,
+      "y": 390.4,
+      "content": "Standard",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 524.97,
+      "y1": 373.6,
+      "x2": 524.97,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 524.97,
+      "y": 390.4,
+      "content": "Premium",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 342.06,
+      "y": 416,
+      "content": "Category",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "title"
+      }
+    }
+  ]
+}

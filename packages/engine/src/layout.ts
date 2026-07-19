@@ -7,7 +7,7 @@
 import {
   BandScale, Channel, DEFAULT_THEME, Graphic, LayoutInput, LinearScale,
   MarkDef, MeasureText, Meta, Row, SceneGraph, SceneNode, TextNode, Theme,
-  UnitGraphic, arcPath, bandScale, defaultMeasureText, formatTick, formatValue,
+  UnitGraphic, arcPath, bandScale, boxStats, defaultMeasureText, formatTick, formatValue,
   linearScale, niceTicks, parseTemporal, r2, textHeight, timeTicks, truncateToFit,
 } from "./core.js";
 import { applyTransforms, nominalDomain, resolveLayerData, ResolvedLayerData } from "./transform.js";
@@ -375,6 +375,48 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
             ? { type: "text", x: r2(qp - pad), y: r2(np + textHeight(fs) / 2 - fs * 0.25), content: truncateToFit(content, Math.abs(qp - zero) - pad * 2, fs, measure), fill, fontSize: fs, anchor: "end", meta: meta(rrow) }
             : { type: "text", x: r2(np), y: r2(qp - 4), content, fill, fontSize: fs, anchor: "middle", meta: meta(rrow) };
           if (node.content.length) push(node);
+        }
+        break;
+      }
+      case "boxplot": {
+        if (!nScale || !nF) throw new Error("airmark-engine: boxplot requires a nominal positional channel");
+        // group RAW rows by category; stats computed in-engine (SCENEGRAPH.md §6.5)
+        const byCat = new Map<string, number[]>();
+        for (const rrow of p.data.rows) {
+          const k = String(rrow[nF]);
+          const v = num(rrow[qF]);
+          if (Number.isFinite(v)) byCat.set(k, [...(byCat.get(k) ?? []), v]);
+        }
+        const boxFrac = 0.7;
+        for (const cat of domainNominal) {
+          const vals = byCat.get(String(cat));
+          if (!vals?.length) continue;
+          const st = boxStats(vals);
+          const center = r2(nScale.center(cat));
+          const bw = nScale.bandwidth * boxFrac;
+          const half = r2(bw / 2);
+          const capHalf = r2(bw / 4);
+          const fill = resolveFill(p.mark, { [nF]: cat });
+          const stroke = theme.axisColor;
+          const P = (v: number) => r2(qScale.scale(v));
+          const dMeta: Meta = { role: "mark", datum: { [nF]: cat, q1: r2(st.q1), median: r2(st.median), q3: r2(st.q3), whiskerLo: r2(st.whiskerLo), whiskerHi: r2(st.whiskerHi) } };
+          if (horizontal) {
+            push({ type: "line", x1: P(st.whiskerLo), y1: center, x2: P(st.q1), y2: center, stroke, strokeWidth: 1, meta: dMeta });
+            push({ type: "line", x1: P(st.q3), y1: center, x2: P(st.whiskerHi), y2: center, stroke, strokeWidth: 1, meta: dMeta });
+            push({ type: "line", x1: P(st.whiskerLo), y1: r2(center - capHalf), x2: P(st.whiskerLo), y2: r2(center + capHalf), stroke, strokeWidth: 1, meta: dMeta });
+            push({ type: "line", x1: P(st.whiskerHi), y1: r2(center - capHalf), x2: P(st.whiskerHi), y2: r2(center + capHalf), stroke, strokeWidth: 1, meta: dMeta });
+            push({ type: "rect", x: Math.min(P(st.q1), P(st.q3)), y: r2(center - half), width: r2(Math.abs(P(st.q3) - P(st.q1))), height: r2(bw), fill, stroke, strokeWidth: 1, ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), meta: dMeta });
+            push({ type: "line", x1: P(st.median), y1: r2(center - half), x2: P(st.median), y2: r2(center + half), stroke: "#FFFFFF", strokeWidth: 2, meta: dMeta });
+            for (const o of st.outliers) push({ type: "circle", cx: P(o), cy: center, r: 2.5, fill, opacity: 0.7, meta: { role: "mark", datum: { [nF]: cat, value: o, outlier: true } } });
+          } else {
+            push({ type: "line", x1: center, y1: P(st.whiskerLo), x2: center, y2: P(st.q1), stroke, strokeWidth: 1, meta: dMeta });
+            push({ type: "line", x1: center, y1: P(st.q3), x2: center, y2: P(st.whiskerHi), stroke, strokeWidth: 1, meta: dMeta });
+            push({ type: "line", x1: r2(center - capHalf), y1: P(st.whiskerLo), x2: r2(center + capHalf), y2: P(st.whiskerLo), stroke, strokeWidth: 1, meta: dMeta });
+            push({ type: "line", x1: r2(center - capHalf), y1: P(st.whiskerHi), x2: r2(center + capHalf), y2: P(st.whiskerHi), stroke, strokeWidth: 1, meta: dMeta });
+            push({ type: "rect", x: r2(center - half), y: Math.min(P(st.q1), P(st.q3)), width: r2(bw), height: r2(Math.abs(P(st.q1) - P(st.q3))), fill, stroke, strokeWidth: 1, ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), meta: dMeta });
+            push({ type: "line", x1: r2(center - half), y1: P(st.median), x2: r2(center + half), y2: P(st.median), stroke: "#FFFFFF", strokeWidth: 2, meta: dMeta });
+            for (const o of st.outliers) push({ type: "circle", cx: center, cy: P(o), r: 2.5, fill, opacity: 0.7, meta: { role: "mark", datum: { [nF]: cat, value: o, outlier: true } } });
+          }
         }
         break;
       }
