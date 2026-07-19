@@ -195,11 +195,15 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
   const quantTitle = quantCh.title ?? quantAxis?.title ?? undefined;
   const nomTitle = nomCh ? (nomCh.title ?? nomAxis?.title ?? undefined) : undefined;
 
+  const nomOrientRight = horizontal && nomAxis?.orient === "right";
+  if (nomAxis?.orient && !["left", "right", "bottom", "top"].includes(nomAxis.orient)) throw new Error(`airmark-engine: axis orient '${nomAxis.orient}' invalid`);
+  if (nomAxis?.orient === "top" || (!horizontal && nomAxis?.orient === "right")) throw new Error(`airmark-engine: axis orient '${nomAxis.orient}' not implemented for this orientation — add a golden fixture`);
   const mTop = Math.ceil(textHeight(fs) / 2) + 2;
   let mRight = Math.ceil(Math.min(maxQLabelW, 60) / 2) + 4 + legendW;
   let mLeft: number, mBottom: number;
   if (horizontal) {
-    mLeft = (nomAxis !== null ? Math.min(maxNomLabelW, 140) + tickLen + labelGap : 0) + (nomTitle ? textHeight(fs) + titleGap : 0) + 4;
+    const nomSide = (nomAxis !== null ? Math.min(maxNomLabelW, 140) + tickLen + labelGap : 0) + (nomTitle ? textHeight(fs) + titleGap : 0) + 4;
+    if (nomOrientRight) { mLeft = 6; mRight += nomSide; } else { mLeft = nomSide; }
     mBottom = (quantAxis !== null ? textHeight(fs) + tickLen + labelGap : 0) + (quantTitle ? textHeight(fs) + titleGap : 0) + 4;
   } else {
     mLeft = (quantAxis !== null ? Math.min(maxQLabelW, 80) + tickLen + labelGap : 0) + (quantTitle ? textHeight(fs) + titleGap : 0) + 4;
@@ -519,16 +523,22 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
     }
   }
   if (nomAxis && nScale) {
+    const edgeX = nomOrientRight ? r2(plot.x + plot.w) : plot.x;
     push(horizontal
-      ? { type: "line", x1: plot.x, y1: plot.y, x2: plot.x, y2: r2(plot.y + plot.h), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } }
+      ? { type: "line", x1: edgeX, y1: plot.y, x2: edgeX, y2: r2(plot.y + plot.h), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } }
       : { type: "line", x1: plot.x, y1: r2(plot.y + plot.h), x2: r2(plot.x + plot.w), y2: r2(plot.y + plot.h), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
     const angle = nomAxis.labelAngle ?? 0;
     for (const v of domainNominal) {
       const c = r2(nScale.center(v));
       const label = truncateToFit(String(v), nomAxis.labelLimit ?? 140, fs, measure);
       if (horizontal) {
-        push({ type: "line", x1: r2(plot.x - tickLen), y1: c, x2: plot.x, y2: c, stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
-        push(axisText(plot.x - tickLen - labelGap, c + fs * 0.35, label, "end"));
+        if (nomOrientRight) {
+          push({ type: "line", x1: edgeX, y1: c, x2: r2(edgeX + tickLen), y2: c, stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
+          push(axisText(edgeX + tickLen + labelGap, c + fs * 0.35, label, "start"));
+        } else {
+          push({ type: "line", x1: r2(plot.x - tickLen), y1: c, x2: plot.x, y2: c, stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
+          push(axisText(plot.x - tickLen - labelGap, c + fs * 0.35, label, "end"));
+        }
       } else {
         push({ type: "line", x1: c, y1: r2(plot.y + plot.h), x2: c, y2: r2(plot.y + plot.h + tickLen), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
         push(angle
@@ -538,7 +548,7 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
     }
     if (nomTitle) {
       push(horizontal
-        ? axisText(0, 0, String(nomTitle), "middle", { angle: -90, x: r2(rect.x + textHeight(fs) - 2), y: r2(plot.y + plot.h / 2), meta: { role: "title" } })
+        ? axisText(0, 0, String(nomTitle), "middle", { angle: nomOrientRight ? 90 : -90, x: r2(nomOrientRight ? rect.x + rect.w - textHeight(fs) + 2 : rect.x + textHeight(fs) - 2), y: r2(plot.y + plot.h / 2), meta: { role: "title" } })
         : axisText(plot.x + plot.w / 2, rect.y + rect.h - 4, String(nomTitle), "middle", { meta: { role: "title" } }));
     }
   }

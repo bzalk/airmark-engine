@@ -108,7 +108,7 @@ Layout depends on text width (margins, truncation, angled labels). Platforms dis
 
 ## 6. Layout obligations
 
-Given the inputs, a conforming engine MUST: detect orientation (nominal↔quantitative positional pair; both-quantitative = scatter/line semantics; `bin` on a quantitative channel produces interval bars); share one scale per positional channel and one color scale across all layers of a graphic; derive margins from measured tick labels, axis titles, angled-label extents, and the legend; emit grid lines (when `axis.grid`) before marks, marks in layer order, axis lines/ticks/labels/titles after marks; suppress an axis entirely when `axis` is `null`; and emit per-mark `meta.datum` for every data-driven node.
+Given the inputs, a conforming engine MUST: detect orientation (nominal↔quantitative positional pair; both-quantitative = scatter/line semantics; `bin` on a quantitative channel produces interval bars); share one scale per positional channel and one color scale across all layers of a graphic; derive margins from measured tick labels, axis titles, angled-label extents, and the legend; emit grid lines (when `axis.grid`) before marks, marks in layer order, axis lines/ticks/labels/titles after marks; suppress an axis entirely when `axis` is `null`; honor `axis.orient: "right"` on the nominal axis of horizontal charts (mirrored margins, ticks and start-anchored labels on the right edge — the center-spine pattern for mirrored pairs; other non-default orients MUST error until specified); and emit per-mark `meta.datum` for every data-driven node.
 
 ### 6.1 Stacking and grouping
 

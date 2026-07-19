@@ -13,7 +13,10 @@
           "field": "age",
           "type": "nominal",
           "sort": null,
-          "title": "Age Group"
+          "title": "Age Group",
+          "axis": {
+            "orient": "right"
+          }
         },
         "x": {
           "field": "population",
@@ -87,6 +90,7 @@
     "x range flipped: zero at the RIGHT edge, values grow leftward",
     "bars right-aligned at the shared baseline",
     "tick labels mirrored (0 rightmost)",
-    "the male half of a population pyramid"
+    "the male half of a population pyramid",
+    "age labels on the RIGHT edge (center spine of a mirrored pair)"
   ]
 }

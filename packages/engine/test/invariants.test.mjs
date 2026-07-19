@@ -352,3 +352,18 @@ test("scale.reverse: flipped quantitative range (pyramid left panel) and band re
   const orderB = [...marks(flipped, "rect")].sort((a, b) => a.y - b.y).map((b) => b.meta.datum.age);
   assert.deepEqual(orderB, [...orderA].reverse(), "nominal reverse flips resolved domain order");
 });
+
+test("axis orient right: age labels on the spine edge of the reversed pyramid half", () => {
+  const scene = layout(load("bar-horizontal-reversed-x-pyramid"));
+  const bars = marks(scene, "rect");
+  const barsRight = Math.max(...bars.map((b) => b.x + b.width));
+  const ageLabels = scene.nodes.filter((n) => n.type === "text" && /^\d/.test(n.content) && n.content.includes("-"));
+  assert.equal(ageLabels.length, 9);
+  for (const l of ageLabels) {
+    assert.ok(l.x > barsRight, "labels sit to the RIGHT of the bars (spine side)");
+    assert.equal(l.anchor, "start");
+  }
+  // zero baseline (bar right edges) now abuts the label column: reversed + orient right = pyramid half
+  const zero = scene.nodes.filter((n) => n.type === "text" && n.content === "0");
+  assert.ok(zero.length >= 1 && Math.abs(zero[0].x - barsRight) < 20, "zero tick adjacent to spine");
+});
