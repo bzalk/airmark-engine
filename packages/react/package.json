@@ -1,6 +1,6 @@
 {
   "name": "@airspec/airmark-react",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Thin React SVG renderer for AIRMark scene graphs.",
   "type": "module",
   "main": "./dist/index.js",
@@ -29,6 +29,6 @@
   "bugs": { "url": "https://github.com/bzalk/airmark-engine/issues" },
   "publishConfig": { "access": "public" },
   "keywords": ["airspec", "airmark", "react", "svg", "charts", "visualization"],
-  "dependencies": { "@airspec/airmark-engine": "0.1.0" },
+  "dependencies": { "@airspec/airmark-engine": "0.2.0" },
   "peerDependencies": { "react": ">=18" }
 }

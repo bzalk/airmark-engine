@@ -67,6 +67,12 @@ import { AirmarkChart } from "@airspec/airmark-react";
 
 The engine consumes **validated** graphics only — it is a layout engine, not a validator. Run the AIRspec validation pipeline (and its conformance suite) upstream.
 
+### Sizing charts inside containers
+
+Layout pixels must equal display pixels. Do not lay out a chart at one size and then stretch its SVG with CSS: scaling also stretches text, ticks, and margins and can make the chart overflow its card.
+
+Use `AirmarkChart` when exact pixel dimensions are already known. Inside responsive grid cells, use `AirmarkChartAuto`; it measures its content box with `ResizeObserver`, calls the engine with those dimensions, and re-lays out when the box changes.
+
 ## The workflow: fixture first, always
 
 Adding a mark, scale, or behavior — or fixing a bug — follows one loop:
@@ -78,7 +84,7 @@ Adding a mark, scale, or behavior — or fixing a bug — follows one loop:
 
 Goldens are contract: regenerate only with a reviewed rationale, never to silence a failing port (SCENEGRAPH.md §7).
 
-Current fixtures (11): vertical/horizontal bars, uniform-bar text overlays, binned histograms, layered bar+line, selection-condition highlighting, stacked bars, grouped bars, pie + donut, multi-series temporal lines with legends, and faceted small multiples — plus grid-layout tests. Known-unimplemented (throwing, awaiting fixtures): legends inside facets, temporal-axis bars, `stack`/`window`/`pivot`/`flatten` explicit transforms, `errorband`/`errorbar`, interval-selection brushing, `sqrt`/`pow` scales.
+Current fixtures (16): vertical/horizontal bars, horizontal tick strips, uniform-bar text overlays, binned histograms, layered bar+line, selection-condition highlighting, stacked bars, grouped bars, pie + donut, multi-series temporal lines with legends, faceted small multiples, boxplots, linear bubble scatters, and logarithmic scatters — plus grid-layout tests. Known-unimplemented (throwing, awaiting fixtures): legends inside facets, temporal-axis bars, `stack`/`window`/`pivot`/`flatten` explicit transforms, `errorband`/`errorbar`, interval-selection brushing, `sqrt`/`pow` scales.
 
 ## Relationship to AIRspec
 
