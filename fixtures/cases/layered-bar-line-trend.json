@@ -1,0 +1,106 @@
+{
+  "name": "layered-bar-line-trend",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "layers": [
+        {
+          "mark": {
+            "type": "bar",
+            "opacity": 0.85
+          },
+          "encoding": {
+            "x": {
+              "field": "month",
+              "type": "nominal",
+              "title": "Month"
+            },
+            "y": {
+              "field": "revenue",
+              "type": "quantitative",
+              "title": "Revenue",
+              "axis": {
+                "grid": true,
+                "format": {
+                  "type": "currency",
+                  "maximumFractionDigits": 0,
+                  "notation": "compact"
+                }
+              }
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "line",
+            "point": true,
+            "strokeWidth": 2,
+            "color": "#26A69A"
+          },
+          "encoding": {
+            "x": {
+              "field": "month",
+              "type": "nominal"
+            },
+            "y": {
+              "field": "avgOrder",
+              "type": "quantitative"
+            }
+          }
+        }
+      ]
+    },
+    "rows": [
+      {
+        "month": "2026-01",
+        "revenue": 104000,
+        "avgOrder": 212
+      },
+      {
+        "month": "2026-02",
+        "revenue": 98000,
+        "avgOrder": 198
+      },
+      {
+        "month": "2026-03",
+        "revenue": 121500,
+        "avgOrder": 224
+      },
+      {
+        "month": "2026-04",
+        "revenue": 133000,
+        "avgOrder": 231
+      },
+      {
+        "month": "2026-05",
+        "revenue": 127500,
+        "avgOrder": 219
+      },
+      {
+        "month": "2026-06",
+        "revenue": 149000,
+        "avgOrder": 244
+      }
+    ],
+    "width": 720,
+    "height": 420,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    }
+  },
+  "invariants": [
+    "bars and line share the x band scale",
+    "line points centered on bands",
+    "currency compact tick labels"
+  ]
+}

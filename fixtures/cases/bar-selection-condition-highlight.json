@@ -1,0 +1,95 @@
+{
+  "name": "bar-selection-condition-highlight",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 4
+      },
+      "encoding": {
+        "x": {
+          "field": "region",
+          "type": "nominal",
+          "sort": "-y",
+          "title": "Region"
+        },
+        "y": {
+          "field": "revenue",
+          "type": "quantitative",
+          "title": "Revenue",
+          "axis": {
+            "format": {
+              "type": "currency",
+              "maximumFractionDigits": 0,
+              "notation": "compact"
+            }
+          }
+        },
+        "color": {
+          "condition": {
+            "selection": "picked",
+            "field": "region",
+            "type": "nominal"
+          },
+          "value": "#C7CDD8"
+        }
+      },
+      "selections": [
+        {
+          "id": "picked",
+          "type": "point",
+          "on": "click",
+          "fields": [
+            "region"
+          ]
+        }
+      ]
+    },
+    "rows": [
+      {
+        "region": "West",
+        "revenue": 420000
+      },
+      {
+        "region": "East",
+        "revenue": 310000
+      },
+      {
+        "region": "North",
+        "revenue": 275000
+      },
+      {
+        "region": "South",
+        "revenue": 150000
+      }
+    ],
+    "width": 720,
+    "height": 420,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    },
+    "selectionState": {
+      "picked": [
+        {
+          "region": "West"
+        }
+      ]
+    }
+  },
+  "invariants": [
+    "bars sorted descending by revenue",
+    "West colored from palette; others #C7CDD8",
+    "selection metadata on marks"
+  ]
+}

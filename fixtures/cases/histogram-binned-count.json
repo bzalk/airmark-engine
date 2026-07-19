@@ -1,0 +1,409 @@
+{
+  "name": "histogram-binned-count",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "mark": {
+        "type": "bar",
+        "color": "#1A1A1A"
+      },
+      "encoding": {
+        "x": {
+          "field": "flipper_length_mm",
+          "type": "quantitative",
+          "bin": {
+            "maxbins": 10
+          },
+          "title": "flipper_length_mm"
+        },
+        "y": {
+          "aggregate": "count",
+          "type": "quantitative",
+          "title": "Frequency"
+        }
+      }
+    },
+    "rows": [
+      {
+        "flipper_length_mm": 198.3
+      },
+      {
+        "flipper_length_mm": 197.9
+      },
+      {
+        "flipper_length_mm": 198.7
+      },
+      {
+        "flipper_length_mm": 208.4
+      },
+      {
+        "flipper_length_mm": 198.5
+      },
+      {
+        "flipper_length_mm": 182.0
+      },
+      {
+        "flipper_length_mm": 204.0
+      },
+      {
+        "flipper_length_mm": 196.8
+      },
+      {
+        "flipper_length_mm": 197.4
+      },
+      {
+        "flipper_length_mm": 201.4
+      },
+      {
+        "flipper_length_mm": 202.8
+      },
+      {
+        "flipper_length_mm": 214.0
+      },
+      {
+        "flipper_length_mm": 207.9
+      },
+      {
+        "flipper_length_mm": 201.3
+      },
+      {
+        "flipper_length_mm": 191.1
+      },
+      {
+        "flipper_length_mm": 187.8
+      },
+      {
+        "flipper_length_mm": 203.0
+      },
+      {
+        "flipper_length_mm": 215.7
+      },
+      {
+        "flipper_length_mm": 200.5
+      },
+      {
+        "flipper_length_mm": 198.7
+      },
+      {
+        "flipper_length_mm": 206.4
+      },
+      {
+        "flipper_length_mm": 182.6
+      },
+      {
+        "flipper_length_mm": 196.3
+      },
+      {
+        "flipper_length_mm": 205.9
+      },
+      {
+        "flipper_length_mm": 210.5
+      },
+      {
+        "flipper_length_mm": 197.1
+      },
+      {
+        "flipper_length_mm": 204.5
+      },
+      {
+        "flipper_length_mm": 203.0
+      },
+      {
+        "flipper_length_mm": 209.4
+      },
+      {
+        "flipper_length_mm": 186.6
+      },
+      {
+        "flipper_length_mm": 206.8
+      },
+      {
+        "flipper_length_mm": 181.8
+      },
+      {
+        "flipper_length_mm": 168.6
+      },
+      {
+        "flipper_length_mm": 192.7
+      },
+      {
+        "flipper_length_mm": 189.0
+      },
+      {
+        "flipper_length_mm": 210.5
+      },
+      {
+        "flipper_length_mm": 208.0
+      },
+      {
+        "flipper_length_mm": 185.4
+      },
+      {
+        "flipper_length_mm": 210.2
+      },
+      {
+        "flipper_length_mm": 188.0
+      },
+      {
+        "flipper_length_mm": 199.0
+      },
+      {
+        "flipper_length_mm": 196.5
+      },
+      {
+        "flipper_length_mm": 201.4
+      },
+      {
+        "flipper_length_mm": 209.8
+      },
+      {
+        "flipper_length_mm": 207.7
+      },
+      {
+        "flipper_length_mm": 204.2
+      },
+      {
+        "flipper_length_mm": 207.8
+      },
+      {
+        "flipper_length_mm": 205.7
+      },
+      {
+        "flipper_length_mm": 192.5
+      },
+      {
+        "flipper_length_mm": 191.4
+      },
+      {
+        "flipper_length_mm": 194.4
+      },
+      {
+        "flipper_length_mm": 206.0
+      },
+      {
+        "flipper_length_mm": 197.0
+      },
+      {
+        "flipper_length_mm": 228.0
+      },
+      {
+        "flipper_length_mm": 190.2
+      },
+      {
+        "flipper_length_mm": 186.8
+      },
+      {
+        "flipper_length_mm": 209.2
+      },
+      {
+        "flipper_length_mm": 217.1
+      },
+      {
+        "flipper_length_mm": 206.1
+      },
+      {
+        "flipper_length_mm": 210.0
+      },
+      {
+        "flipper_length_mm": 217.1
+      },
+      {
+        "flipper_length_mm": 198.9
+      },
+      {
+        "flipper_length_mm": 182.9
+      },
+      {
+        "flipper_length_mm": 193.6
+      },
+      {
+        "flipper_length_mm": 211.4
+      },
+      {
+        "flipper_length_mm": 182.7
+      },
+      {
+        "flipper_length_mm": 200.4
+      },
+      {
+        "flipper_length_mm": 203.0
+      },
+      {
+        "flipper_length_mm": 196.2
+      },
+      {
+        "flipper_length_mm": 208.7
+      },
+      {
+        "flipper_length_mm": 207.0
+      },
+      {
+        "flipper_length_mm": 227.9
+      },
+      {
+        "flipper_length_mm": 207.4
+      },
+      {
+        "flipper_length_mm": 192.7
+      },
+      {
+        "flipper_length_mm": 193.3
+      },
+      {
+        "flipper_length_mm": 190.0
+      },
+      {
+        "flipper_length_mm": 211.4
+      },
+      {
+        "flipper_length_mm": 193.2
+      },
+      {
+        "flipper_length_mm": 199.2
+      },
+      {
+        "flipper_length_mm": 209.0
+      },
+      {
+        "flipper_length_mm": 191.3
+      },
+      {
+        "flipper_length_mm": 196.5
+      },
+      {
+        "flipper_length_mm": 177.9
+      },
+      {
+        "flipper_length_mm": 187.0
+      },
+      {
+        "flipper_length_mm": 193.2
+      },
+      {
+        "flipper_length_mm": 205.0
+      },
+      {
+        "flipper_length_mm": 214.3
+      },
+      {
+        "flipper_length_mm": 199.8
+      },
+      {
+        "flipper_length_mm": 203.1
+      },
+      {
+        "flipper_length_mm": 202.0
+      },
+      {
+        "flipper_length_mm": 213.0
+      },
+      {
+        "flipper_length_mm": 210.7
+      },
+      {
+        "flipper_length_mm": 203.3
+      },
+      {
+        "flipper_length_mm": 187.9
+      },
+      {
+        "flipper_length_mm": 210.8
+      },
+      {
+        "flipper_length_mm": 204.6
+      },
+      {
+        "flipper_length_mm": 214.7
+      },
+      {
+        "flipper_length_mm": 199.6
+      },
+      {
+        "flipper_length_mm": 223.4
+      },
+      {
+        "flipper_length_mm": 195.7
+      },
+      {
+        "flipper_length_mm": 219.1
+      },
+      {
+        "flipper_length_mm": 201.4
+      },
+      {
+        "flipper_length_mm": 193.8
+      },
+      {
+        "flipper_length_mm": 186.5
+      },
+      {
+        "flipper_length_mm": 198.2
+      },
+      {
+        "flipper_length_mm": 217.1
+      },
+      {
+        "flipper_length_mm": 209.8
+      },
+      {
+        "flipper_length_mm": 208.3
+      },
+      {
+        "flipper_length_mm": 171.5
+      },
+      {
+        "flipper_length_mm": 208.5
+      },
+      {
+        "flipper_length_mm": 206.7
+      },
+      {
+        "flipper_length_mm": 193.4
+      },
+      {
+        "flipper_length_mm": 192.5
+      },
+      {
+        "flipper_length_mm": 200.0
+      },
+      {
+        "flipper_length_mm": 220.7
+      },
+      {
+        "flipper_length_mm": 187.3
+      },
+      {
+        "flipper_length_mm": 194.9
+      },
+      {
+        "flipper_length_mm": 216.3
+      },
+      {
+        "flipper_length_mm": 194.6
+      },
+      {
+        "flipper_length_mm": 195.6
+      }
+    ],
+    "width": 720,
+    "height": 420,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    }
+  },
+  "invariants": [
+    "contiguous interval bars",
+    "bin edges on nice-step boundaries",
+    "y counts sum to 120"
+  ]
+}

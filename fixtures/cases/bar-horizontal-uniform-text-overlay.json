@@ -1,0 +1,124 @@
+{
+  "name": "bar-horizontal-uniform-text-overlay",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "layers": [
+        {
+          "mark": {
+            "type": "bar",
+            "color": "#3264D6",
+            "cornerRadiusEnd": 4,
+            "opacity": 0.9
+          },
+          "encoding": {
+            "y": {
+              "field": "displayName",
+              "type": "nominal",
+              "sort": "ascending",
+              "title": "Department",
+              "axis": null
+            },
+            "x": {
+              "aggregate": "count",
+              "type": "quantitative",
+              "axis": null,
+              "scale": {
+                "zero": true,
+                "nice": false
+              }
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "color": "#FFFFFF"
+          },
+          "encoding": {
+            "y": {
+              "field": "displayName",
+              "type": "nominal",
+              "sort": "ascending",
+              "axis": null
+            },
+            "x": {
+              "aggregate": "count",
+              "type": "quantitative",
+              "axis": null
+            },
+            "text": {
+              "field": "displayName",
+              "type": "nominal"
+            }
+          }
+        }
+      ]
+    },
+    "rows": [
+      {
+        "displayName": "American Decorative Arts"
+      },
+      {
+        "displayName": "Ancient Near Eastern Art"
+      },
+      {
+        "displayName": "Arms and Armor"
+      },
+      {
+        "displayName": "Asian Art"
+      },
+      {
+        "displayName": "The Costume Institute"
+      },
+      {
+        "displayName": "Drawings and Prints"
+      },
+      {
+        "displayName": "Egyptian Art"
+      },
+      {
+        "displayName": "European Paintings"
+      },
+      {
+        "displayName": "Greek and Roman Art"
+      },
+      {
+        "displayName": "Islamic Art"
+      },
+      {
+        "displayName": "Medieval Art"
+      },
+      {
+        "displayName": "Musical Instruments"
+      },
+      {
+        "displayName": "Photographs"
+      },
+      {
+        "displayName": "Robert Lehman Collection"
+      }
+    ],
+    "width": 720,
+    "height": 600,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    }
+  },
+  "invariants": [
+    "14 equal-width bars",
+    "white text labels inside bar ends",
+    "no axes emitted",
+    "alphabetical order"
+  ]
+}

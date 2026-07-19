@@ -1,0 +1,468 @@
+{
+  "width": 720,
+  "height": 600,
+  "nodes": [
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 13.18,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "American Decorative Arts",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 54.96,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Ancient Near Eastern Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 96.74,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Arms and Armor",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 138.52,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Asian Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 556.31,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "The Costume Institute",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 180.3,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Drawings and Prints",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 222.07,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Egyptian Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 263.85,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "European Paintings",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 305.63,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Greek and Roman Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 347.41,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Islamic Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 389.19,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Medieval Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 430.97,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Musical Instruments",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 472.75,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Photographs",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 25.2,
+      "y": 514.53,
+      "width": 682.8,
+      "height": 35.51,
+      "fill": "#3264D6",
+      "opacity": 0.9,
+      "rx": 4,
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Robert Lehman Collection",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 34.78,
+      "content": "American Decorative Arts",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "American Decorative Arts",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 76.56,
+      "content": "Ancient Near Eastern Art",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Ancient Near Eastern Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 118.34,
+      "content": "Arms and Armor",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Arms and Armor",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 160.12,
+      "content": "Asian Art",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Asian Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 577.92,
+      "content": "The Costume Institute",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "The Costume Institute",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 201.9,
+      "content": "Drawings and Prints",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Drawings and Prints",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 243.68,
+      "content": "Egyptian Art",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Egyptian Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 285.46,
+      "content": "European Paintings",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "European Paintings",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 327.24,
+      "content": "Greek and Roman Art",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Greek and Roman Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 369.02,
+      "content": "Islamic Art",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Islamic Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 410.8,
+      "content": "Medieval Art",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Medieval Art",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 452.58,
+      "content": "Musical Instruments",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Musical Instruments",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 494.36,
+      "content": "Photographs",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Photographs",
+          "__count": 1
+        }
+      }
+    },
+    {
+      "type": "text",
+      "x": 702,
+      "y": 536.14,
+      "content": "Robert Lehman Collection",
+      "fill": "#FFFFFF",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "displayName": "Robert Lehman Collection",
+          "__count": 1
+        }
+      }
+    }
+  ]
+}

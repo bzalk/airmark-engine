@@ -1,0 +1,4 @@
+{ "name": "@airspec/airmark-react", "version": "0.1.0", "type": "module",
+  "main": "dist/index.js", "types": "dist/index.d.ts", "license": "MIT",
+  "dependencies": { "@airspec/airmark-engine": "0.1.0" },
+  "peerDependencies": { "react": ">=18" } }
