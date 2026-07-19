@@ -1,3 +1,33 @@
-{ "name": "@airspec/airmark-svg", "version": "0.1.0", "type": "module",
-  "main": "dist/index.js", "types": "dist/index.d.ts", "license": "MIT",
-  "dependencies": { "@airspec/airmark-engine": "0.1.0" } }
+{
+  "name": "@airspec/airmark-svg",
+  "version": "0.1.0",
+  "description": "SVG string adapter for AIRMark scene graphs.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -b",
+    "prepack": "npm run build"
+  },
+  "engines": { "node": ">=20" },
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bzalk/airmark-engine.git",
+    "directory": "packages/svg"
+  },
+  "homepage": "https://github.com/bzalk/airmark-engine#readme",
+  "bugs": { "url": "https://github.com/bzalk/airmark-engine/issues" },
+  "publishConfig": { "access": "public" },
+  "keywords": ["airspec", "airmark", "svg", "charts", "visualization"],
+  "dependencies": { "@airspec/airmark-engine": "0.1.0" }
+}

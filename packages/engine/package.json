@@ -1,3 +1,32 @@
-{ "name": "@airspec/airmark-engine", "version": "0.1.0", "type": "module",
-  "main": "dist/index.js", "types": "dist/index.d.ts", "license": "MIT",
-  "description": "Pure, deterministic AIRMark layout engine: validated graphic + rows -> scene graph. Zero dependencies." }
+{
+  "name": "@airspec/airmark-engine",
+  "version": "0.1.0",
+  "description": "Pure, deterministic AIRMark layout engine: validated graphic plus rows to a portable scene graph.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -b",
+    "prepack": "npm run build"
+  },
+  "engines": { "node": ">=20" },
+  "sideEffects": false,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bzalk/airmark-engine.git",
+    "directory": "packages/engine"
+  },
+  "homepage": "https://github.com/bzalk/airmark-engine#readme",
+  "bugs": { "url": "https://github.com/bzalk/airmark-engine/issues" },
+  "publishConfig": { "access": "public" },
+  "keywords": ["airspec", "airmark", "charts", "scene-graph", "visualization", "layout"]
+}

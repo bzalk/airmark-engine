@@ -78,3 +78,5 @@ Current fixtures (11): vertical/horizontal bars, uniform-bar text overlays, binn
 ## License
 
 MIT
+
+Release maintainers: see [PUBLISHING.md](./PUBLISHING.md) for npm package and trusted-publishing instructions.
