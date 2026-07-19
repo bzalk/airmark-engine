@@ -1,108 +1,218 @@
 // packages/engine/src/layout.ts
-// The layout pipeline: validated graphic + rows + size -> SceneGraph.
-// Implements SCENEGRAPH.md §6 obligations. Pure and deterministic.
+// Layout pipeline: validated graphic + rows + size -> SceneGraph.
+// Implements SCENEGRAPH.md §6: orientation, shared scales across layers,
+// stacking/grouping, temporal axes, legends, facets, arcs.
+// Pure and deterministic.
 
 import {
-  BandScale, Channel, DEFAULT_THEME, Encoding, Graphic, LayoutInput, LinearScale,
-  MarkDef, Meta, Row, SceneGraph, SceneNode, TextNode, Theme, UnitGraphic,
-  bandScale, clamp, defaultMeasureText, formatTick, formatValue, linearScale,
-  niceTicks, r2, textHeight, truncateToFit,
+  BandScale, Channel, DEFAULT_THEME, Graphic, LayoutInput, LinearScale,
+  MarkDef, MeasureText, Meta, Row, SceneGraph, SceneNode, TextNode, Theme,
+  UnitGraphic, arcPath, bandScale, defaultMeasureText, formatTick, formatValue,
+  linearScale, niceTicks, parseTemporal, r2, textHeight, timeTicks, truncateToFit,
 } from "./core.js";
 import { applyTransforms, nominalDomain, resolveLayerData, ResolvedLayerData } from "./transform.js";
 
 const asChannel = (c: Channel | Channel[] | undefined): Channel | undefined => (Array.isArray(c) ? c[0] : c);
 const markDef = (m: UnitGraphic["mark"]): MarkDef => (typeof m === "string" ? { type: m } : m);
-const isQuant = (c?: Channel) => c?.type === "quantitative" || c?.type === "temporal" || !!c?.aggregate || !!c?.bin;
+const isQuant = (c?: Channel) => c?.type === "quantitative" || !!c?.aggregate || !!c?.bin;
 const num = (v: unknown): number => (typeof v === "number" ? v : Number(v));
 
+type Ctx = { theme: Theme; measure: MeasureText; selectionState?: LayoutInput["selectionState"] };
+type Rect = { x: number; y: number; w: number; h: number };
+type Shared = { qLo: number; qHi: number; domainNominal: Array<string | number>; colorDomain: Array<string | number> };
 type Prepared = { unit: UnitGraphic; mark: MarkDef; data: ResolvedLayerData };
 
 export function layout(input: LayoutInput): SceneGraph {
-  const theme: Theme = { ...DEFAULT_THEME, ...(input.theme ?? {}) };
-  const measure = input.measureText ?? defaultMeasureText;
-  const W = input.width, H = input.height;
+  const ctx: Ctx = {
+    theme: { ...DEFAULT_THEME, ...(input.theme ?? {}) },
+    measure: input.measureText ?? defaultMeasureText,
+    selectionState: input.selectionState,
+  };
   const units: UnitGraphic[] = "layers" in input.graphic ? input.graphic.layers : [input.graphic];
   if (units.length === 0) throw new Error("airmark-engine: graphic has no layers");
+  const nodes: SceneNode[] = [];
 
-  // ---- 1. Per-layer data resolution (transforms, aggregation, binning) ----
-  const prepared: Prepared[] = units.map((unit) => {
-    const rows = applyTransforms(input.rows, unit.transform);
-    return { unit, mark: markDef(unit.mark), data: resolveLayerData(rows, unit.encoding, W) };
-  });
+  // ---- Facet dispatch (SCENEGRAPH.md §6: small multiples share all scales) ----
+  const enc0 = units[0].encoding;
+  const facetCh = asChannel(enc0.facet) ?? asChannel(enc0.column) ?? asChannel(enc0.row);
+  const facetMode = asChannel(enc0.facet) ? "facet" : asChannel(enc0.column) ? "column" : asChannel(enc0.row) ? "row" : null;
 
-  // ---- 2. Orientation from the first layer (all layers share scales) ----
+  if (facetCh && facetMode) {
+    if (!facetCh.field) throw new Error("airmark-engine: facet channel requires a field");
+    const fField = facetCh.field;
+    const panelsOf = nominalDomain(input.rows, fField, facetCh.sort ?? "ascending");
+    const k = panelsOf.length;
+    const cols = facetMode === "column" ? k : facetMode === "row" ? 1 : Math.ceil(Math.sqrt(k));
+    const rowsN = Math.ceil(k / cols);
+    const gap = 16, titleH = textHeight(ctx.theme.fontSize) + 4;
+    const strippedUnits = units.map((u) => {
+      const { facet: _f, column: _c, row: _r, ...restEnc } = u.encoding;
+      return { ...u, encoding: restEnc };
+    });
+    // Shared domains over ALL rows
+    const shared = computeShared(strippedUnits, input.rows, ctx);
+    const pw = (input.width - gap * (cols - 1)) / cols;
+    const ph = (input.height - gap * (rowsN - 1)) / rowsN;
+    panelsOf.forEach((pv, i) => {
+      const cx = i % cols, cy = Math.floor(i / cols);
+      const rect: Rect = { x: r2(cx * (pw + gap)), y: r2(cy * (ph + gap) + titleH), w: r2(pw), h: r2(ph - titleH) };
+      nodes.push({ type: "text", x: r2(rect.x + rect.w / 2), y: r2(rect.y - 6), content: String(pv), fill: ctx.theme.labelColor, fontSize: ctx.theme.fontSize, anchor: "middle", fontWeight: 600, meta: { role: "title" } });
+      const panelRows = input.rows.filter((r) => String(r[fField]) === String(pv));
+      nodes.push(...layoutPanel(strippedUnits, panelRows, rect, ctx, shared, { suppressLegend: true }));
+    });
+    // One shared legend at top-level would overlap panels; facet legends are a
+    // deliberate follow-up (throwing keeps deny-by-default honest):
+    if (shared.colorDomain.length && asChannel(strippedUnits[0].encoding.color)?.legend !== null && asChannel(strippedUnits[0].encoding.color)?.field !== fField) {
+      throw new Error("airmark-engine: color legend inside facets not implemented yet — add a golden fixture");
+    }
+    return { width: input.width, height: input.height, nodes };
+  }
+
+  nodes.push(...layoutPanel(units, input.rows, { x: 0, y: 0, w: input.width, h: input.height }, ctx));
+  return { width: input.width, height: input.height, nodes };
+}
+
+function computeShared(units: UnitGraphic[], rows: Row[], ctx: Ctx): Shared {
+  const prepared = units.map((unit) => ({ unit, mark: markDef(unit.mark), data: resolveLayerData(applyTransforms(rows, unit.transform), unit.encoding, 0) }));
+  const x0 = asChannel(prepared[0].unit.encoding.x), y0 = asChannel(prepared[0].unit.encoding.y);
+  const horizontal = isQuant(x0) && !isQuant(y0) && !!y0;
+  let qLo = Infinity, qHi = -Infinity;
+  for (const p of prepared) {
+    const f = horizontal ? p.data.xField : p.data.yField;
+    for (const r of p.data.rows) { const v = num(r[f!]); if (Number.isFinite(v)) { qLo = Math.min(qLo, v); qHi = Math.max(qHi, v); } }
+  }
+  if (!Number.isFinite(qLo)) { qLo = 0; qHi = 1; }
+  const nomField = horizontal ? prepared[0].data.yField : prepared[0].data.xField;
+  const nomCh = horizontal ? y0 : x0;
+  const domainNominal = nomField && nomCh ? nominalDomain(prepared[0].data.rows, nomField, nomCh.sort, horizontal ? prepared[0].data.xField : prepared[0].data.yField) : [];
+  const colorField = prepared[0].data.colorField;
+  const colorDomain = colorField ? nominalDomain(prepared[0].data.rows, colorField, null) : [];
+  return { qLo, qHi, domainNominal, colorDomain };
+}
+
+function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, shared?: Shared, opts?: { suppressLegend?: boolean }): SceneNode[] {
+  const { theme, measure } = ctx;
+  const fs = theme.fontSize;
+  const nodes: SceneNode[] = [];
+  const push = (n: SceneNode) => nodes.push(n);
+
+  const prepared: Prepared[] = units.map((unit) => ({ unit, mark: markDef(unit.mark), data: resolveLayerData(applyTransforms(rowsIn, unit.transform), unit.encoding, rect.w) }));
+
+  // ---------- ARC / PIE ----------
+  if (prepared[0].mark.type === "arc") return layoutArc(prepared[0], rect, ctx, opts);
+
   const x0 = asChannel(prepared[0].unit.encoding.x);
   const y0 = asChannel(prepared[0].unit.encoding.y);
   if (!x0 && !y0) throw new Error("airmark-engine: encoding needs an x or y channel");
   const xQ = isQuant(x0), yQ = isQuant(y0);
-  // horizontal = quantitative x against nominal y
   const horizontal = xQ && !yQ && !!y0;
-  const nomCh = horizontal ? y0! : x0;              // may be undefined for pure-quant charts (not yet supported)
+  const nomCh = horizontal ? y0! : x0;
   const quantCh = horizontal ? x0! : y0!;
-  if (!quantCh) throw new Error("airmark-engine: a quantitative channel (field, aggregate, or bin) is required");
+  if (!quantCh || !isQuant(quantCh)) throw new Error("airmark-engine: a quantitative channel (field, aggregate, or bin) is required");
   const binned = prepared[0].data.binned;
+  const temporal = !binned && nomCh?.type === "temporal";
+  if (temporal && prepared.some((p) => p.mark.type === "bar")) {
+    throw new Error("airmark-engine: temporal-axis bars not implemented — use a nominal axis (e.g. timeUnit labels) or add a golden fixture");
+  }
 
-  // ---- 3. Shared domains across layers ----
   const nomField = horizontal ? prepared[0].data.yField : prepared[0].data.xField;
   const quantField = horizontal ? prepared[0].data.xField! : prepared[0].data.yField!;
   const hasBars = prepared.some((p) => p.mark.type === "bar");
-  let qLo = Infinity, qHi = -Infinity;
-  for (const p of prepared) {
-    const f = horizontal ? p.data.xField : p.data.yField;
-    for (const r of p.data.rows) {
-      const v = num(r[f!]);
-      if (Number.isFinite(v)) { qLo = Math.min(qLo, v); qHi = Math.max(qHi, v); }
+
+  // ---------- Stacking detection ----------
+  const stackMode = (quantCh.stack === "zero" || quantCh.stack === "normalize") && prepared[0].data.colorField ? quantCh.stack : null;
+  // ---------- Grouping detection ----------
+  const offCh = asChannel(prepared[0].unit.encoding[horizontal ? "yOffset" : "xOffset"]);
+  const offField = offCh?.field;
+
+  // ---------- Domains ----------
+  let qLo: number, qHi: number;
+  const colorField = prepared[0].data.colorField;
+  const colorDomain = shared?.colorDomain.length ? shared.colorDomain : colorField ? nominalDomain(prepared[0].data.rows, colorField, null) : [];
+  let stackedSegs: Array<{ nom: unknown; color: unknown; v0: number; v1: number; datum: Row }> | null = null;
+
+  if (stackMode) {
+    // group by nominal, cumulate in colorDomain order
+    const byNom = new Map<string, Row[]>();
+    const order: string[] = [];
+    for (const r of prepared[0].data.rows) {
+      const k = String(r[nomField!]);
+      if (!byNom.has(k)) { byNom.set(k, []); order.push(k); }
+      byNom.get(k)!.push(r);
     }
-    if (p.data.binned) {
-      for (const r of p.data.rows) { /* x extent for binned handled below */ }
+    stackedSegs = [];
+    let maxTop = 0;
+    for (const k of order) {
+      const g = byNom.get(k)!;
+      const total = g.reduce((s, r) => s + num(r[quantField]), 0);
+      let acc = 0;
+      for (const cv of colorDomain) {
+        const r = g.find((rr) => String(rr[colorField!]) === String(cv));
+        if (!r) continue;
+        let v = num(r[quantField]);
+        if (stackMode === "normalize" && total > 0) v = v / total;
+        stackedSegs.push({ nom: r[nomField!], color: cv, v0: acc, v1: acc + v, datum: r });
+        acc += v;
+      }
+      maxTop = Math.max(maxTop, acc);
     }
+    qLo = 0; qHi = stackMode === "normalize" ? 1 : maxTop;
+  } else if (shared) {
+    qLo = shared.qLo; qHi = shared.qHi;
+  } else {
+    qLo = Infinity; qHi = -Infinity;
+    for (const p of prepared) {
+      const f = horizontal ? p.data.xField : p.data.yField;
+      for (const r of p.data.rows) { const v = num(r[f!]); if (Number.isFinite(v)) { qLo = Math.min(qLo, v); qHi = Math.max(qHi, v); } }
+    }
+    if (!Number.isFinite(qLo)) { qLo = 0; qHi = 1; }
   }
-  if (!Number.isFinite(qLo)) { qLo = 0; qHi = 1; }
 
-  const domainNominal = !binned && nomField && nomCh
-    ? nominalDomain(prepared[0].data.rows, nomField, nomCh.sort, quantField)
-    : [];
+  const domainNominal = shared?.domainNominal.length
+    ? shared.domainNominal
+    : !binned && !temporal && nomField && nomCh
+      ? nominalDomain(prepared[0].data.rows, nomField, nomCh.sort, quantField)
+      : [];
 
-  // ---- 4. Margins from measured axis content (SCENEGRAPH.md §6) ----
-  const fs = theme.fontSize;
+  // ---------- Legend reservation ----------
+  const colorCh = asChannel(prepared[0].unit.encoding.color);
+  const wantLegend = !opts?.suppressLegend && colorDomain.length > 0 && colorCh?.legend !== null && !!colorCh?.field;
+  const legendLabelW = wantLegend ? colorDomain.reduce((m: number, v) => Math.max(m, measure(String(v), fs)), 0) : 0;
+  const legendW = wantLegend ? Math.min(legendLabelW, 120) + 10 + 6 + 16 : 0;
+
+  // ---------- Margins ----------
   const quantAxis = quantCh.axis === null ? null : (quantCh.axis ?? {});
   const nomAxis = nomCh ? (nomCh.axis === null ? null : (nomCh.axis ?? {})) : null;
   const tickLen = 4, labelGap = 4, titleGap = 8;
-
-  // Provisional quantitative ticks against full size for label measurement
-  const provisional = niceTicks(qLo, qHi, horizontal ? W : H, { includeZero: hasBars || quantCh.scale?.zero === true, nice: quantCh.scale?.nice !== false, tickCount: quantAxis?.tickCount });
-  const qLabels = provisional.ticks.map((t) => formatValue(t, quantAxis?.format, provisional.step));
+  const provisional = niceTicks(qLo, qHi, horizontal ? rect.w : rect.h, { includeZero: hasBars || !!stackMode || quantCh.scale?.zero === true, nice: quantCh.scale?.nice !== false, tickCount: quantAxis?.tickCount });
+  const qFmt = quantAxis?.format ?? (stackMode === "normalize" ? { type: "percent", maximumFractionDigits: 0 } : undefined);
+  const qLabels = provisional.ticks.map((t) => formatValue(stackMode === "normalize" ? t * 100 : t, qFmt, provisional.step * (stackMode === "normalize" ? 100 : 1)));
   const maxQLabelW = qLabels.reduce((m, l) => Math.max(m, measure(l, fs)), 0);
-
   const nomLabels = domainNominal.map(String);
   const maxNomLabelW = nomLabels.reduce((m, l) => Math.max(m, measure(l, fs)), 0);
-
   const quantTitle = quantCh.title ?? quantAxis?.title ?? undefined;
   const nomTitle = nomCh ? (nomCh.title ?? nomAxis?.title ?? undefined) : undefined;
 
-  let mLeft: number, mBottom: number;
   const mTop = Math.ceil(textHeight(fs) / 2) + 2;
-  let mRight = Math.ceil(Math.min(maxQLabelW, 60) / 2) + 4;
+  let mRight = Math.ceil(Math.min(maxQLabelW, 60) / 2) + 4 + legendW;
+  let mLeft: number, mBottom: number;
   if (horizontal) {
     mLeft = (nomAxis !== null ? Math.min(maxNomLabelW, 140) + tickLen + labelGap : 0) + (nomTitle ? textHeight(fs) + titleGap : 0) + 4;
     mBottom = (quantAxis !== null ? textHeight(fs) + tickLen + labelGap : 0) + (quantTitle ? textHeight(fs) + titleGap : 0) + 4;
   } else {
     mLeft = (quantAxis !== null ? Math.min(maxQLabelW, 80) + tickLen + labelGap : 0) + (quantTitle ? textHeight(fs) + titleGap : 0) + 4;
     const angled = nomAxis?.labelAngle ? Math.abs(nomAxis.labelAngle) > 0 : false;
-    const nomLabelH = nomAxis !== null ? (angled ? Math.min(maxNomLabelW, 90) * 0.85 : textHeight(fs)) : 0;
+    const nomLabelH = nomAxis !== null ? (angled ? Math.min(maxNomLabelW, 90) * 0.85 : textHeight(fs)) : (temporal ? textHeight(fs) + tickLen + labelGap : 0);
     mBottom = nomLabelH + (nomAxis !== null ? tickLen + labelGap : 0) + (nomTitle ? textHeight(fs) + titleGap : 0) + 4;
   }
-  const plot = { x: r2(mLeft), y: r2(mTop), w: r2(Math.max(10, W - mLeft - mRight)), h: r2(Math.max(10, H - mTop - mBottom)) };
+  const plot: Rect = { x: r2(rect.x + mLeft), y: r2(rect.y + mTop), w: r2(Math.max(10, rect.w - mLeft - mRight)), h: r2(Math.max(10, rect.h - mTop - mBottom)) };
 
-  // ---- 5. Final scales ----
-  const qTicks = niceTicks(qLo, qHi, horizontal ? plot.w : plot.h, { includeZero: hasBars || quantCh.scale?.zero === true, nice: quantCh.scale?.nice !== false, tickCount: quantAxis?.tickCount });
-  const qScale: LinearScale = horizontal
-    ? linearScale(qTicks, [plot.x, plot.x + plot.w])
-    : linearScale(qTicks, [plot.y + plot.h, plot.y]); // y grows downward
-  const nScale: BandScale | null = !binned && domainNominal.length
-    ? bandScale(domainNominal, horizontal ? plot.y : plot.x, horizontal ? plot.h : plot.w)
-    : null;
-  // binned x: linear scale over bin extent
+  // ---------- Scales ----------
+  const qTicks = niceTicks(qLo, qHi, horizontal ? plot.w : plot.h, { includeZero: hasBars || !!stackMode || quantCh.scale?.zero === true, nice: quantCh.scale?.nice !== false, tickCount: quantAxis?.tickCount });
+  const qScale: LinearScale = horizontal ? linearScale(qTicks, [plot.x, plot.x + plot.w]) : linearScale(qTicks, [plot.y + plot.h, plot.y]);
+  const nScale: BandScale | null = !binned && !temporal && domainNominal.length ? bandScale(domainNominal, horizontal ? plot.y : plot.x, horizontal ? plot.h : plot.w) : null;
+  const offScale: BandScale | null = offField && nScale ? bandScale(nominalDomain(prepared[0].data.rows, offField, null), 0, nScale.bandwidth, 0.1, 0.05) : null;
+
   let binScale: LinearScale | null = null;
   if (binned) {
     let bLo = Infinity, bHi = -Infinity;
@@ -110,16 +220,29 @@ export function layout(input: LayoutInput): SceneGraph {
     const bt = niceTicks(bLo, bHi, plot.w, {});
     binScale = linearScale({ ...bt, niceMin: bLo, niceMax: bHi }, [plot.x, plot.x + plot.w]);
   }
+  let tScale: { scale: (v: number) => number; ticks: number[]; labels: string[] } | null = null;
+  if (temporal) {
+    let tLo = Infinity, tHi = -Infinity;
+    for (const p of prepared) {
+      const f = horizontal ? p.data.yField! : p.data.xField!;
+      for (const r of p.data.rows) { const t = parseTemporal(r[f]); tLo = Math.min(tLo, t); tHi = Math.max(tHi, t); }
+    }
+    const pad = (tHi - tLo) * 0.02 || 1;
+    tLo -= pad; tHi += pad;
+    const tt = timeTicks(tLo, tHi, plot.w);
+    const k = (plot.w) / (tHi - tLo);
+    tScale = { scale: (v) => plot.x + (v - tLo) * k, ticks: tt.ticks, labels: tt.labels };
+  }
 
-  // ---- 6. Color resolution (SCENEGRAPH.md §4.3) ----
-  const colorCh = asChannel(prepared[0].unit.encoding.color);
-  const colorField = prepared[0].data.colorField;
-  const colorDomain = colorField ? nominalDomain(prepared[0].data.rows, colorField, null) : [];
-  const paletteFor = (v: unknown): string => theme.palette[colorDomain.findIndex((d) => String(d) === String(v)) % theme.palette.length] ?? theme.hue;
+  // ---------- Color resolution ----------
+  const paletteFor = (v: unknown): string => {
+    const i = colorDomain.findIndex((d) => String(d) === String(v));
+    return i < 0 ? theme.hue : theme.palette[i % theme.palette.length];
+  };
   const selected = (sel: string | undefined, datum: Row): boolean | null => {
     if (!sel) return null;
-    const state = input.selectionState?.[sel];
-    if (!state || state.length === 0) return null; // no active selection -> condition value applies to none? spec: no selection -> base value
+    const state = ctx.selectionState?.[sel];
+    if (!state || state.length === 0) return null;
     return state.some((s) => Object.entries(s).every(([k, v]) => datum[k] === v));
   };
   const resolveFill = (mark: MarkDef, datum: Row): string => {
@@ -137,10 +260,7 @@ export function layout(input: LayoutInput): SceneGraph {
     return theme.hue;
   };
 
-  const nodes: SceneNode[] = [];
-  const push = (n: SceneNode) => nodes.push(n);
-
-  // ---- 7. Grid (before marks) ----
+  // ---------- Grid ----------
   if (quantAxis && quantAxis.grid) {
     for (const t of qTicks.ticks) {
       const p = r2(qScale.scale(t));
@@ -150,48 +270,73 @@ export function layout(input: LayoutInput): SceneGraph {
     }
   }
 
-  // ---- 8. Marks, in layer order ----
-  const zero = r2(qScale.scale(Math.max(qTicks.niceMin, Math.min(0, qTicks.niceMax)) < 0 ? 0 : Math.max(0, qTicks.niceMin)));
+  // ---------- Marks ----------
+  const zeroV = Math.max(qTicks.niceMin, Math.min(0, qTicks.niceMax));
+  const zero = r2(qScale.scale(zeroV < 0 ? 0 : Math.max(0, qTicks.niceMin)));
+
+  // Stacked bars replace the per-layer bar path
+  if (stackedSegs && nScale) {
+    const mark = prepared[0].mark;
+    for (const s of stackedSegs) {
+      const np = r2(nScale.position(s.nom));
+      const bw = r2(nScale.bandwidth);
+      const p0 = r2(qScale.scale(s.v0)), p1 = r2(qScale.scale(s.v1));
+      const fill = paletteFor(s.color);
+      push(horizontal
+        ? { type: "rect", x: Math.min(p0, p1), y: np, width: r2(Math.abs(p1 - p0)), height: bw, fill, ...(mark.opacity !== undefined ? { opacity: mark.opacity } : {}), meta: { role: "mark", datum: s.datum } }
+        : { type: "rect", x: np, y: Math.min(p0, p1), width: bw, height: r2(Math.abs(p1 - p0)), fill, ...(mark.opacity !== undefined ? { opacity: mark.opacity } : {}), meta: { role: "mark", datum: s.datum } });
+    }
+  }
+
   for (const p of prepared) {
+    if (stackedSegs && p.mark.type === "bar") continue; // handled above
     const enc = p.unit.encoding;
-    const mx = asChannel(enc.x), my = asChannel(enc.y);
     const qF = horizontal ? p.data.xField! : p.data.yField!;
     const nF = horizontal ? p.data.yField : p.data.xField;
-    const selMeta: Meta["selection"] = p.unit.selections?.[0]?.id;
+    const selMeta = p.unit.selections?.[0]?.id;
     const selFields = p.unit.selections?.[0]?.fields;
     const meta = (datum: Row): Meta => ({ role: "mark", datum, ...(selMeta ? { selection: selMeta, fields: selFields } : {}) });
+    const nomPos = (r: Row): number => {
+      if (temporal && tScale && nF) return tScale.scale(parseTemporal(r[nF]));
+      if (binScale) return binScale.scale((num(r.__bin0) + num(r.__bin1)) / 2);
+      return nScale && nF ? nScale.center(r[nF]) : 0;
+    };
 
     switch (p.mark.type) {
       case "bar": {
         for (const rrow of p.data.rows) {
-          const qv = num(rrow[qF]);
-          const qp = r2(qScale.scale(qv));
+          const qp = r2(qScale.scale(num(rrow[qF])));
           const fill = resolveFill(p.mark, rrow);
-          const opacity = p.mark.opacity;
           const rx = p.mark.cornerRadiusEnd ?? p.mark.cornerRadius;
+          const common = { fill, ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), ...(rx !== undefined ? { rx } : {}), meta: meta(rrow) };
           if (binned && binScale) {
-            const x0p = r2(binScale.scale(num(rrow.__bin0)));
-            const x1p = r2(binScale.scale(num(rrow.__bin1)));
-            push({ type: "rect", x: x0p, y: Math.min(qp, zero), width: r2(Math.max(0, x1p - x0p - 1)), height: r2(Math.abs(zero - qp)), fill, ...(opacity !== undefined ? { opacity } : {}), ...(rx !== undefined ? { rx } : {}), meta: meta(rrow) });
+            const x0p = r2(binScale.scale(num(rrow.__bin0))), x1p = r2(binScale.scale(num(rrow.__bin1)));
+            push({ type: "rect", x: x0p, y: Math.min(qp, zero), width: r2(Math.max(0, x1p - x0p - 1)), height: r2(Math.abs(zero - qp)), ...common });
           } else if (nScale && nF) {
-            const np = r2(nScale.position(rrow[nF]));
-            const bw = r2(nScale.bandwidth);
+            let np = nScale.position(rrow[nF]);
+            let bw = nScale.bandwidth;
+            if (offScale && offField) { np += offScale.position(rrow[offField]); bw = offScale.bandwidth; }
+            np = r2(np); bw = r2(bw);
             push(horizontal
-              ? { type: "rect", x: Math.min(qp, zero), y: np, width: r2(Math.abs(qp - zero)), height: bw, fill, ...(opacity !== undefined ? { opacity } : {}), ...(rx !== undefined ? { rx } : {}), meta: meta(rrow) }
-              : { type: "rect", x: np, y: Math.min(qp, zero), width: bw, height: r2(Math.abs(zero - qp)), fill, ...(opacity !== undefined ? { opacity } : {}), ...(rx !== undefined ? { rx } : {}), meta: meta(rrow) });
+              ? { type: "rect", x: Math.min(qp, zero), y: np, width: r2(Math.abs(qp - zero)), height: bw, ...common }
+              : { type: "rect", x: np, y: Math.min(qp, zero), width: bw, height: r2(Math.abs(zero - qp)), ...common });
           }
         }
         break;
       }
       case "line": case "area": {
-        const pts = p.data.rows.map((rrow) => {
-          const qp = qScale.scale(num(rrow[qF]));
-          const np = nScale && nF ? nScale.center(rrow[nF]) : binScale ? binScale.scale((num(rrow.__bin0) + num(rrow.__bin1)) / 2) : 0;
-          return horizontal ? { x: qp, y: np, row: rrow } : { x: np, y: qp, row: rrow };
-        });
-        if (pts.length) {
+        // multi-series: split by color field, one path per series in colorDomain order
+        const seriesKeys = colorField && p.data.colorField ? colorDomain : [null];
+        for (const sk of seriesKeys) {
+          const rows = sk === null ? p.data.rows : p.data.rows.filter((r) => String(r[colorField!]) === String(sk));
+          if (!rows.length) continue;
+          const pts = rows.map((rrow) => {
+            const qp = qScale.scale(num(rrow[qF]));
+            const np = nomPos(rrow);
+            return horizontal ? { x: qp, y: np, row: rrow } : { x: np, y: qp, row: rrow };
+          });
           const d = pts.map((pt, i) => `${i === 0 ? "M" : "L"}${r2(pt.x)},${r2(pt.y)}`).join("");
-          const stroke = resolveFill(p.mark, p.data.rows[0]);
+          const stroke = sk === null ? resolveFill(p.mark, rows[0]) : paletteFor(sk);
           if (p.mark.type === "area") {
             const base = horizontal ? `L${zero},${r2(pts[pts.length - 1].y)}L${zero},${r2(pts[0].y)}Z` : `L${r2(pts[pts.length - 1].x)},${zero}L${r2(pts[0].x)},${zero}Z`;
             push({ type: "path", d: d + base, fill: stroke, opacity: p.mark.opacity ?? 0.25, meta: { role: "mark" } });
@@ -204,9 +349,8 @@ export function layout(input: LayoutInput): SceneGraph {
       case "point": case "circle": case "square": case "tick": {
         for (const rrow of p.data.rows) {
           const qp = qScale.scale(num(rrow[qF]));
-          const np = nScale && nF ? nScale.center(rrow[nF]) : 0;
-          const fill = resolveFill(p.mark, rrow);
-          push({ type: "circle", cx: r2(horizontal ? qp : np), cy: r2(horizontal ? np : qp), r: p.mark.size ? Math.sqrt(p.mark.size) : 3.5, fill, ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), meta: meta(rrow) });
+          const np = nomPos(rrow);
+          push({ type: "circle", cx: r2(horizontal ? qp : np), cy: r2(horizontal ? np : qp), r: p.mark.size ? Math.sqrt(p.mark.size) : 3.5, fill: resolveFill(p.mark, rrow), ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), meta: meta(rrow) });
         }
         break;
       }
@@ -222,12 +366,10 @@ export function layout(input: LayoutInput): SceneGraph {
       case "text": {
         const textCh = asChannel(enc.text);
         for (const rrow of p.data.rows) {
-          const qv = num(rrow[qF]);
-          const qp = qScale.scale(qv);
-          const np = nScale && nF ? nScale.center(rrow[nF]) : 0;
+          const qp = qScale.scale(num(rrow[qF]));
+          const np = nomPos(rrow);
           const content = String(textCh?.field !== undefined ? rrow[textCh.field] : textCh?.value ?? "");
           const fill = p.mark.color ?? theme.labelColor;
-          // Place just inside the bar end (horizontal) / just above (vertical).
           const pad = 6;
           const node: TextNode = horizontal
             ? { type: "text", x: r2(qp - pad), y: r2(np + textHeight(fs) / 2 - fs * 0.25), content: truncateToFit(content, Math.abs(qp - zero) - pad * 2, fs, measure), fill, fontSize: fs, anchor: "end", meta: meta(rrow) }
@@ -236,25 +378,23 @@ export function layout(input: LayoutInput): SceneGraph {
         }
         break;
       }
-      case "arc":
-        throw new Error("airmark-engine: 'arc' mark not implemented yet — add a golden fixture and implement in layout.ts");
       default:
         throw new Error(`airmark-engine: unsupported mark type '${p.mark.type}'`);
     }
   }
 
-  // ---- 9. Axes (after marks) ----
+  // ---------- Axes ----------
   const axisText = (x: number, y: number, content: string, anchor: TextNode["anchor"], extra?: Partial<TextNode>): TextNode =>
     ({ type: "text", x: r2(x), y: r2(y), content, fill: theme.labelColor, fontSize: fs, anchor, meta: { role: "label" }, ...extra });
 
   if (quantAxis) {
-    // domain line
     push(horizontal
       ? { type: "line", x1: plot.x, y1: r2(plot.y + plot.h), x2: r2(plot.x + plot.w), y2: r2(plot.y + plot.h), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } }
       : { type: "line", x1: plot.x, y1: plot.y, x2: plot.x, y2: r2(plot.y + plot.h), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
-    for (const t of qTicks.ticks) {
+    for (let i = 0; i < qTicks.ticks.length; i++) {
+      const t = qTicks.ticks[i];
       const p = r2(qScale.scale(t));
-      const label = formatValue(t, quantAxis.format, qTicks.step);
+      const label = formatValue(stackMode === "normalize" ? t * 100 : t, qFmt, qTicks.step * (stackMode === "normalize" ? 100 : 1));
       if (horizontal) {
         push({ type: "line", x1: p, y1: r2(plot.y + plot.h), x2: p, y2: r2(plot.y + plot.h + tickLen), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
         push(axisText(p, plot.y + plot.h + tickLen + labelGap + fs * 0.8, label, "middle"));
@@ -265,8 +405,8 @@ export function layout(input: LayoutInput): SceneGraph {
     }
     if (quantTitle) {
       push(horizontal
-        ? axisText(plot.x + plot.w / 2, H - 4, String(quantTitle), "middle", { meta: { role: "title" } })
-        : axisText(0, 0, String(quantTitle), "middle", { angle: -90, x: r2(textHeight(fs) - 2), y: r2(plot.y + plot.h / 2), meta: { role: "title" } }));
+        ? axisText(plot.x + plot.w / 2, rect.y + rect.h - 4, String(quantTitle), "middle", { meta: { role: "title" } })
+        : axisText(0, 0, String(quantTitle), "middle", { angle: -90, x: r2(rect.x + textHeight(fs) - 2), y: r2(plot.y + plot.h / 2), meta: { role: "title" } }));
     }
   }
   if (nomAxis && nScale) {
@@ -289,11 +429,19 @@ export function layout(input: LayoutInput): SceneGraph {
     }
     if (nomTitle) {
       push(horizontal
-        ? axisText(0, 0, String(nomTitle), "middle", { angle: -90, x: r2(textHeight(fs) - 2), y: r2(plot.y + plot.h / 2), meta: { role: "title" } })
-        : axisText(plot.x + plot.w / 2, H - 4, String(nomTitle), "middle", { meta: { role: "title" } }));
+        ? axisText(0, 0, String(nomTitle), "middle", { angle: -90, x: r2(rect.x + textHeight(fs) - 2), y: r2(plot.y + plot.h / 2), meta: { role: "title" } })
+        : axisText(plot.x + plot.w / 2, rect.y + rect.h - 4, String(nomTitle), "middle", { meta: { role: "title" } }));
     }
   }
-  // binned x axis (linear ticks along x)
+  if (temporal && tScale && nomAxis !== null) {
+    push({ type: "line", x1: plot.x, y1: r2(plot.y + plot.h), x2: r2(plot.x + plot.w), y2: r2(plot.y + plot.h), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
+    tScale.ticks.forEach((t, i) => {
+      const p = r2(tScale!.scale(t));
+      push({ type: "line", x1: p, y1: r2(plot.y + plot.h), x2: p, y2: r2(plot.y + plot.h + tickLen), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
+      push(axisText(p, plot.y + plot.h + tickLen + labelGap + fs * 0.8, tScale!.labels[i], "middle"));
+    });
+    if (nomTitle) push(axisText(plot.x + plot.w / 2, rect.y + rect.h - 4, String(nomTitle), "middle", { meta: { role: "title" } }));
+  }
   if (binned && binScale && (x0?.axis !== null)) {
     push({ type: "line", x1: plot.x, y1: r2(plot.y + plot.h), x2: r2(plot.x + plot.w), y2: r2(plot.y + plot.h), stroke: theme.axisColor, strokeWidth: 1, meta: { role: "axis" } });
     for (const t of binScale.ticksInfo.ticks.filter((t) => t >= binScale!.domain[0] - 1e-9 && t <= binScale!.domain[1] + 1e-9)) {
@@ -302,8 +450,62 @@ export function layout(input: LayoutInput): SceneGraph {
       push(axisText(p, plot.y + plot.h + tickLen + labelGap + fs * 0.8, formatTick(t, binScale.ticksInfo.step), "middle"));
     }
     const xt = x0?.title ?? (x0?.axis as { title?: string } | undefined)?.title;
-    if (xt) push(axisText(plot.x + plot.w / 2, H - 4, String(xt), "middle", { meta: { role: "title" } }));
+    if (xt) push(axisText(plot.x + plot.w / 2, rect.y + rect.h - 4, String(xt), "middle", { meta: { role: "title" } }));
   }
 
-  return { width: W, height: H, nodes };
+  // ---------- Legend (SCENEGRAPH.md §6: right side, swatch 10px, row height fs*1.6) ----------
+  if (wantLegend) {
+    const lx = r2(plot.x + plot.w + 16);
+    const rowH = fs * 1.6;
+    colorDomain.forEach((v, i) => {
+      const ly = r2(plot.y + i * rowH);
+      push({ type: "rect", x: lx, y: ly, width: 10, height: 10, fill: paletteFor(v), rx: 2, meta: { role: "label" } });
+      push({ type: "text", x: r2(lx + 16), y: r2(ly + fs * 0.85), content: truncateToFit(String(v), 120, fs, measure), fill: theme.labelColor, fontSize: fs, anchor: "start", meta: { role: "label" } });
+    });
+  }
+
+  return nodes;
+}
+
+// ---------- Arc / pie (SCENEGRAPH.md §2: 4° polyline approximation) ----------
+function layoutArc(p: Prepared, rect: Rect, ctx: Ctx, opts?: { suppressLegend?: boolean }): SceneNode[] {
+  const { theme, measure } = ctx;
+  const fs = theme.fontSize;
+  const nodes: SceneNode[] = [];
+  const thetaCh = asChannel(p.unit.encoding.theta);
+  const colorCh = asChannel(p.unit.encoding.color);
+  if (!thetaCh?.field) throw new Error("airmark-engine: arc mark requires a theta channel with a field");
+  const colorField = colorCh?.field;
+  const colorDomain = colorField ? nominalDomain(p.data.rows, colorField, null) : [];
+  const paletteFor = (v: unknown): string => theme.palette[colorDomain.findIndex((d) => String(d) === String(v)) % theme.palette.length] ?? theme.hue;
+
+  const wantLegend = !opts?.suppressLegend && colorDomain.length > 0 && colorCh?.legend !== null;
+  const legendLabelW = wantLegend ? colorDomain.reduce((m: number, v) => Math.max(m, measure(String(v), fs)), 0) : 0;
+  const legendW = wantLegend ? Math.min(legendLabelW, 120) + 10 + 6 + 16 : 0;
+
+  const cx = r2(rect.x + (rect.w - legendW) / 2);
+  const cy = r2(rect.y + rect.h / 2);
+  const rOuter = p.mark.outerRadius ?? Math.max(10, Math.min(rect.w - legendW, rect.h) / 2 - 8);
+  const rInner = p.mark.innerRadius ?? 0;
+
+  const total = p.data.rows.reduce((s, r) => s + num(r[thetaCh.field!]), 0);
+  let a = 0;
+  const selMeta = p.unit.selections?.[0]?.id;
+  const selFields = p.unit.selections?.[0]?.fields;
+  for (const rrow of p.data.rows) {
+    const frac = total > 0 ? num(rrow[thetaCh.field!]) / total : 0;
+    const a1 = a + frac * Math.PI * 2;
+    nodes.push({ type: "path", d: arcPath(cx, cy, rInner, rOuter, a, a1), fill: p.mark.color ?? (colorField ? paletteFor(rrow[colorField]) : theme.hue), ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), meta: { role: "mark", datum: rrow, ...(selMeta ? { selection: selMeta, fields: selFields } : {}) } });
+    a = a1;
+  }
+  if (wantLegend) {
+    const lx = r2(rect.x + rect.w - legendW + 16);
+    const rowH = fs * 1.6;
+    colorDomain.forEach((v, i) => {
+      const ly = r2(rect.y + 8 + i * rowH);
+      nodes.push({ type: "rect", x: lx, y: ly, width: 10, height: 10, fill: paletteFor(v), rx: 2, meta: { role: "label" } });
+      nodes.push({ type: "text", x: r2(lx + 16), y: r2(ly + fs * 0.85), content: truncateToFit(String(v), 120, fs, measure), fill: theme.labelColor, fontSize: fs, anchor: "start", meta: { role: "label" } });
+    });
+  }
+  return nodes;
 }

@@ -1,0 +1,112 @@
+{
+  "name": "bar-stacked-zero",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "mark": "bar",
+      "encoding": {
+        "x": {
+          "field": "region",
+          "type": "nominal",
+          "title": "Region"
+        },
+        "y": {
+          "field": "revenue",
+          "type": "quantitative",
+          "stack": "zero",
+          "title": "Revenue",
+          "axis": {
+            "grid": true
+          }
+        },
+        "color": {
+          "field": "product",
+          "type": "nominal"
+        }
+      }
+    },
+    "rows": [
+      {
+        "region": "West",
+        "product": "Hardware",
+        "revenue": 120
+      },
+      {
+        "region": "West",
+        "product": "Software",
+        "revenue": 95
+      },
+      {
+        "region": "West",
+        "product": "Services",
+        "revenue": 60
+      },
+      {
+        "region": "East",
+        "product": "Hardware",
+        "revenue": 80
+      },
+      {
+        "region": "East",
+        "product": "Software",
+        "revenue": 110
+      },
+      {
+        "region": "East",
+        "product": "Services",
+        "revenue": 45
+      },
+      {
+        "region": "North",
+        "product": "Hardware",
+        "revenue": 70
+      },
+      {
+        "region": "North",
+        "product": "Software",
+        "revenue": 65
+      },
+      {
+        "region": "North",
+        "product": "Services",
+        "revenue": 55
+      },
+      {
+        "region": "South",
+        "product": "Hardware",
+        "revenue": 40
+      },
+      {
+        "region": "South",
+        "product": "Software",
+        "revenue": 30
+      },
+      {
+        "region": "South",
+        "product": "Services",
+        "revenue": 25
+      }
+    ],
+    "width": 720,
+    "height": 420,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    }
+  },
+  "invariants": [
+    "3 segments per region stacked without gaps",
+    "segment order = color domain order",
+    "legend with 3 swatches",
+    "West column tallest (275)"
+  ]
+}

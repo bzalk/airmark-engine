@@ -1,0 +1,61 @@
+{
+  "name": "arc-pie-legend",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "mark": {
+        "type": "arc",
+        "outerRadius": 150
+      },
+      "encoding": {
+        "theta": {
+          "field": "share",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "browser",
+          "type": "nominal"
+        }
+      }
+    },
+    "rows": [
+      {
+        "browser": "Chrome",
+        "share": 64
+      },
+      {
+        "browser": "Safari",
+        "share": 19
+      },
+      {
+        "browser": "Edge",
+        "share": 9
+      },
+      {
+        "browser": "Other",
+        "share": 8
+      }
+    ],
+    "width": 520,
+    "height": 360,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    }
+  },
+  "invariants": [
+    "4 slices summing to full circle",
+    "slice fractions proportional to share",
+    "legend right side",
+    "polyline arc approximation"
+  ]
+}

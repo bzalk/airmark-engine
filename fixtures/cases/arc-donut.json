@@ -1,0 +1,56 @@
+{
+  "name": "arc-donut",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "mark": {
+        "type": "arc",
+        "innerRadius": 70,
+        "outerRadius": 140
+      },
+      "encoding": {
+        "theta": {
+          "field": "count",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "status",
+          "type": "nominal"
+        }
+      }
+    },
+    "rows": [
+      {
+        "status": "Open",
+        "count": 34
+      },
+      {
+        "status": "Pending",
+        "count": 21
+      },
+      {
+        "status": "Closed",
+        "count": 88
+      }
+    ],
+    "width": 520,
+    "height": 340,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    }
+  },
+  "invariants": [
+    "ring slices (inner radius hole)",
+    "3 slices"
+  ]
+}

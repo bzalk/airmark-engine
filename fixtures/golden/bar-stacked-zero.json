@@ -1,0 +1,667 @@
+{
+  "width": 720,
+  "height": 420,
+  "nodes": [
+    {
+      "type": "line",
+      "x1": 51.35,
+      "y1": 373.6,
+      "x2": 626.81,
+      "y2": 373.6,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 51.35,
+      "y1": 312.83,
+      "x2": 626.81,
+      "y2": 312.83,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 51.35,
+      "y1": 252.07,
+      "x2": 626.81,
+      "y2": 252.07,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 51.35,
+      "y1": 191.3,
+      "x2": 626.81,
+      "y2": 191.3,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 51.35,
+      "y1": 130.53,
+      "x2": 626.81,
+      "y2": 130.53,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 51.35,
+      "y1": 69.77,
+      "x2": 626.81,
+      "y2": 69.77,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 51.35,
+      "y1": 9,
+      "x2": 626.81,
+      "y2": 9,
+      "stroke": "#E1E7F0",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "grid"
+      }
+    },
+    {
+      "type": "rect",
+      "x": 65.56,
+      "y": 227.76,
+      "width": 120.78,
+      "height": 145.84,
+      "fill": "#3264D6",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "West",
+          "product": "Hardware",
+          "revenue": 120
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 65.56,
+      "y": 112.3,
+      "width": 120.78,
+      "height": 115.46,
+      "fill": "#26A69A",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "West",
+          "product": "Software",
+          "revenue": 95
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 65.56,
+      "y": 39.38,
+      "width": 120.78,
+      "height": 72.92,
+      "fill": "#F59E0B",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "West",
+          "product": "Services",
+          "revenue": 60
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 207.65,
+      "y": 276.37,
+      "width": 120.78,
+      "height": 97.23,
+      "fill": "#3264D6",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "East",
+          "product": "Hardware",
+          "revenue": 80
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 207.65,
+      "y": 142.69,
+      "width": 120.78,
+      "height": 133.68,
+      "fill": "#26A69A",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "East",
+          "product": "Software",
+          "revenue": 110
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 207.65,
+      "y": 88,
+      "width": 120.78,
+      "height": 54.69,
+      "fill": "#F59E0B",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "East",
+          "product": "Services",
+          "revenue": 45
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 349.74,
+      "y": 288.53,
+      "width": 120.78,
+      "height": 85.07,
+      "fill": "#3264D6",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "North",
+          "product": "Hardware",
+          "revenue": 70
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 349.74,
+      "y": 209.53,
+      "width": 120.78,
+      "height": 79,
+      "fill": "#26A69A",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "North",
+          "product": "Software",
+          "revenue": 65
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 349.74,
+      "y": 142.69,
+      "width": 120.78,
+      "height": 66.84,
+      "fill": "#F59E0B",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "North",
+          "product": "Services",
+          "revenue": 55
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 491.83,
+      "y": 324.99,
+      "width": 120.78,
+      "height": 48.61,
+      "fill": "#3264D6",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "South",
+          "product": "Hardware",
+          "revenue": 40
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 491.83,
+      "y": 288.53,
+      "width": 120.78,
+      "height": 36.46,
+      "fill": "#26A69A",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "South",
+          "product": "Software",
+          "revenue": 30
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "x": 491.83,
+      "y": 258.14,
+      "width": 120.78,
+      "height": 30.39,
+      "fill": "#F59E0B",
+      "meta": {
+        "role": "mark",
+        "datum": {
+          "region": "South",
+          "product": "Services",
+          "revenue": 25
+        }
+      }
+    },
+    {
+      "type": "line",
+      "x1": 51.35,
+      "y1": 9,
+      "x2": 51.35,
+      "y2": 373.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 47.35,
+      "y1": 373.6,
+      "x2": 51.35,
+      "y2": 373.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 43.35,
+      "y": 377.45,
+      "content": "0",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 47.35,
+      "y1": 312.83,
+      "x2": 51.35,
+      "y2": 312.83,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 43.35,
+      "y": 316.68,
+      "content": "50",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 47.35,
+      "y1": 252.07,
+      "x2": 51.35,
+      "y2": 252.07,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 43.35,
+      "y": 255.92,
+      "content": "100",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 47.35,
+      "y1": 191.3,
+      "x2": 51.35,
+      "y2": 191.3,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 43.35,
+      "y": 195.15,
+      "content": "150",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 47.35,
+      "y1": 130.53,
+      "x2": 51.35,
+      "y2": 130.53,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 43.35,
+      "y": 134.38,
+      "content": "200",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 47.35,
+      "y1": 69.77,
+      "x2": 51.35,
+      "y2": 69.77,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 43.35,
+      "y": 73.62,
+      "content": "250",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 47.35,
+      "y1": 9,
+      "x2": 51.35,
+      "y2": 9,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 43.35,
+      "y": 12.85,
+      "content": "300",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "end",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 11.2,
+      "y": 191.3,
+      "content": "Revenue",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "title"
+      },
+      "angle": -90
+    },
+    {
+      "type": "line",
+      "x1": 51.35,
+      "y1": 373.6,
+      "x2": 626.81,
+      "y2": 373.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 125.95,
+      "y1": 373.6,
+      "x2": 125.95,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 125.95,
+      "y": 390.4,
+      "content": "West",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 268.04,
+      "y1": 373.6,
+      "x2": 268.04,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 268.04,
+      "y": 390.4,
+      "content": "East",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 410.12,
+      "y1": 373.6,
+      "x2": 410.12,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 410.12,
+      "y": 390.4,
+      "content": "North",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "line",
+      "x1": 552.21,
+      "y1": 373.6,
+      "x2": 552.21,
+      "y2": 377.6,
+      "stroke": "#4A576C",
+      "strokeWidth": 1,
+      "meta": {
+        "role": "axis"
+      }
+    },
+    {
+      "type": "text",
+      "x": 552.21,
+      "y": 390.4,
+      "content": "South",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 339.08,
+      "y": 416,
+      "content": "Region",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "middle",
+      "meta": {
+        "role": "title"
+      }
+    },
+    {
+      "type": "rect",
+      "x": 642.81,
+      "y": 9,
+      "width": 10,
+      "height": 10,
+      "fill": "#3264D6",
+      "rx": 2,
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 658.81,
+      "y": 18.35,
+      "content": "Hardware",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "start",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "rect",
+      "x": 642.81,
+      "y": 26.6,
+      "width": 10,
+      "height": 10,
+      "fill": "#26A69A",
+      "rx": 2,
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 658.81,
+      "y": 35.95,
+      "content": "Software",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "start",
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "rect",
+      "x": 642.81,
+      "y": 44.2,
+      "width": 10,
+      "height": 10,
+      "fill": "#F59E0B",
+      "rx": 2,
+      "meta": {
+        "role": "label"
+      }
+    },
+    {
+      "type": "text",
+      "x": 658.81,
+      "y": 53.55,
+      "content": "Services",
+      "fill": "#4A576C",
+      "fontSize": 11,
+      "anchor": "start",
+      "meta": {
+        "role": "label"
+      }
+    }
+  ]
+}

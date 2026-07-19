@@ -27,10 +27,8 @@ export function applyTransforms(rows: Row[], transforms: Transform[] | undefined
   let out = rows;
   for (const t of transforms ?? []) {
     if ("filter" in t) out = out.filter((r) => matchPredicate(t.filter as Predicate, r));
-    // aggregate / bin / timeUnit as explicit graphic transforms are handled by
-    // the same helpers as channel-level shorthands; explicit forms are TODO'd
-    // to fixtures before implementation (deny-by-default: unknown transform -> error).
-    else if ("aggregate" in t || "bin" in t || "timeUnit" in t || "stack" in t || "window" in t || "fold" in t || "flatten" in t || "pivot" in t || "sort" in t) {
+    else if ("aggregate" in t || "timeUnit" in t || "fold" in t || "sort" in t || "bin" in t) out = explicitTransform(out, t);
+    else if ("stack" in t || "window" in t || "flatten" in t || "pivot" in t) {
       throw new Error(`airmark-engine: explicit transform '${Object.keys(t)[0]}' not implemented yet — add a golden fixture and implement in transform.ts`);
     } else {
       throw new Error(`airmark-engine: unknown transform '${Object.keys(t)[0]}'`);
@@ -163,4 +161,74 @@ export function nominalDomain(rows: Row[], field: string, sort: Channel["sort"],
     case "-y": case "-x": return [...items].sort((a, b) => b.other - a.other).map((i) => i.v);
     default: return items.map((i) => i.v); // null / undefined = data order
   }
+}
+
+// ---------- Explicit transform forms (AIRspec §10.4) ----------
+import { parseTemporal } from "./core.js";
+
+type AggregateEntry = { op: NonNullable<Channel["aggregate"]>; field?: string; as: string };
+export function explicitTransform(rows: Row[], t: Transform): Row[] {
+  if ("aggregate" in t) {
+    const entries = t.aggregate as AggregateEntry[];
+    const groupby = (t.groupby as string[] | undefined) ?? [];
+    const keys: string[] = []; const groups = new Map<string, Row[]>();
+    for (const r of rows) {
+      const key = JSON.stringify(groupby.map((g) => r[g]));
+      if (!groups.has(key)) { groups.set(key, []); keys.push(key); }
+      groups.get(key)!.push(r);
+    }
+    return keys.map((key) => {
+      const g = groups.get(key)!; const out: Row = {};
+      groupby.forEach((f, i) => (out[f] = (JSON.parse(key) as unknown[])[i]));
+      for (const e of entries) out[e.as] = computeOp(e.op, e.field ? g.map((r) => r[e.field!]) : g, e.field);
+      return out;
+    });
+  }
+  if ("timeUnit" in t) {
+    const { field, unit, as } = t.timeUnit as { field: string; unit: string; as: string };
+    return rows.map((r) => {
+      const d = new Date(parseTemporal(r[field]));
+      let out: number;
+      switch (unit) {
+        case "year": out = Date.UTC(d.getUTCFullYear(), 0, 1); break;
+        case "quarter": out = Date.UTC(d.getUTCFullYear(), Math.floor(d.getUTCMonth() / 3) * 3, 1); break;
+        case "month": out = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1); break;
+        case "week": { const dow = d.getUTCDay(); out = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - dow); break; }
+        case "day": out = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); break;
+        default: throw new Error(`airmark-engine: unknown timeUnit '${unit}'`);
+      }
+      return { ...r, [as]: out };
+    });
+  }
+  if ("fold" in t) {
+    const fields = t.fold as string[];
+    const out: Row[] = [];
+    for (const r of rows) for (const f of fields) out.push({ ...r, key: f, value: r[f] });
+    return out;
+  }
+  if ("sort" in t) {
+    const specs = t.sort as Array<{ field: string; direction: "ascending" | "descending" }>;
+    return [...rows].sort((a, b) => {
+      for (const s of specs) {
+        const av = a[s.field], bv = b[s.field];
+        const c = typeof av === "number" && typeof bv === "number" ? av - bv : String(av) < String(bv) ? -1 : String(av) > String(bv) ? 1 : 0;
+        if (c !== 0) return s.direction === "descending" ? -c : c;
+      }
+      return 0;
+    });
+  }
+  if ("bin" in t) {
+    const { field, as, maxbins = 10 } = t.bin as { field: string; as: string; maxbins?: number };
+    const vals = rows.map((r) => Number(r[field])).filter(Number.isFinite);
+    const lo = Math.min(...vals), hi = Math.max(...vals);
+    const tk = niceTicks(lo, hi, maxbins * 50, { tickCount: maxbins });
+    return rows.map((r) => {
+      const v = Number(r[field]);
+      let i = Math.floor((v - tk.niceMin) / tk.step);
+      const nBins = Math.round((tk.niceMax - tk.niceMin) / tk.step);
+      i = Math.max(0, Math.min(nBins - 1, i));
+      return { ...r, [as]: tk.niceMin + i * tk.step, [`${as}_end`]: tk.niceMin + (i + 1) * tk.step };
+    });
+  }
+  throw new Error(`airmark-engine: unknown transform '${Object.keys(t)[0]}'`);
 }

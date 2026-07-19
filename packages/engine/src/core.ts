@@ -172,3 +172,80 @@ export function linearScale(ticksInfo: TickResult, range: [number, number], nice
   const k = d1 === d0 ? 0 : (r1 - r0) / (d1 - d0);
   return { kind: "linear", domain, range, ticksInfo, scale: (v) => r0 + (v - d0) * k };
 }
+
+// ---------- Temporal ticks (SCENEGRAPH.md §4.5) ----------
+const SEC = 1000, MIN = 60 * SEC, HOUR = 60 * MIN, DAY = 24 * HOUR;
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const TIME_STEPS = [SEC, 5*SEC, 15*SEC, 30*SEC, MIN, 5*MIN, 15*MIN, 30*MIN, HOUR, 3*HOUR, 6*HOUR, 12*HOUR, DAY, 2*DAY, 7*DAY];
+
+export function parseTemporal(v: unknown): number {
+  if (typeof v === "number") return v;
+  let s = String(v);
+  if (/^\d{4}-\d{2}$/.test(s)) s += "-01";
+  if (/^\d{4}$/.test(s)) s += "-01-01";
+  const t = Date.parse(s);
+  if (Number.isNaN(t)) throw new Error(`airmark-engine: unparseable temporal value '${v}'`);
+  return t;
+}
+
+export type TimeTickResult = { ticks: number[]; labels: string[]; lo: number; hi: number };
+export function timeTicks(lo: number, hi: number, axisLengthPx: number): TimeTickResult {
+  if (lo === hi) hi = lo + DAY;
+  const target = clamp(Math.floor(axisLengthPx / 80), 2, 10);
+  const span = hi - lo;
+  const MONTH = 30 * DAY, YEAR = 365 * DAY;
+  type Unit = "ms" | "month" | "year";
+  let unit: Unit = "ms", step = TIME_STEPS[TIME_STEPS.length - 1], mul = 1;
+  const fixed = TIME_STEPS.find((s) => span / s <= target);
+  if (fixed) { unit = "ms"; step = fixed; }
+  else if (span / MONTH <= target) { unit = "month"; mul = 1; }
+  else if (span / (3 * MONTH) <= target) { unit = "month"; mul = 3; }
+  else if (span / (6 * MONTH) <= target) { unit = "month"; mul = 6; }
+  else {
+    unit = "year";
+    mul = 1;
+    while (span / (mul * YEAR) > target) mul *= mul % 3 === 2 ? 2.5 : 2; // 1,2,5,10,20,50…
+    mul = Math.round(mul);
+  }
+  const ticks: number[] = [];
+  if (unit === "ms") {
+    const start = Math.ceil(lo / step) * step;
+    for (let t = start; t <= hi + 1e-6; t += step) ticks.push(t);
+  } else {
+    const d = new Date(lo);
+    let y = d.getUTCFullYear(), m = unit === "month" ? d.getUTCMonth() : 0;
+    if (unit === "month") { m = Math.ceil(m / mul) * mul; if (m > 11) { y++; m = 0; } }
+    else { y = Math.ceil(y / mul) * mul; }
+    while (true) {
+      const t = Date.UTC(y, m, 1);
+      if (t > hi) break;
+      if (t >= lo) ticks.push(t);
+      if (unit === "month") { m += mul; y += Math.floor(m / 12); m = m % 12; }
+      else y += mul;
+    }
+  }
+  const stepMs = ticks.length > 1 ? ticks[1] - ticks[0] : span;
+  const labels = ticks.map((t) => {
+    const d = new Date(t);
+    if (stepMs >= 300 * DAY) return String(d.getUTCFullYear());
+    if (stepMs >= 25 * DAY) return `${MONTHS[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+    if (stepMs >= DAY) return `${MONTHS[d.getUTCMonth()]} ${d.getUTCDate()}`;
+    return `${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}`;
+  });
+  return { ticks, labels, lo, hi };
+}
+
+// ---------- Polar helpers (SCENEGRAPH.md §2: arcs are 4° polyline approximations) ----------
+export function arcPath(cx: number, cy: number, r0: number, r1: number, a0: number, a1: number): string {
+  // angles in radians, 0 at 12 o'clock, clockwise. Deterministic 4° segments.
+  const seg = (Math.PI / 180) * 4;
+  const n = Math.max(1, Math.ceil((a1 - a0) / seg));
+  const pt = (r: number, a: number) => `${r2(cx + r * Math.sin(a))},${r2(cy - r * Math.cos(a))}`;
+  let d = `M${pt(r1, a0)}`;
+  for (let i = 1; i <= n; i++) d += `L${pt(r1, a0 + ((a1 - a0) * i) / n)}`;
+  if (r0 > 0) {
+    d += `L${pt(r0, a1)}`;
+    for (let i = 1; i <= n; i++) d += `L${pt(r0, a1 - ((a1 - a0) * i) / n)}`;
+  } else d += `L${r2(cx)},${r2(cy)}`;
+  return d + "Z";
+}

@@ -29,7 +29,7 @@ Determinism is enforced by construction: no locale, no clock, no randomness, coo
 
 | Package | What | Deps |
 | --- | --- | --- |
-| `@airspec/airmark-engine` | `layout(input) → SceneGraph`. Marks: bar (vertical/horizontal/binned), line, area, point, rule, text overlay; layers; channel aggregates; structured-predicate filters; selection `condition` resolution; axes/grid/titles. | none |
+| `@airspec/airmark-engine` | `layout(input) → SceneGraph`. Marks: bar (vertical/horizontal/binned/**stacked/grouped**), line/area (**multi-series**), point, rule, text overlay, **arc/pie/donut**; layers; **facets (small multiples with shared scales)**; **legends**; **temporal axes** (UTC tick ladder); channel aggregates + explicit `aggregate`/`timeUnit`/`fold`/`sort`/`bin` transforms; structured-predicate filters; selection `condition` resolution; axes/grid/titles; **`layoutGrid`** for the AIRspec §8 document grid (charts beside/above each other). | none |
 | `@airspec/airmark-svg` | `toSVG(scene) → string` | engine |
 | `@airspec/airmark-react` | `<AirmarkChart {...input} onSelect={…} />` | engine, React ≥18 (peer) |
 
@@ -69,11 +69,11 @@ Adding a mark, scale, or behavior — or fixing a bug — follows one loop:
 
 Goldens are contract: regenerate only with a reviewed rationale, never to silence a failing port (SCENEGRAPH.md §7).
 
-Current fixtures cover the charts that drove the design: vertical/horizontal bars, uniform-bar text overlays, binned histograms, layered bar+line with shared scales, and selection-condition highlighting. Known-unimplemented (throwing, awaiting fixtures): `arc`, stacked/grouped bars, explicit `transform` forms beyond `filter`, temporal tick labeling, facets, legends.
+Current fixtures (11): vertical/horizontal bars, uniform-bar text overlays, binned histograms, layered bar+line, selection-condition highlighting, stacked bars, grouped bars, pie + donut, multi-series temporal lines with legends, and faceted small multiples — plus grid-layout tests. Known-unimplemented (throwing, awaiting fixtures): legends inside facets, temporal-axis bars, `stack`/`window`/`pivot`/`flatten` explicit transforms, `boxplot`/`errorband`/`errorbar` composite marks, interval-selection brushing.
 
 ## Relationship to AIRspec
 
-`SCENEGRAPH.md` is drafted here and moves to the AIRspec repository (with the golden fixtures) once stabilized — fixtures are contract, engines are implementations. This repo versions against spec releases ("implements AIRspec 1.1"). Nothing in AIRspec requires this engine; it exists so implementers don't re-fight solved layout bugs.
+`SCENEGRAPH.md` is drafted here and moves to the [AIRspec repository](https://github.com/bzalk/AIRspec) (with the golden fixtures) once stabilized — fixtures are contract, engines are implementations. This repo versions against spec releases ("implements AIRspec 1.1"). Nothing in AIRspec requires this engine; it exists so implementers don't re-fight solved layout bugs.
 
 ## License
 

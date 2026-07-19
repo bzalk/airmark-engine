@@ -1,6 +1,6 @@
 # AIRMark Scene Graph — Companion Specification
 
-Status: **Draft 1.0** — companion to AIRspec 1.1 §10 (AIRMark). Canonical home: the AIRspec repository, once stabilized. Reference implementation: `airmark-engine`.
+Status: **Draft 1.0** — companion to AIRspec 1.1 §10 (AIRMark). Canonical home: the [AIRspec repository](https://github.com/bzalk/AIRspec), once stabilized. Reference implementation: [airmark-engine](https://github.com/bzalk/airmark-engine).
 
 ## Problem
 
@@ -29,7 +29,7 @@ A scene graph is `{ "width", "height", "nodes": SceneNode[] }`. Nodes render in 
 | `circle` | `type`, `cx`, `cy`, `r`, `fill` | `opacity`, `stroke`, `strokeWidth`, `meta` |
 | `text` | `type`, `x`, `y`, `content`, `fill`, `fontSize`, `anchor` (`start`\|`middle`\|`end`) | `baseline` (`alphabetic`\|`middle`\|`hanging`), `angle` (deg, rotate about x,y), `fontWeight`, `meta` |
 
-`path.d` uses only `M`, `L`, `Z` commands with absolute coordinates (deterministic; no curves in Draft 1.0 — line interpolation smoothing is a renderer MAY, applied visually without changing the scene graph).
+`path.d` uses only `M`, `L`, `Z` commands with absolute coordinates (deterministic; no curves in Draft 1.0 — line interpolation smoothing is a renderer MAY, applied visually without changing the scene graph). Arcs (pie/donut slices) are emitted as **polyline approximations with 4° segments**, angles measured clockwise from 12 o'clock; this keeps arc geometry exactly comparable across languages.
 
 ### 2.1 Interaction metadata
 
@@ -85,7 +85,11 @@ position(i) = round2(start + step*paddingOuter + i*step)
 * Nominal domain order: data order after applying `encoding.sort` (`"ascending"`/`"descending"` by the channel's own field, `"y"`/`"-y"`/`"x"`/`"-x"` by the referenced channel's value, explicit array verbatim, `null` = data order). Ties preserve input order (stable sort).
 * Color: `mark.color` wins; else a `color` channel with `field` maps domain values to `theme.palette` in domain order (cycling); else single-series marks use `theme.hue`. `condition` on a selection resolves at layout time from `input.selectionState` when provided, else the non-condition value.
 
-### 4.4 Formatting
+### 4.4 Time ticks
+
+Temporal axes use a fixed step ladder over UTC epoch milliseconds: `1s, 5s, 15s, 30s, 1m, 5m, 15m, 30m, 1h, 3h, 6h, 12h, 1d, 2d, 7d`, then calendar-aware `1/3/6 months` and `1, 2, 5, 10, …` years. The engine picks the first ladder step where `span/step ≤ targetCount` (`targetCount = clamp(floor(L/80), 2, 10)`); month/year ticks fall on UTC month/year boundaries walked from the floored start. Label format is chosen by the realized step: ≥ ~1 year → `YYYY`; ≥ ~1 month → `MMM YYYY`; ≥ 1 day → `MMM D`; else `HH:mm` — UTC, English 3-letter months, ASCII digits. Temporal parsing accepts ISO strings (with `YYYY` and `YYYY-MM` normalized to the 1st) and epoch numbers; anything else is an error.
+
+### 4.5 Formatting
 
 Numeric and temporal tick/label formatting is engine-owned and locale-free: ASCII digits, `.` decimal separator, no grouping separators in Draft 1.0; temporal labels use UTC and the shortest of `YYYY`, `MMM YYYY`, `MMM D`, `HH:mm` that distinguishes adjacent ticks (`MMM` = English 3-letter). AIRspec §11 format objects, when present, are applied by the engine using these same locale-free rules.
 
@@ -100,7 +104,23 @@ Layout depends on text width (margins, truncation, angled labels). Platforms dis
 
 ## 6. Layout obligations
 
-Given the inputs, a conforming engine MUST: detect orientation (nominal↔quantitative positional pair; both-quantitative = scatter/line semantics; `bin` on a quantitative channel produces interval bars); share one scale per positional channel and one color scale across all layers of a graphic; derive margins from measured tick labels, axis titles, and angled-label extents; emit grid lines (when `axis.grid`) before marks, marks in layer order, axis lines/ticks/labels/titles after marks; suppress an axis entirely when `axis` is `null`; and emit per-mark `meta.datum` for every data-driven node.
+Given the inputs, a conforming engine MUST: detect orientation (nominal↔quantitative positional pair; both-quantitative = scatter/line semantics; `bin` on a quantitative channel produces interval bars); share one scale per positional channel and one color scale across all layers of a graphic; derive margins from measured tick labels, axis titles, angled-label extents, and the legend; emit grid lines (when `axis.grid`) before marks, marks in layer order, axis lines/ticks/labels/titles after marks; suppress an axis entirely when `axis` is `null`; and emit per-mark `meta.datum` for every data-driven node.
+
+### 6.1 Stacking and grouping
+
+`stack: "zero" | "normalize"` on the quantitative channel, with a color field present, replaces per-row bars with per-(category, color) segments: within each category, segments accumulate in **color-domain order** with no gaps; `normalize` divides by the category total and defaults the axis to percent labels. `xOffset`/`yOffset` with a field nests an inner band scale (`paddingInner 0.10`, `paddingOuter 0.05`) inside each outer band, in the offset field's data order.
+
+### 6.2 Legends
+
+A color channel with a `field` and `legend ≠ null` reserves right margin `min(maxLabelWidth, 120) + 32` and emits, top-aligned with the plot: a 10×10 swatch (`rx 2`) plus a label per color-domain value, row height `fontSize × 1.6`, labels truncated at 120px. Legends inside facets are not yet specified (engines MUST error rather than improvise).
+
+### 6.3 Facets (small multiples)
+
+A `row`, `column`, or `facet` channel partitions rows by its field (panel order: `sort` if given, else ascending). Panel grids: `column` → one row of k panels; `row` → one column; `facet` → wrap at `ceil(sqrt(k))` columns; 16px gaps, and a bold panel title (`fontWeight 600`) centered 6px above each panel. **All panels share the quantitative extent, nominal domain, and color domain computed over the full dataset** — per-panel scales are non-conformant. Each panel then lays out independently within its rect with absolute coordinates.
+
+### 6.4 What is NOT in the graphic: document-level arrangement
+
+Multiple charts beside/above one another are **document layout** (AIRspec §8's 12-column grid), never in-graphic composition. Appendix A specifies the deterministic grid algorithm so hosts on any platform arrange components identically.
 
 ## 7. Golden fixture format and tolerance
 
@@ -125,6 +145,10 @@ with expected output `golden/<name>.json` (a SceneGraph). Comparison rules:
 
 Every rendering bug fixed in any conforming implementation SHOULD be captured as a new fixture before the fix is merged.
 
-## 8. Explicit non-goals
+## 8. Appendix A — Document grid algorithm (normative for the reference helper)
+
+`layoutGrid(items, options)` implements AIRspec §8.2 as a pure function. Breakpoints: width `< 640` = mobile, `< 1024` = tablet, else desktop; the effective span is `spanMobile ?? spanTablet ?? span` (mobile), `spanTablet ?? span` (tablet), `span` (desktop), clamped to `1..columns` (default 12), default span = full width. Column width is `(containerWidth − gap×(columns−1)) / columns` with `gap` default 16. Items pack left-to-right in document order; an item whose span would overflow the current row starts a new row (no reordering, no backfill). An item's height is `clamp(height ?? 300, minHeight, maxHeight)`; the **row height is the max of its items**, and every box in the row stretches to it. Output boxes carry `x, y, width, height, row`, rounded to 2dp.
+
+## 9. Explicit non-goals
 
 The scene graph does not include: animation or transitions; event handlers or behavior of any kind; CSS, classes, or stylesheets; fonts beyond a size/weight pair (font *family* is renderer-owned); accessibility trees (renderers MUST add platform-appropriate a11y from `meta`); curve interpolation geometry; canvas/GPU-specific constructs; or any property whose value is a string to be evaluated. Determinism is load-bearing: any proposal that would make layout depend on platform, locale, wall clock, or randomness is rejected by construction.

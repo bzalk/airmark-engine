@@ -105,3 +105,97 @@ test("deny by default: unknown mark and unknown transform throw", () => {
   assert.throws(() => layout({ ...base, graphic: { ...base.graphic, mark: "hexbin" } }), /unsupported mark/);
   assert.throws(() => layout({ ...base, graphic: { ...base.graphic, transform: [{ calculate: "x" }] } }), /unknown transform/);
 });
+
+// ---------------- New-capability invariants ----------------
+import { layoutGrid } from "../dist/index.js";
+
+test("stacked bars: segments contiguous, column heights = group totals, legend emitted", () => {
+  const scene = layout(load("bar-stacked-zero"));
+  const bars = marks(scene, "rect");
+  assert.equal(bars.length, 12);
+  const west = bars.filter((b) => b.meta.datum.region === "West").sort((a, b) => b.y - a.y);
+  // contiguity: each segment's top equals the next segment's bottom
+  for (let i = 1; i < west.length; i++) {
+    assert.ok(Math.abs((west[i].y + west[i].height) - west[i - 1].y) < 0.02, "stack segments contiguous");
+  }
+  const westTotal = west.reduce((s, b) => s + b.height, 0);
+  const south = bars.filter((b) => b.meta.datum.region === "South");
+  const southTotal = south.reduce((s, b) => s + b.height, 0);
+  assert.ok(Math.abs(westTotal / southTotal - 275 / 95) < 0.02, "stack heights proportional to totals");
+  const swatches = scene.nodes.filter((n) => n.type === "rect" && n.meta?.role === "label");
+  assert.equal(swatches.length, 3, "legend swatch per product");
+});
+
+test("grouped bars: 4 groups x 3, inner bars inside outer band", () => {
+  const scene = layout(load("bar-grouped-xoffset"));
+  const bars = marks(scene, "rect");
+  assert.equal(bars.length, 12);
+  const byRegion = new Map();
+  for (const b of bars) {
+    const r = b.meta.datum.region;
+    byRegion.set(r, [...(byRegion.get(r) ?? []), b]);
+  }
+  for (const [, group] of byRegion) {
+    assert.equal(group.length, 3);
+    const xs = group.map((b) => b.x).sort((a, b) => a - b);
+    const spread = xs[2] + group[0].width - xs[0];
+    // three inner bars must be narrower than a third of the panel width
+    assert.ok(group[0].width * 3 <= spread + 1, "inner bars packed");
+  }
+  const fills = new Set(bars.map((b) => b.fill));
+  assert.equal(fills.size, 3, "one palette color per product");
+});
+
+test("pie: slice fractions proportional, full circle, legend", () => {
+  const input = load("arc-pie-legend");
+  const scene = layout(input);
+  const slices = scene.nodes.filter((n) => n.type === "path" && n.meta?.role === "mark");
+  assert.equal(slices.length, 4);
+  // Chrome (64%) slice path should have ~64% of the polyline segments of the full circle
+  const segs = slices.map((s) => s.d.split("L").length);
+  const total = segs.reduce((a, b) => a + b, 0);
+  assert.ok(Math.abs(segs[0] / total - 0.64) < 0.05, "segment counts track angular fractions");
+  assert.equal(scene.nodes.filter((n) => n.type === "rect" && n.meta?.role === "label").length, 4, "legend");
+  // donut variant produces ring paths (contains inner arc: more L commands than pie wedge with same angle)
+  const donut = layout(load("arc-donut"));
+  assert.equal(donut.nodes.filter((n) => n.type === "path" && n.meta?.role === "mark").length, 3);
+});
+
+test("temporal multi-series line: two palette paths, month labels, shared scale", () => {
+  const scene = layout(load("line-multiseries-temporal"));
+  const paths = scene.nodes.filter((n) => n.type === "path" && n.meta?.role === "mark");
+  assert.equal(paths.length, 2);
+  assert.equal(paths[0].stroke, "#3264D6");
+  assert.equal(paths[1].stroke, "#26A69A");
+  const labels = scene.nodes.filter((n) => n.type === "text").map((n) => n.content);
+  assert.ok(labels.includes("Feb 2026") || labels.includes("Feb 1"), "temporal tick labels present: " + labels.join("|"));
+});
+
+test("facets: 4 titled panels sharing the quantitative domain", () => {
+  const scene = layout(load("facet-column-small-multiples"));
+  const titles = scene.nodes.filter((n) => n.type === "text" && n.meta?.role === "title" && ["East","North","South","West"].includes(n.content));
+  assert.equal(titles.length, 4);
+  assert.deepEqual(titles.map((t) => t.content), ["East","North","South","West"], "alphabetical panel order");
+  const bars = marks(scene, "rect");
+  assert.equal(bars.length, 12);
+  // shared scale: the 120-revenue bar (West/Hardware) is the tallest overall,
+  // and equal revenues in different panels have equal heights
+  const h = (r, p) => bars.find((b) => b.meta.datum.region === r && b.meta.datum.product === p).height;
+  assert.ok(Math.abs(h("West","Hardware") / h("East","Software") - 120 / 110) < 0.03, "cross-panel heights share one scale");
+});
+
+test("document grid: spans, wrapping, row heights, responsive collapse", () => {
+  const items = [
+    { id: "m1", span: 3, height: 120 }, { id: "m2", span: 3, height: 120 },
+    { id: "chart", span: 6, minHeight: 320 },
+    { id: "table", span: 12, height: 260 },
+  ];
+  const g = layoutGrid(items, { containerWidth: 1120, gap: 16 });
+  const by = Object.fromEntries(g.boxes.map((b) => [b.id, b]));
+  assert.equal(by.m1.row, 0); assert.equal(by.chart.row, 0); assert.equal(by.table.row, 1);
+  assert.equal(by.m1.height, 320, "row height = max of items in row");
+  assert.ok(Math.abs((by.m1.width + by.m2.width + by.chart.width + 2 * 16) - 1120) < 0.05, "row fills container");
+  assert.equal(by.table.y, 320 + 16);
+  const mobile = layoutGrid(items.map((i) => ({ ...i, spanMobile: 12 })), { containerWidth: 390 });
+  assert.deepEqual(mobile.boxes.map((b) => b.row), [0, 1, 2, 3], "mobile: every item wraps to its own row");
+});

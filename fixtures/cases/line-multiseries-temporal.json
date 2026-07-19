@@ -1,0 +1,314 @@
+{
+  "name": "line-multiseries-temporal",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "mark": {
+        "type": "line",
+        "point": false,
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "date",
+          "type": "temporal",
+          "title": "Week"
+        },
+        "y": {
+          "field": "value",
+          "type": "quantitative",
+          "title": "Users",
+          "axis": {
+            "grid": true
+          }
+        },
+        "color": {
+          "field": "series",
+          "type": "nominal"
+        }
+      }
+    },
+    "rows": [
+      {
+        "date": "2026-01-01",
+        "series": "Alpha",
+        "value": 115
+      },
+      {
+        "date": "2026-01-01",
+        "series": "Beta",
+        "value": 90
+      },
+      {
+        "date": "2026-01-08",
+        "series": "Alpha",
+        "value": 108
+      },
+      {
+        "date": "2026-01-08",
+        "series": "Beta",
+        "value": 86
+      },
+      {
+        "date": "2026-01-15",
+        "series": "Alpha",
+        "value": 116
+      },
+      {
+        "date": "2026-01-15",
+        "series": "Beta",
+        "value": 92
+      },
+      {
+        "date": "2026-01-22",
+        "series": "Alpha",
+        "value": 124
+      },
+      {
+        "date": "2026-01-22",
+        "series": "Beta",
+        "value": 108
+      },
+      {
+        "date": "2026-01-29",
+        "series": "Alpha",
+        "value": 132
+      },
+      {
+        "date": "2026-01-29",
+        "series": "Beta",
+        "value": 104
+      },
+      {
+        "date": "2026-02-05",
+        "series": "Alpha",
+        "value": 155
+      },
+      {
+        "date": "2026-02-05",
+        "series": "Beta",
+        "value": 110
+      },
+      {
+        "date": "2026-02-12",
+        "series": "Alpha",
+        "value": 148
+      },
+      {
+        "date": "2026-02-12",
+        "series": "Beta",
+        "value": 126
+      },
+      {
+        "date": "2026-02-19",
+        "series": "Alpha",
+        "value": 156
+      },
+      {
+        "date": "2026-02-19",
+        "series": "Beta",
+        "value": 122
+      },
+      {
+        "date": "2026-02-26",
+        "series": "Alpha",
+        "value": 164
+      },
+      {
+        "date": "2026-02-26",
+        "series": "Beta",
+        "value": 128
+      },
+      {
+        "date": "2026-03-05",
+        "series": "Alpha",
+        "value": 172
+      },
+      {
+        "date": "2026-03-05",
+        "series": "Beta",
+        "value": 144
+      },
+      {
+        "date": "2026-03-12",
+        "series": "Alpha",
+        "value": 195
+      },
+      {
+        "date": "2026-03-12",
+        "series": "Beta",
+        "value": 140
+      },
+      {
+        "date": "2026-03-19",
+        "series": "Alpha",
+        "value": 188
+      },
+      {
+        "date": "2026-03-19",
+        "series": "Beta",
+        "value": 146
+      },
+      {
+        "date": "2026-03-26",
+        "series": "Alpha",
+        "value": 196
+      },
+      {
+        "date": "2026-03-26",
+        "series": "Beta",
+        "value": 162
+      },
+      {
+        "date": "2026-04-02",
+        "series": "Alpha",
+        "value": 204
+      },
+      {
+        "date": "2026-04-02",
+        "series": "Beta",
+        "value": 158
+      },
+      {
+        "date": "2026-04-09",
+        "series": "Alpha",
+        "value": 212
+      },
+      {
+        "date": "2026-04-09",
+        "series": "Beta",
+        "value": 164
+      },
+      {
+        "date": "2026-04-16",
+        "series": "Alpha",
+        "value": 235
+      },
+      {
+        "date": "2026-04-16",
+        "series": "Beta",
+        "value": 180
+      },
+      {
+        "date": "2026-04-23",
+        "series": "Alpha",
+        "value": 228
+      },
+      {
+        "date": "2026-04-23",
+        "series": "Beta",
+        "value": 176
+      },
+      {
+        "date": "2026-04-30",
+        "series": "Alpha",
+        "value": 236
+      },
+      {
+        "date": "2026-04-30",
+        "series": "Beta",
+        "value": 182
+      },
+      {
+        "date": "2026-05-07",
+        "series": "Alpha",
+        "value": 244
+      },
+      {
+        "date": "2026-05-07",
+        "series": "Beta",
+        "value": 198
+      },
+      {
+        "date": "2026-05-14",
+        "series": "Alpha",
+        "value": 252
+      },
+      {
+        "date": "2026-05-14",
+        "series": "Beta",
+        "value": 194
+      },
+      {
+        "date": "2026-05-21",
+        "series": "Alpha",
+        "value": 275
+      },
+      {
+        "date": "2026-05-21",
+        "series": "Beta",
+        "value": 200
+      },
+      {
+        "date": "2026-05-28",
+        "series": "Alpha",
+        "value": 268
+      },
+      {
+        "date": "2026-05-28",
+        "series": "Beta",
+        "value": 216
+      },
+      {
+        "date": "2026-06-04",
+        "series": "Alpha",
+        "value": 276
+      },
+      {
+        "date": "2026-06-04",
+        "series": "Beta",
+        "value": 212
+      },
+      {
+        "date": "2026-06-11",
+        "series": "Alpha",
+        "value": 284
+      },
+      {
+        "date": "2026-06-11",
+        "series": "Beta",
+        "value": 218
+      },
+      {
+        "date": "2026-06-18",
+        "series": "Alpha",
+        "value": 292
+      },
+      {
+        "date": "2026-06-18",
+        "series": "Beta",
+        "value": 234
+      },
+      {
+        "date": "2026-06-25",
+        "series": "Alpha",
+        "value": 315
+      },
+      {
+        "date": "2026-06-25",
+        "series": "Beta",
+        "value": 230
+      }
+    ],
+    "width": 760,
+    "height": 380,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    }
+  },
+  "invariants": [
+    "2 paths in palette order",
+    "UTC month tick labels (Jan 2026 \u2026)",
+    "legend Alpha/Beta"
+  ]
+}
