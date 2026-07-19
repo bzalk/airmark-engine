@@ -267,9 +267,11 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
   }
 
   // ---------- Color resolution ----------
+  if (colorCh?.scale?.scheme) throw new Error("airmark-engine: color scale.scheme not implemented — use scale.range or the theme palette");
+  const colorRange = colorCh?.scale?.range ?? theme.palette;
   const paletteFor = (v: unknown): string => {
     const i = colorDomain.findIndex((d) => String(d) === String(v));
-    return i < 0 ? theme.hue : theme.palette[i % theme.palette.length];
+    return i < 0 ? theme.hue : colorRange[i % colorRange.length];
   };
   const selected = (sel: string | undefined, datum: Row): boolean | null => {
     if (!sel) return null;
@@ -589,7 +591,9 @@ function layoutArc(p: Prepared, rect: Rect, ctx: Ctx, opts?: { suppressLegend?: 
   if (!thetaCh?.field) throw new Error("airmark-engine: arc mark requires a theta channel with a field");
   const colorField = colorCh?.field;
   const colorDomain = colorField ? nominalDomain(p.data.rows, colorField, null) : [];
-  const paletteFor = (v: unknown): string => theme.palette[colorDomain.findIndex((d) => String(d) === String(v)) % theme.palette.length] ?? theme.hue;
+  if (colorCh?.scale?.scheme) throw new Error("airmark-engine: color scale.scheme not implemented — use scale.range or the theme palette");
+  const arcRange = colorCh?.scale?.range ?? theme.palette;
+  const paletteFor = (v: unknown): string => arcRange[colorDomain.findIndex((d) => String(d) === String(v)) % arcRange.length] ?? theme.hue;
 
   const wantLegend = !opts?.suppressLegend && colorDomain.length > 0 && colorCh?.legend !== null;
   const legendLabelW = wantLegend ? colorDomain.reduce((m: number, v) => Math.max(m, measure(String(v), fs)), 0) : 0;

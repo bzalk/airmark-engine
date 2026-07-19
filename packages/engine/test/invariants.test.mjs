@@ -313,3 +313,16 @@ test("log x scatter: decade ticks, skewed data spread, deny unsupported types", 
   assert.throws(() => layout({ ...input, graphic: { ...g, encoding: { ...g.encoding, x: { ...g.encoding.x, scale: { type: "sqrt" } } } } }), /not implemented/);
   assert.throws(() => layout({ ...input, rows: [...input.rows, { title: "free", category: "beauty", price: 0, rating: 3, stock: 5 }] }), /positive domain/);
 });
+
+test("color scale.range: custom range overrides theme palette; scheme denied", () => {
+  const input = load("bar-stacked-zero");
+  const g = JSON.parse(JSON.stringify(input.graphic));
+  g.encoding.color.scale = { range: ["#111111", "#555555", "#999999"] };
+  const scene = layout({ ...input, graphic: g });
+  const fills = new Set(marks(scene, "rect").map((b) => b.fill));
+  assert.deepEqual([...fills].sort(), ["#111111", "#555555", "#999999"], "segments use the declared range, not the theme palette");
+  const swatches = scene.nodes.filter((n) => n.type === "rect" && n.meta?.role === "label").map((n) => n.fill);
+  assert.deepEqual([...new Set(swatches)].sort(), ["#111111", "#555555", "#999999"], "legend swatches match the range");
+  g.encoding.color.scale = { scheme: "category10" };
+  assert.throws(() => layout({ ...input, graphic: g }), /scheme not implemented/);
+});

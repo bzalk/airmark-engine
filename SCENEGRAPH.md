@@ -83,7 +83,7 @@ position(i) = round2(start + step*paddingOuter + i*step)
 ### 4.3 Ordering and color
 
 * Nominal domain order: data order after applying `encoding.sort` (`"ascending"`/`"descending"` by the channel's own field, `"y"`/`"-y"`/`"x"`/`"-x"` by the referenced channel's value, explicit array verbatim, `null` = data order). Ties preserve input order (stable sort).
-* Color: `mark.color` wins; else a `color` channel with `field` maps domain values to `theme.palette` in domain order (cycling); else single-series marks use `theme.hue`. `condition` on a selection resolves at layout time from `input.selectionState` when provided, else the non-condition value.
+* Color resolution order: `mark.color` wins; else a `color` channel with `field` maps domain values in domain order (cycling) to the channel's **`scale.range` if declared, otherwise `theme.palette`**; else single-series marks use `theme.hue`. `scale.scheme` is unimplemented and MUST error, never silently fall back. `condition` on a selection resolves at layout time from `input.selectionState` when provided, else the non-condition value.
 
 ### 4.4 Time ticks
 
