@@ -195,9 +195,18 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
   const quantTitle = quantCh.title ?? quantAxis?.title ?? undefined;
   const nomTitle = nomCh ? (nomCh.title ?? nomAxis?.title ?? undefined) : undefined;
 
+  const validateAxisOrient = (orient: string | undefined, channel: string, supported: string[]) => {
+    if (!orient) return;
+    if (!["left", "right", "bottom", "top"].includes(orient)) {
+      throw new Error(`airmark-engine: axis orient '${orient}' invalid`);
+    }
+    if (!supported.includes(orient)) {
+      throw new Error(`airmark-engine: axis orient '${orient}' not implemented for the ${channel} channel in this chart orientation — add a golden fixture`);
+    }
+  };
+  validateAxisOrient(nomAxis?.orient, "nominal", horizontal ? ["left", "right"] : ["bottom"]);
+  validateAxisOrient(quantAxis?.orient, "quantitative", horizontal ? ["bottom"] : ["left"]);
   const nomOrientRight = horizontal && nomAxis?.orient === "right";
-  if (nomAxis?.orient && !["left", "right", "bottom", "top"].includes(nomAxis.orient)) throw new Error(`airmark-engine: axis orient '${nomAxis.orient}' invalid`);
-  if (nomAxis?.orient === "top" || (!horizontal && nomAxis?.orient === "right")) throw new Error(`airmark-engine: axis orient '${nomAxis.orient}' not implemented for this orientation — add a golden fixture`);
   const mTop = Math.ceil(textHeight(fs) / 2) + 2;
   let mRight = Math.ceil(Math.min(maxQLabelW, 60) / 2) + 4 + legendW;
   let mLeft: number, mBottom: number;

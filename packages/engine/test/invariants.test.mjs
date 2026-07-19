@@ -354,7 +354,8 @@ test("scale.reverse: flipped quantitative range (pyramid left panel) and band re
 });
 
 test("axis orient right: age labels on the spine edge of the reversed pyramid half", () => {
-  const scene = layout(load("bar-horizontal-reversed-x-pyramid"));
+  const input = load("bar-horizontal-reversed-x-pyramid");
+  const scene = layout(input);
   const bars = marks(scene, "rect");
   const barsRight = Math.max(...bars.map((b) => b.x + b.width));
   const ageLabels = scene.nodes.filter((n) => n.type === "text" && /^\d/.test(n.content) && n.content.includes("-"));
@@ -366,4 +367,16 @@ test("axis orient right: age labels on the spine edge of the reversed pyramid ha
   // zero baseline (bar right edges) now abuts the label column: reversed + orient right = pyramid half
   const zero = scene.nodes.filter((n) => n.type === "text" && n.content === "0");
   assert.ok(zero.length >= 1 && Math.abs(zero[0].x - barsRight) < 20, "zero tick adjacent to spine");
+
+  const badNominal = structuredClone(input);
+  badNominal.graphic.encoding.y.axis.orient = "bottom";
+  assert.throws(() => layout(badNominal), /not implemented for the nominal channel/);
+
+  const badQuantitative = structuredClone(input);
+  badQuantitative.graphic.encoding.x.axis = { orient: "top" };
+  assert.throws(() => layout(badQuantitative), /not implemented for the quantitative channel/);
+
+  const invalid = structuredClone(input);
+  invalid.graphic.encoding.y.axis.orient = "diagonal";
+  assert.throws(() => layout(invalid), /orient 'diagonal' invalid/);
 });
