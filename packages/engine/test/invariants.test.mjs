@@ -407,4 +407,8 @@ test("explicit scale.domain: exact bounds honored, not nice-rounded (mirrored-pa
   const s2 = layout(other);
   const b95 = s2.nodes.filter((n) => n.type === "rect").find((b) => b.meta.datum.pop === 95);
   assert.ok(Math.abs(b407.width / 407 - b95.width / 95) < 0.01, "identical domains -> identical px-per-unit across charts");
+  for (const domain of [[0], [1, 0], [0, "1000"]]) {
+    const invalid = structuredClone(base); invalid.graphic.encoding.x.scale.domain = domain;
+    assert.throws(() => layout(invalid), /exactly two ascending finite numbers/);
+  }
 });

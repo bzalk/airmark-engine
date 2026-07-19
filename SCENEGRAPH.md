@@ -68,7 +68,7 @@ niceMax = ceil (dmax / step) * step
 ticks  = niceMin, niceMin+step, … , niceMax   (inclusive; compute as niceMin + i*step to avoid drift)
 ```
 
-`scale.nice: false` uses `[dmin, dmax]` as the domain but the same tick step. `scale.reverse: true` flips the scale's pixel range **after** all domain and tick computation — same nice domain, same tick values, mirrored positions (a bar zero-baseline lands on the flipped side automatically); on band/ordinal scales it reverses the resolved domain order, composing with (not replacing) `sort`. Applies uniformly to linear, log, band, and scatter axes. Tick label formatting: minimal decimals sufficient for `step` (trailing zeros trimmed), `-0` normalized to `0`. Temporal axes use the same algorithm over epoch milliseconds; labels format per §4.4.
+A quantitative `scale.domain` MUST contain exactly two ascending finite numbers. When present, it overrides the data extent exactly: bounds are not nice-rounded and ticks are computed within the declared domain. Identical explicit domains therefore produce identical pixels-per-unit across sibling charts. `scale.nice: false` uses `[dmin, dmax]` as the domain but the same tick step. `scale.reverse: true` flips the scale's pixel range **after** all domain and tick computation — same nice domain, same tick values, mirrored positions (a bar zero-baseline lands on the flipped side automatically); on band/ordinal scales it reverses the resolved domain order, composing with (not replacing) `sort`. Applies uniformly to linear, log, band, and scatter axes. Tick label formatting: minimal decimals sufficient for `step` (trailing zeros trimmed), `-0` normalized to `0`. Temporal axes use the same algorithm over epoch milliseconds; labels format per §4.4.
 
 ### 4.2 Band scale
 

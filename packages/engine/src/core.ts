@@ -99,6 +99,9 @@ export function niceTicks(dmin: number, dmax: number, axisLengthPx: number, opts
   // Explicit scale.domain overrides the data extent exactly (SCENEGRAPH §4.1):
   // ticks are computed within it and the bounds are not nice-rounded.
   const dom = opts?.domain;
+  if (dom !== undefined && (dom.length !== 2 || typeof dom[0] !== "number" || typeof dom[1] !== "number" || !Number.isFinite(dom[0]) || !Number.isFinite(dom[1]) || dom[0] >= dom[1])) {
+    throw new Error("airmark-engine: quantitative scale.domain must be exactly two ascending finite numbers");
+  }
   if (dom && dom.length === 2 && typeof dom[0] === "number" && typeof dom[1] === "number") {
     const t = niceTicks(dom[0], dom[1], axisLengthPx, { tickCount: opts?.tickCount, nice: false });
     return { niceMin: dom[0], niceMax: dom[1], step: t.step, ticks: t.ticks };
