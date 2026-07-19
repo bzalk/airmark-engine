@@ -258,3 +258,35 @@ test("scatter: linear x axis, nice y ticks, area-proportional size, legend", () 
   // legend: one swatch per category
   assert.equal(scene.nodes.filter((n) => n.type === "rect" && n.meta?.role === "label").length, 4);
 });
+
+test("horizontal sorted bars (-x): longest on top, nominal y labels, quantitative x ticks", () => {
+  const scene = layout(load("bar-horizontal-sorted-negx"));
+  const bars = marks(scene, "rect");
+  assert.equal(bars.length, 4);
+  const topToBottom = [...bars].sort((a, b) => a.y - b.y).map((b) => b.meta.datum.category);
+  assert.deepEqual(topToBottom, ["laptops", "fragrances", "skincare", "groceries"], "-x sorts descending by value");
+  const widths = [...bars].sort((a, b) => a.y - b.y).map((b) => b.width);
+  for (let i = 1; i < widths.length; i++) assert.ok(widths[i] <= widths[i - 1] + 0.01, "bar length decreases downward");
+  const labels = scene.nodes.filter((n) => n.type === "text").map((n) => n.content);
+  assert.ok(labels.includes("laptops") && labels.includes("groceries"), "y axis shows category names");
+  assert.ok(!labels.includes("5999.94999") && !labels.includes("419.95"), "x axis shows nice ticks, never raw data values");
+  assert.ok(labels.some((l) => /^\$\d+(K)?$/.test(l)), "compact currency x ticks: " + labels.filter(l=>l.startsWith("$")).join(","));
+});
+
+test("horizontal tick strip: vertical segments at price positions on category rows", () => {
+  const input = load("tick-strip-horizontal");
+  const scene = layout(input);
+  const ticks = scene.nodes.filter((n) => n.type === "line" && n.meta?.role === "mark");
+  assert.equal(ticks.length, 60);
+  for (const t of ticks) {
+    assert.ok(Math.abs(t.x1 - t.x2) < 0.01 && Math.abs(t.y2 - t.y1 - 12) < 0.01, "vertical 12px segment");
+  }
+  // electronics ticks sit to the right of groceries ticks (linear x)
+  const maxG = Math.max(...ticks.filter((t) => t.meta.datum.category === "groceries").map((t) => t.x1));
+  const minE = Math.min(...ticks.filter((t) => t.meta.datum.category === "electronics").map((t) => t.x1));
+  assert.ok(minE > maxG, "linear price axis separates categories");
+  // three distinct row centers, three palette colors, no legend
+  assert.equal(new Set(ticks.map((t) => (t.y1 + t.y2) / 2)).size, 3, "ticks centered on 3 category rows");
+  assert.equal(new Set(ticks.map((t) => t.stroke)).size, 3);
+  assert.equal(scene.nodes.filter((n) => n.type === "rect" && n.meta?.role === "label").length, 0, "legend:null respected");
+});

@@ -1,0 +1,351 @@
+{
+  "name": "tick-strip-horizontal",
+  "airspec": "1.1",
+  "input": {
+    "graphic": {
+      "mark": {
+        "type": "tick",
+        "opacity": 0.7
+      },
+      "encoding": {
+        "x": {
+          "field": "price",
+          "type": "quantitative",
+          "title": "Price (USD)"
+        },
+        "y": {
+          "field": "category",
+          "type": "nominal",
+          "title": "Category"
+        },
+        "color": {
+          "field": "category",
+          "type": "nominal",
+          "legend": null
+        }
+      }
+    },
+    "rows": [
+      {
+        "category": "beauty",
+        "price": 18.09,
+        "title": "beauty-0"
+      },
+      {
+        "category": "beauty",
+        "price": 34.93,
+        "title": "beauty-1"
+      },
+      {
+        "category": "beauty",
+        "price": 25.35,
+        "title": "beauty-2"
+      },
+      {
+        "category": "beauty",
+        "price": 38.22,
+        "title": "beauty-3"
+      },
+      {
+        "category": "beauty",
+        "price": 39.41,
+        "title": "beauty-4"
+      },
+      {
+        "category": "beauty",
+        "price": 8.6,
+        "title": "beauty-5"
+      },
+      {
+        "category": "beauty",
+        "price": 5.72,
+        "title": "beauty-6"
+      },
+      {
+        "category": "beauty",
+        "price": 51.06,
+        "title": "beauty-7"
+      },
+      {
+        "category": "beauty",
+        "price": 19.26,
+        "title": "beauty-8"
+      },
+      {
+        "category": "beauty",
+        "price": 17.89,
+        "title": "beauty-9"
+      },
+      {
+        "category": "beauty",
+        "price": 59.76,
+        "title": "beauty-10"
+      },
+      {
+        "category": "beauty",
+        "price": 30.86,
+        "title": "beauty-11"
+      },
+      {
+        "category": "beauty",
+        "price": 51.01,
+        "title": "beauty-12"
+      },
+      {
+        "category": "beauty",
+        "price": 31.2,
+        "title": "beauty-13"
+      },
+      {
+        "category": "beauty",
+        "price": 40.15,
+        "title": "beauty-14"
+      },
+      {
+        "category": "beauty",
+        "price": 13.28,
+        "title": "beauty-15"
+      },
+      {
+        "category": "beauty",
+        "price": 39.92,
+        "title": "beauty-16"
+      },
+      {
+        "category": "beauty",
+        "price": 52.74,
+        "title": "beauty-17"
+      },
+      {
+        "category": "beauty",
+        "price": 33.77,
+        "title": "beauty-18"
+      },
+      {
+        "category": "beauty",
+        "price": 45.77,
+        "title": "beauty-19"
+      },
+      {
+        "category": "electronics",
+        "price": 1105.69,
+        "title": "electronics-0"
+      },
+      {
+        "category": "electronics",
+        "price": 376.84,
+        "title": "electronics-1"
+      },
+      {
+        "category": "electronics",
+        "price": 1209.88,
+        "title": "electronics-2"
+      },
+      {
+        "category": "electronics",
+        "price": 1009.32,
+        "title": "electronics-3"
+      },
+      {
+        "category": "electronics",
+        "price": 661.52,
+        "title": "electronics-4"
+      },
+      {
+        "category": "electronics",
+        "price": 337.21,
+        "title": "electronics-5"
+      },
+      {
+        "category": "electronics",
+        "price": 1338.63,
+        "title": "electronics-6"
+      },
+      {
+        "category": "electronics",
+        "price": 867.3,
+        "title": "electronics-7"
+      },
+      {
+        "category": "electronics",
+        "price": 1162.59,
+        "title": "electronics-8"
+      },
+      {
+        "category": "electronics",
+        "price": 1354.58,
+        "title": "electronics-9"
+      },
+      {
+        "category": "electronics",
+        "price": 1156.96,
+        "title": "electronics-10"
+      },
+      {
+        "category": "electronics",
+        "price": 1405.32,
+        "title": "electronics-11"
+      },
+      {
+        "category": "electronics",
+        "price": 773.96,
+        "title": "electronics-12"
+      },
+      {
+        "category": "electronics",
+        "price": 1261.09,
+        "title": "electronics-13"
+      },
+      {
+        "category": "electronics",
+        "price": 833.55,
+        "title": "electronics-14"
+      },
+      {
+        "category": "electronics",
+        "price": 1422.7,
+        "title": "electronics-15"
+      },
+      {
+        "category": "electronics",
+        "price": 1354.64,
+        "title": "electronics-16"
+      },
+      {
+        "category": "electronics",
+        "price": 416.95,
+        "title": "electronics-17"
+      },
+      {
+        "category": "electronics",
+        "price": 463.16,
+        "title": "electronics-18"
+      },
+      {
+        "category": "electronics",
+        "price": 560.38,
+        "title": "electronics-19"
+      },
+      {
+        "category": "groceries",
+        "price": 24.21,
+        "title": "groceries-0"
+      },
+      {
+        "category": "groceries",
+        "price": 12.03,
+        "title": "groceries-1"
+      },
+      {
+        "category": "groceries",
+        "price": 16.41,
+        "title": "groceries-2"
+      },
+      {
+        "category": "groceries",
+        "price": 8.92,
+        "title": "groceries-3"
+      },
+      {
+        "category": "groceries",
+        "price": 13.67,
+        "title": "groceries-4"
+      },
+      {
+        "category": "groceries",
+        "price": 10.87,
+        "title": "groceries-5"
+      },
+      {
+        "category": "groceries",
+        "price": 10.07,
+        "title": "groceries-6"
+      },
+      {
+        "category": "groceries",
+        "price": 15.46,
+        "title": "groceries-7"
+      },
+      {
+        "category": "groceries",
+        "price": 15.44,
+        "title": "groceries-8"
+      },
+      {
+        "category": "groceries",
+        "price": 22.8,
+        "title": "groceries-9"
+      },
+      {
+        "category": "groceries",
+        "price": 17.69,
+        "title": "groceries-10"
+      },
+      {
+        "category": "groceries",
+        "price": 23.37,
+        "title": "groceries-11"
+      },
+      {
+        "category": "groceries",
+        "price": 21.7,
+        "title": "groceries-12"
+      },
+      {
+        "category": "groceries",
+        "price": 24.79,
+        "title": "groceries-13"
+      },
+      {
+        "category": "groceries",
+        "price": 17.44,
+        "title": "groceries-14"
+      },
+      {
+        "category": "groceries",
+        "price": 5.75,
+        "title": "groceries-15"
+      },
+      {
+        "category": "groceries",
+        "price": 21.79,
+        "title": "groceries-16"
+      },
+      {
+        "category": "groceries",
+        "price": 24.19,
+        "title": "groceries-17"
+      },
+      {
+        "category": "groceries",
+        "price": 22.81,
+        "title": "groceries-18"
+      },
+      {
+        "category": "groceries",
+        "price": 15.09,
+        "title": "groceries-19"
+      }
+    ],
+    "width": 640,
+    "height": 340,
+    "theme": {
+      "palette": [
+        "#3264D6",
+        "#26A69A",
+        "#F59E0B",
+        "#DC5A5A"
+      ],
+      "hue": "#3264D6",
+      "fontSize": 11,
+      "axisColor": "#4A576C",
+      "gridColor": "#E1E7F0",
+      "labelColor": "#4A576C"
+    }
+  },
+  "invariants": [
+    "60 vertical tick segments at price positions",
+    "ticks centered on category rows",
+    "legend suppressed via legend:null"
+  ]
+}
