@@ -84,7 +84,7 @@ Adding a mark, scale, or behavior — or fixing a bug — follows one loop:
 
 Goldens are contract: regenerate only with a reviewed rationale, never to silence a failing port (SCENEGRAPH.md §7).
 
-Current fixtures (16): vertical/horizontal bars, horizontal tick strips, uniform-bar text overlays, binned histograms, layered bar+line, selection-condition highlighting, stacked bars, grouped bars, pie + donut, multi-series temporal lines with legends, faceted small multiples, boxplots, linear bubble scatters, and logarithmic scatters — plus grid-layout tests. Known-unimplemented (throwing, awaiting fixtures): legends inside facets, temporal-axis bars, `stack`/`window`/`pivot`/`flatten` explicit transforms, `errorband`/`errorbar`, interval-selection brushing, `sqrt`/`pow` scales.
+Current fixtures (17): vertical/horizontal/reversed bars, horizontal tick strips, uniform-bar text overlays, binned histograms, layered bar+line, selection-condition highlighting, stacked bars, grouped bars, pie + donut, multi-series temporal lines with legends, faceted small multiples, boxplots, linear bubble scatters, and logarithmic scatters — plus grid-layout tests. Known-unimplemented (throwing, awaiting fixtures): legends inside facets, temporal-axis bars, `stack`/`window`/`pivot`/`flatten` explicit transforms, `errorband`/`errorbar`, interval-selection brushing, `sqrt`/`pow` scales.
 
 ## Relationship to AIRspec
 
