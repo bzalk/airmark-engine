@@ -6,8 +6,9 @@ import { Channel, Encoding, Predicate, Row, Transform, niceTicks } from "./core.
 
 export function matchPredicate(p: Predicate, row: Row): boolean {
   if (p === null || typeof p !== "object" || Array.isArray(p)) {
+    const received = p === null ? "null" : Array.isArray(p) ? "array" : typeof p;
     throw new Error(
-      `airmark-engine: filter predicate must be a structured object, got ${Array.isArray(p) ? "array" : typeof p}` +
+      `airmark-engine: filter predicate must be a structured object, got ${received}` +
       (typeof p === "string" ? ` (${JSON.stringify(String(p).slice(0, 60))}) — expression strings are not part of AIRMark; use {"field": …, "equal"/"oneOf"/"range"/… }` : ""),
     );
   }

@@ -387,6 +387,6 @@ test("deny by default: expression-string filter throws a named error, never a Ty
     () => applyTransforms([{ sex: "male" }], [{ filter: "datum.sex === 'male'" }]),
     /expression strings are not part of AIRMark/,
   );
-  assert.throws(() => applyTransforms([{}], [{ filter: null }]), /structured object/);
+  assert.throws(() => applyTransforms([{}], [{ filter: null }]), /got null/);
   assert.throws(() => applyTransforms([{}], [{ filter: [{ field: "x", equal: 1 }] }]), /structured object/);
 });
