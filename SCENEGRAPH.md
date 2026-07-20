@@ -18,7 +18,7 @@ Conformance is proven by **golden fixtures**: recorded inputs with expected scen
 
 ## 2. Node vocabulary
 
-A scene graph is `{ "width", "height", "nodes": SceneNode[] }`. Nodes render in array order (painter's algorithm). Unknown node types MUST cause a renderer error, not silent skipping.
+A scene graph is `{ "width", "height", "nodes": SceneNode[], "plot"? }`. `plot` (`{x, y, w, h}`, present for standard single-panel graphics; absent for arcs and faceted graphics) reports the computed inner plot bounds — margins are outputs, and this is where they are output. Hosts use it for tooltip positioning, overlay alignment, and **plot-width equalization across sibling charts** (mirrored pairs sharing a domain also need equal `plot.w` for equal px-per-unit; layout each chart, compare `plot.w`, shrink the wider container by the difference, layout again). Nodes render in array order (painter's algorithm). Unknown node types MUST cause a renderer error, not silent skipping.
 
 | Node | Required | Optional |
 | --- | --- | --- |

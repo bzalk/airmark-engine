@@ -16,7 +16,8 @@ export type CircleNode = { type: "circle"; cx: number; cy: number; r: number; fi
 export type TextNode = { type: "text"; x: number; y: number; content: string; fill: string; fontSize: number; anchor: "start" | "middle" | "end"; baseline?: "alphabetic" | "middle" | "hanging"; angle?: number; fontWeight?: number; meta?: Meta };
 export type GroupNode = { type: "group"; children: SceneNode[]; meta?: Meta };
 export type SceneNode = RectNode | LineNode | PathNode | CircleNode | TextNode | GroupNode;
-export type SceneGraph = { width: number; height: number; nodes: SceneNode[] };
+export type PlotBounds = { x: number; y: number; w: number; h: number };
+export type SceneGraph = { width: number; height: number; nodes: SceneNode[]; plot?: PlotBounds };
 
 // ---------- AIRMark graphic (input) ----------
 export type FormatObject = { type: string; maximumFractionDigits?: number; minimumFractionDigits?: number; notation?: string; currency?: string; pattern?: string };

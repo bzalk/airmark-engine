@@ -5,7 +5,7 @@
 // Pure and deterministic.
 
 import {
-  BandScale, Channel, DEFAULT_THEME, Graphic, LayoutInput, LinearScale,
+  BandScale, Channel, DEFAULT_THEME, Graphic, LayoutInput, LinearScale, PlotBounds,
   MarkDef, MeasureText, Meta, Row, SceneGraph, SceneNode, TextNode, Theme,
   UnitGraphic, arcPath, bandScale, boxStats, defaultMeasureText, formatTick, formatValue, logScale, LogScale,
   linearScale, niceTicks, parseTemporal, r2, textHeight, timeTicks, truncateToFit,
@@ -58,7 +58,7 @@ export function layout(input: LayoutInput): SceneGraph {
       const rect: Rect = { x: r2(cx * (pw + gap)), y: r2(cy * (ph + gap) + titleH), w: r2(pw), h: r2(ph - titleH) };
       nodes.push({ type: "text", x: r2(rect.x + rect.w / 2), y: r2(rect.y - 6), content: String(pv), fill: ctx.theme.labelColor, fontSize: ctx.theme.fontSize, anchor: "middle", fontWeight: 600, meta: { role: "title" } });
       const panelRows = input.rows.filter((r) => String(r[fField]) === String(pv));
-      nodes.push(...layoutPanel(strippedUnits, panelRows, rect, ctx, shared, { suppressLegend: true }));
+      nodes.push(...layoutPanel(strippedUnits, panelRows, rect, ctx, shared, { suppressLegend: true }).nodes);
     });
     // One shared legend at top-level would overlap panels; facet legends are a
     // deliberate follow-up (throwing keeps deny-by-default honest):
@@ -68,8 +68,9 @@ export function layout(input: LayoutInput): SceneGraph {
     return { width: input.width, height: input.height, nodes };
   }
 
-  nodes.push(...layoutPanel(units, input.rows, { x: 0, y: 0, w: input.width, h: input.height }, ctx));
-  return { width: input.width, height: input.height, nodes };
+  const panel = layoutPanel(units, input.rows, { x: 0, y: 0, w: input.width, h: input.height }, ctx);
+  nodes.push(...panel.nodes);
+  return { width: input.width, height: input.height, nodes, ...(panel.plot ? { plot: panel.plot } : {}) };
 }
 
 function computeShared(units: UnitGraphic[], rows: Row[], ctx: Ctx): Shared {
@@ -90,7 +91,7 @@ function computeShared(units: UnitGraphic[], rows: Row[], ctx: Ctx): Shared {
   return { qLo, qHi, domainNominal, colorDomain };
 }
 
-function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, shared?: Shared, opts?: { suppressLegend?: boolean }): SceneNode[] {
+function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, shared?: Shared, opts?: { suppressLegend?: boolean }): { nodes: SceneNode[]; plot: PlotBounds | null } {
   const { theme, measure } = ctx;
   const fs = theme.fontSize;
   const nodes: SceneNode[] = [];
@@ -99,7 +100,7 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
   const prepared: Prepared[] = units.map((unit) => ({ unit, mark: markDef(unit.mark), data: resolveLayerData(applyTransforms(rowsIn, unit.transform), unit.encoding, rect.w) }));
 
   // ---------- ARC / PIE ----------
-  if (prepared[0].mark.type === "arc") return layoutArc(prepared[0], rect, ctx, opts);
+  if (prepared[0].mark.type === "arc") return { nodes: layoutArc(prepared[0], rect, ctx, opts), plot: null };
 
   const x0 = asChannel(prepared[0].unit.encoding.x);
   const y0 = asChannel(prepared[0].unit.encoding.y);
@@ -605,7 +606,7 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
     });
   }
 
-  return nodes;
+  return { nodes, plot: { x: plot.x, y: plot.y, w: plot.w, h: plot.h } };
 }
 
 // ---------- Arc / pie (SCENEGRAPH.md §2: 4° polyline approximation) ----------
