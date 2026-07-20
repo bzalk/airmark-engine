@@ -418,5 +418,5 @@ test("missing encoded field: named contract error listing actual row keys, never
     rows: [{ sum: 2600, group_key: "all" }],  // broker returned wrong keys
     graphic: { mark: "bar", encoding: { y: { field: "age", type: "nominal", sort: null },
       x: { field: "population", type: "quantitative", scale: { zero: true } } } } };
-  assert.throws(() => layout(input), /references field 'age' but data rows have keys \[sum, group_key\]/);
+  assert.throws(() => layout(input), /fields 'population', 'age' but data rows have keys \[sum, group_key\]/);
 });

@@ -105,10 +105,10 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
   for (const p of prepared) {
     if (!p.data.rows.length) continue;
     const keys = new Set(Object.keys(p.data.rows[0]));
-    for (const f of [p.data.xField, p.data.yField, p.data.colorField]) {
-      if (f && !f.startsWith("__") && !keys.has(f)) {
-        throw new Error(`airmark-engine: encoding references field '${f}' but data rows have keys [${[...keys].join(", ")}] — the dataset output does not match the encoding (check broker output naming: dimension/metric outputs are alias ?? field)`);
-      }
+    const missing = [p.data.xField, p.data.yField, p.data.colorField]
+      .filter((f): f is string => !!f && !f.startsWith("__") && !keys.has(f));
+    if (missing.length) {
+      throw new Error(`airmark-engine: encoding references field${missing.length > 1 ? "s" : ""} '${missing.join("', '")}' but data rows have keys [${[...keys].join(", ")}] — the dataset output does not match the encoding (check broker output naming: dimension/metric outputs are alias ?? field)`);
     }
   }
 
