@@ -423,3 +423,11 @@ test("missing encoded field: named contract error listing actual row keys, never
   const near = { ...input, rows: [{ age: "0-4", sum_population: 62 }] };
   assert.throws(() => layout(near), /row key 'sum_population' looks like a renamed 'population'/);
 });
+
+test("partial row (rollup/total) throws a named error, never a phantom band", () => {
+  const input = { width: 400, height: 300,
+    rows: [{ age: "0-4", population: 62 }, { age: "5-9", population: 55 }, { population: 2278 }],
+    graphic: { mark: "bar", encoding: { y: { field: "age", type: "nominal", sort: null },
+      x: { field: "population", type: "quantitative", scale: { zero: true } } } } };
+  assert.throws(() => layout(input), /row 2 is missing encoded field 'age'.*rollup\/total/);
+});

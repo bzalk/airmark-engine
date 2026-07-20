@@ -105,8 +105,18 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
   for (const p of prepared) {
     if (!p.data.rows.length) continue;
     const keys = new Set(Object.keys(p.data.rows[0]));
-    const missing = [p.data.xField, p.data.yField, p.data.colorField]
-      .filter((f): f is string => !!f && !f.startsWith("__") && !keys.has(f));
+    const needed = [p.data.xField, p.data.yField, p.data.colorField]
+      .filter((f): f is string => !!f && !f.startsWith("__"));
+    // Every row must carry every encoded field — a single keyless row (e.g. a
+    // rollup/total row appended by a data layer) must be a named error, not a
+    // phantom 'undefined' band.
+    for (let ri = 0; ri < p.data.rows.length; ri++) {
+      const bad = needed.filter((f) => !(f in p.data.rows[ri]));
+      if (bad.length && ri > 0) {
+        throw new Error(`airmark-engine: row ${ri} is missing encoded field${bad.length > 1 ? "s" : ""} '${bad.join("', '")}' (other rows have ${bad.length > 1 ? "them" : "it"}) — the data layer emitted a partial row, e.g. an aggregation rollup/total row; aggregate responses must contain exactly one complete row per group`);
+      }
+    }
+    const missing = needed.filter((f) => !keys.has(f));
     if (missing.length) {
       const hints = missing.map((f) => {
         const fl = f.toLowerCase();
