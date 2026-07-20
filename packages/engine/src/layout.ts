@@ -99,6 +99,19 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
 
   const prepared: Prepared[] = units.map((unit) => ({ unit, mark: markDef(unit.mark), data: resolveLayerData(applyTransforms(rowsIn, unit.transform), unit.encoding, rect.w) }));
 
+  // Contract check (SCENEGRAPH §3): rows are flat objects keyed by field/alias.
+  // A referenced field missing from the rows is a broker/dataset contract
+  // violation — name it, never render an "undefined" band.
+  for (const p of prepared) {
+    if (!p.data.rows.length) continue;
+    const keys = new Set(Object.keys(p.data.rows[0]));
+    for (const f of [p.data.xField, p.data.yField, p.data.colorField]) {
+      if (f && !f.startsWith("__") && !keys.has(f)) {
+        throw new Error(`airmark-engine: encoding references field '${f}' but data rows have keys [${[...keys].join(", ")}] — the dataset output does not match the encoding (check broker output naming: dimension/metric outputs are alias ?? field)`);
+      }
+    }
+  }
+
   // ---------- ARC / PIE ----------
   if (prepared[0].mark.type === "arc") return { nodes: layoutArc(prepared[0], rect, ctx, opts), plot: null };
 

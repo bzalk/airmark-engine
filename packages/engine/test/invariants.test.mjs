@@ -412,3 +412,11 @@ test("explicit scale.domain: exact bounds honored, not nice-rounded (mirrored-pa
     assert.throws(() => layout(invalid), /exactly two ascending finite numbers/);
   }
 });
+
+test("missing encoded field: named contract error listing actual row keys, never an 'undefined' band", () => {
+  const input = { width: 400, height: 300,
+    rows: [{ sum: 2600, group_key: "all" }],  // broker returned wrong keys
+    graphic: { mark: "bar", encoding: { y: { field: "age", type: "nominal", sort: null },
+      x: { field: "population", type: "quantitative", scale: { zero: true } } } } };
+  assert.throws(() => layout(input), /references field 'age' but data rows have keys \[sum, group_key\]/);
+});
