@@ -67,6 +67,8 @@ import { AirmarkChart } from "@airspec/airmark-react";
 
 The engine consumes **validated** graphics only — it is a layout engine, not a validator. Run the AIRspec validation pipeline (and its conformance suite) upstream.
 
+AIRspec 1.1 structured `derived` fields and calc-form metrics are Data Broker responsibilities. The Broker evaluates them and returns flat rows keyed by the declared aliases; this engine consumes those alias-keyed rows without evaluating or receiving expression trees. No renderer or npm API change is required for that additive spec amendment.
+
 ### Sizing charts inside containers
 
 Layout pixels must equal display pixels. Do not lay out a chart at one size and then stretch its SVG with CSS: scaling also stretches text, ticks, and margins and can make the chart overflow its card.
