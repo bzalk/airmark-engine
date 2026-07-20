@@ -1,6 +1,6 @@
 {
   "name": "@airspec/airmark-svg",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "SVG string adapter for AIRMark scene graphs.",
   "type": "module",
   "main": "./dist/index.js",
@@ -29,5 +29,5 @@
   "bugs": { "url": "https://github.com/bzalk/airmark-engine/issues" },
   "publishConfig": { "access": "public" },
   "keywords": ["airspec", "airmark", "svg", "charts", "visualization"],
-  "dependencies": { "@airspec/airmark-engine": "0.4.3" }
+  "dependencies": { "@airspec/airmark-engine": "0.4.4" }
 }
