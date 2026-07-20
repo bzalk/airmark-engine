@@ -419,4 +419,7 @@ test("missing encoded field: named contract error listing actual row keys, never
     graphic: { mark: "bar", encoding: { y: { field: "age", type: "nominal", sort: null },
       x: { field: "population", type: "quantitative", scale: { zero: true } } } } };
   assert.throws(() => layout(input), /fields 'population', 'age' but data rows have keys \[sum, group_key\]/);
+  // did-you-mean: operation-prefixed metric naming detected and named
+  const near = { ...input, rows: [{ age: "0-4", sum_population: 62 }] };
+  assert.throws(() => layout(near), /row key 'sum_population' looks like a renamed 'population'/);
 });
