@@ -112,4 +112,4 @@ Release maintainers: see [PUBLISHING.md](./PUBLISHING.md) for npm package and tr
 
 ## Development and release assistance
 
-AIRMark Engine was designed and directed by Brian Zalk. OpenAI Codex was used as an engineering assistant in interactive development sessions to help integrate code updates, edit documentation and tests, run verification, configure the GitHub release workflow, deploy the repository, and launch and maintain the public `@airspec` packages on npm through trusted publishing. Project decisions, authorship, ownership, and releases remain with Brian Zalk.
+AIRMark Engine was designed and directed by Brian Zalk. OpenAI Codex, powered by GPT-5.6-sol, was used as an engineering assistant in interactive development sessions to help integrate code updates, edit documentation and tests, run verification, configure the GitHub release workflow, deploy the repository, and launch and maintain the public `@airspec` packages on npm through trusted publishing. Project decisions, authorship, ownership, and releases remain with Brian Zalk.
