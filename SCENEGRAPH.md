@@ -33,7 +33,9 @@ A scene graph is `{ "width", "height", "nodes": SceneNode[], "plot"? }`. `plot` 
 
 ### 2.1 Interaction metadata
 
-`meta` is optional, JSON-only, and carries no behavior: `{ "role": "mark" | "axis" | "grid" | "label" | "title", "datum": {…row}, "selection": "<selectionId>", "fields": ["region"] }`. Renderers wire events using `meta.selection`/`meta.fields`; the engine never emits handlers.
+`meta` is optional, JSON-only, and carries no behavior: `{ "role": "mark" | "axis" | "grid" | "label" | "title", "datum": {…row}, "tooltip": [{"label": "Revenue", "value": "$1.2K"}], "selection": "<selectionId>", "fields": ["region"] }`. Renderers wire events using `meta.selection`/`meta.fields`; the engine never emits handlers.
+
+When a graphic explicitly declares an `encoding.tooltip` field or array, every corresponding mark node MUST carry `meta.tooltip` entries in declaration order. The engine resolves each entry's `title` (falling back to its field name) and applies its AIRspec §11 `format`, producing deterministic display strings. Renderers display those entries and MUST NOT independently reinterpret their formatting. No tooltip metadata is emitted when the channel is absent.
 
 ## 3. Engine input
 

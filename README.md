@@ -29,9 +29,9 @@ Determinism is enforced by construction: no locale, no clock, no randomness, coo
 
 | Package | What | Deps |
 | --- | --- | --- |
-| [`@airspec/airmark-engine`](https://www.npmjs.com/package/@airspec/airmark-engine) | `layout(input) → SceneGraph`, including computed inner plot bounds for sibling-chart alignment and all-row contract checks with alias hints when encoded fields are absent from data rows. Marks: bar (vertical/horizontal/binned/**stacked/grouped**), line/area (**multi-series**), point/**scatter** (two-quantitative axes, area-proportional `size` channel, **log scales** with decade ticks, exact quantitative domains, **`scale.reverse`** and right-oriented center-spine labels for mirrored/diverging pairs), rule, text overlay, **arc/pie/donut**, **boxplot** (normative R-7 quartiles, 1.5×IQR whiskers, outliers); layers; **facets (small multiples with shared scales)**; **legends**; **temporal axes** (UTC tick ladder); channel aggregates + explicit `aggregate`/`timeUnit`/`fold`/`sort`/`bin` transforms; structured-predicate filters; selection `condition` resolution; axes/grid/titles; **`layoutGrid`** for the AIRspec §8 document grid (charts beside/above each other). | none |
-| [`@airspec/airmark-svg`](https://www.npmjs.com/package/@airspec/airmark-svg) | `toSVG(scene) → string` | engine |
-| [`@airspec/airmark-react`](https://www.npmjs.com/package/@airspec/airmark-react) | `<AirmarkChart {...input} onSelect={…} />` | engine, React ≥18 (peer) |
+| [`@airspec/airmark-engine`](https://www.npmjs.com/package/@airspec/airmark-engine) | `layout(input) → SceneGraph`, including computed tooltip entries, inner plot bounds for sibling-chart alignment, and all-row contract checks with alias hints when encoded fields are absent from data rows. Marks: bar (vertical/horizontal/binned/**stacked/grouped**), line/area (**multi-series**), point/**scatter** (two-quantitative axes, area-proportional `size` channel, **log scales** with decade ticks, exact quantitative domains, **`scale.reverse`** and right-oriented center-spine labels for mirrored/diverging pairs), rule, text overlay, **arc/pie/donut**, **boxplot** (normative R-7 quartiles, 1.5×IQR whiskers, outliers); layers; **facets (small multiples with shared scales)**; **legends**; **temporal axes** (UTC tick ladder); channel aggregates + explicit `aggregate`/`timeUnit`/`fold`/`sort`/`bin` transforms; structured-predicate filters; selection `condition` resolution; axes/grid/titles; **`layoutGrid`** for the AIRspec §8 document grid (charts beside/above each other). | none |
+| [`@airspec/airmark-svg`](https://www.npmjs.com/package/@airspec/airmark-svg) | `toSVG(scene) → string`, including native `<title>` tooltips | engine |
+| [`@airspec/airmark-react`](https://www.npmjs.com/package/@airspec/airmark-react) | `<AirmarkChart {...input} onSelect={…} transitionMs={…} />`, including native tooltips and optional mark transitions | engine, React ≥18 (peer) |
 
 ## Quickstart
 
@@ -61,9 +61,12 @@ import { AirmarkChart } from "@airspec/airmark-react";
   width={720} height={420}
   theme={resolvedTheme}         // host applies AIRspec §10.1 resolution order first
   selectionState={selections}
+  transitionMs={250}             // optional presentation-only mark transitions
   onSelect={({ selection, datum, fields }) => dispatch(selection, datum, fields)}
 />
 ```
+
+Declare `encoding.tooltip` as a titled, formatted field or array. The engine computes `meta.tooltip` strings once using AIRspec §11 formatting; the React and SVG adapters expose them as native `<title>` elements. A styled host tooltip can read the same metadata without reimplementing formatting.
 
 The engine consumes **validated** graphics only — it is a layout engine, not a validator. Run the AIRspec validation pipeline (and its conformance suite) upstream.
 

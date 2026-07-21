@@ -16,21 +16,29 @@
         "color": {
           "field": "status",
           "type": "nominal"
-        }
+        },
+        "tooltip": [
+          { "field": "status", "title": "Status" },
+          { "field": "count", "title": "Items" },
+          { "field": "share", "title": "Share", "format": { "type": "percent", "maximumFractionDigits": 0 } }
+        ]
       }
     },
     "rows": [
       {
         "status": "Open",
-        "count": 34
+        "count": 34,
+        "share": 24
       },
       {
         "status": "Pending",
-        "count": 21
+        "count": 21,
+        "share": 15
       },
       {
         "status": "Closed",
-        "count": 88
+        "count": 88,
+        "share": 61
       }
     ],
     "width": 520,
@@ -51,6 +59,7 @@
   },
   "invariants": [
     "ring slices (inner radius hole)",
-    "3 slices"
+    "3 slices",
+    "each slice carries Status, Items, and formatted Share tooltip entries"
   ]
 }

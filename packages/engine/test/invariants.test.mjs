@@ -431,3 +431,26 @@ test("partial row (rollup/total) throws a named error, never a phantom band", ()
       x: { field: "population", type: "quantitative", scale: { zero: true } } } } };
   assert.throws(() => layout(input), /row 2 is missing encoded field 'age'.*rollup\/total/);
 });
+
+test("tooltips: bars and arcs carry exact titled, formatted entries", () => {
+  const rows = [{ category: "beauty", post_count: 12, revenue: 1234.5, share: 42 }];
+  const tooltip = [
+    { field: "category", title: "Category" },
+    { field: "revenue", title: "Revenue", format: { type: "currency", minimumFractionDigits: 2, maximumFractionDigits: 2 } },
+    { field: "share", title: "Share", format: { type: "percent", maximumFractionDigits: 0 } },
+  ];
+  const expected = [
+    { label: "Category", value: "beauty" },
+    { label: "Revenue", value: "$1234.50" },
+    { label: "Share", value: "42%" },
+  ];
+  const bar = layout({ width: 400, height: 300, rows, graphic: { mark: "bar", encoding: {
+    x: { field: "category", type: "nominal" }, y: { field: "post_count", type: "quantitative" }, tooltip,
+  } } });
+  assert.deepEqual(bar.nodes.find((n) => n.type === "rect" && n.meta?.role === "mark").meta.tooltip, expected);
+
+  const arc = layout({ width: 400, height: 300, rows, graphic: { mark: { type: "arc", innerRadius: 0.5 }, encoding: {
+    theta: { field: "post_count", type: "quantitative" }, color: { field: "category", type: "nominal" }, tooltip,
+  } } });
+  assert.deepEqual(arc.nodes.find((n) => n.type === "path" && n.meta?.role === "mark").meta.tooltip, expected);
+});

@@ -8,9 +8,24 @@
       "fill": "#3264D6",
       "meta": {
         "role": "mark",
+        "tooltip": [
+          {
+            "label": "Status",
+            "value": "Open"
+          },
+          {
+            "label": "Items",
+            "value": "34"
+          },
+          {
+            "label": "Share",
+            "value": "24%"
+          }
+        ],
         "datum": {
           "status": "Open",
-          "count": 34
+          "count": 34,
+          "share": 24
         }
       }
     },
@@ -20,9 +35,24 @@
       "fill": "#26A69A",
       "meta": {
         "role": "mark",
+        "tooltip": [
+          {
+            "label": "Status",
+            "value": "Pending"
+          },
+          {
+            "label": "Items",
+            "value": "21"
+          },
+          {
+            "label": "Share",
+            "value": "15%"
+          }
+        ],
         "datum": {
           "status": "Pending",
-          "count": 21
+          "count": 21,
+          "share": 15
         }
       }
     },
@@ -32,9 +62,24 @@
       "fill": "#F59E0B",
       "meta": {
         "role": "mark",
+        "tooltip": [
+          {
+            "label": "Status",
+            "value": "Closed"
+          },
+          {
+            "label": "Items",
+            "value": "88"
+          },
+          {
+            "label": "Share",
+            "value": "61%"
+          }
+        ],
         "datum": {
           "status": "Closed",
-          "count": 88
+          "count": 88,
+          "share": 61
         }
       }
     },

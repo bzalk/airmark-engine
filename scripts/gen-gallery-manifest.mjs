@@ -20,7 +20,7 @@ const META = {
   "line-multiseries-temporal":          { title: "Multi-series line (time)",        category: "Lines",      blurb: "Temporal axis with UTC tick ladder, one path per series." },
   "layered-bar-line-trend":             { title: "Bar + line combo",                category: "Lines",      blurb: "Layered marks sharing band x scale." },
   "arc-pie-legend":                     { title: "Pie chart",                       category: "Parts of a whole", blurb: "Arc marks with theta encoding and legend." },
-  "arc-donut":                          { title: "Donut chart",                     category: "Parts of a whole", blurb: "Arc with innerRadius ring." },
+  "arc-donut":                          { title: "Donut chart",                     category: "Parts of a whole", blurb: "Arc with innerRadius ring and deterministic native tooltips." },
   "facet-column-small-multiples":       { title: "Small multiples (facets)",        category: "Composition", blurb: "Column facets with shared scales and panel titles." },
 };
 
@@ -46,6 +46,7 @@ for (const f of readdirSync("fixtures/cases").filter((f) => f.endsWith(".json"))
       if (ch === "xOffset" || ch === "yOffset") capabilities.add("grouping");
       if (c0.stack) capabilities.add(`stack:${c0.stack}`);
       if (ch === "size") capabilities.add("size-channel");
+      if (ch === "tooltip") capabilities.add("tooltip");
     }
     if (u.selections?.length) capabilities.add("selection");
   }

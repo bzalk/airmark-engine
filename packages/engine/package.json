@@ -1,6 +1,6 @@
 {
   "name": "@airspec/airmark-engine",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Pure, deterministic AIRMark layout engine: validated graphic plus rows to a portable scene graph.",
   "type": "module",
   "main": "./dist/index.js",

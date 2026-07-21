@@ -1,14 +1,14 @@
 {
   "name": "airmark-engine-monorepo",
   "private": true,
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Reference implementation of the AIRMark Scene Graph specification",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "build": "tsc -b packages/engine packages/svg packages/react",
-    "test": "npm run build && node --test packages/engine/test/*.test.mjs packages/react/test/*.test.mjs",
+    "test": "npm run build && node --test packages/engine/test/*.test.mjs packages/react/test/*.test.mjs packages/svg/test/*.test.mjs",
     "goldens:gen": "npm run build && node scripts/gen-goldens.mjs",
     "goldens:check": "npm run build && node scripts/run-fixtures.mjs",
     "gallery:gen": "node scripts/gen-gallery-manifest.mjs",
