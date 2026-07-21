@@ -21,6 +21,8 @@ export type AirmarkChartProps = LayoutInput & {
 
 function Node({ n, onSelect, t }: { n: SceneNode; onSelect?: AirmarkChartProps["onSelect"]; t?: number }) {
   const sel = "meta" in n && n.meta?.selection ? n.meta : undefined;
+  const tip = "meta" in n && n.meta?.tooltip?.length
+    ? <title>{n.meta.tooltip.map((e) => `${e.label}: ${e.value}`).join("\n")}</title> : null;
   const handlers = sel && onSelect
     ? { onClick: () => onSelect({ selection: sel.selection!, datum: sel.datum ?? {}, fields: sel.fields }), style: { cursor: "pointer" as const } }
     : {};
@@ -34,15 +36,15 @@ function Node({ n, onSelect, t }: { n: SceneNode; onSelect?: AirmarkChartProps["
       const anim = ease ? { style: { x: `${n.x}px`, y: `${n.y}px`, width: `${n.width}px`, height: `${n.height}px`,
         transition: `x ${ease}, y ${ease}, width ${ease}, height ${ease}, fill ${ease}, opacity ${ease}`,
         ...(handlers.style ?? {}) } } : {};
-      return <rect x={n.x} y={n.y} width={n.width} height={n.height} fill={n.fill} rx={n.rx} opacity={n.opacity} stroke={n.stroke} strokeWidth={n.strokeWidth} {...handlers} {...anim} />;
+      return <rect x={n.x} y={n.y} width={n.width} height={n.height} fill={n.fill} rx={n.rx} opacity={n.opacity} stroke={n.stroke} strokeWidth={n.strokeWidth} {...handlers} {...anim}>{tip}</rect>;
     }
     case "line": return <line x1={n.x1} y1={n.y1} x2={n.x2} y2={n.y2} stroke={n.stroke} strokeWidth={n.strokeWidth ?? 1} strokeDasharray={n.strokeDash?.join(" ")} opacity={n.opacity} />;
-    case "path": return <path d={n.d} stroke={n.stroke} fill={n.fill ?? "none"} strokeWidth={n.strokeWidth} opacity={n.opacity} {...handlers} />;
+    case "path": return <path d={n.d} stroke={n.stroke} fill={n.fill ?? "none"} strokeWidth={n.strokeWidth} opacity={n.opacity} {...handlers}>{tip}</path>;
     case "circle": {
       const anim = ease ? { style: { cx: `${n.cx}px`, cy: `${n.cy}px`, r: `${n.r}px`,
         transition: `cx ${ease}, cy ${ease}, r ${ease}, fill ${ease}, opacity ${ease}`,
         ...(handlers.style ?? {}) } } : {};
-      return <circle cx={n.cx} cy={n.cy} r={n.r} fill={n.fill} opacity={n.opacity} stroke={n.stroke} strokeWidth={n.strokeWidth} {...handlers} {...anim} />;
+      return <circle cx={n.cx} cy={n.cy} r={n.r} fill={n.fill} opacity={n.opacity} stroke={n.stroke} strokeWidth={n.strokeWidth} {...handlers} {...anim}>{tip}</circle>;
     }
     case "text": return <text x={n.x} y={n.y} fill={n.fill} fontSize={n.fontSize} textAnchor={n.anchor} dominantBaseline={n.baseline} fontWeight={n.fontWeight} transform={n.angle ? `rotate(${n.angle} ${n.x} ${n.y})` : undefined} style={{ fontFamily: "system-ui, sans-serif", ...(ease ? { transition: `opacity ${ease}` } : {}) }}>{n.content}</text>;
     default: throw new Error(`airmark-react: unknown scene node type '${(n as { type: string }).type}'`);

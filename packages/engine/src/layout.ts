@@ -379,7 +379,16 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
     const nF = horizontal ? p.data.yField : p.data.xField;
     const selMeta = p.unit.selections?.[0]?.id;
     const selFields = p.unit.selections?.[0]?.fields;
-    const meta = (datum: Row): Meta => ({ role: "mark", datum, ...(selMeta ? { selection: selMeta, fields: selFields } : {}) });
+    const tipChannels = (Array.isArray(p.unit.encoding?.tooltip) ? p.unit.encoding.tooltip : p.unit.encoding?.tooltip ? [p.unit.encoding.tooltip] : [])
+      .filter((c): c is Channel => !!c && typeof c === "object" && !!(c as Channel).field);
+    const tooltipFor = (datum: Row) => tipChannels.map((c) => {
+      const v = datum[c.field!];
+      const value = typeof v === "number" ? formatValue(v, c.format, v) : String(v ?? "");
+      return { label: (c.title ?? c.field) as string, value };
+    });
+    const meta = (datum: Row): Meta => ({ role: "mark", datum,
+      ...(tipChannels.length ? { tooltip: tooltipFor(datum) } : {}),
+      ...(selMeta ? { selection: selMeta, fields: selFields } : {}) });
     const nomPos = (r: Row): number => {
       if (scatter && xLin && nF) return xLin.scale(num(r[nF]));
       if (temporal && tScale && nF) return tScale.scale(parseTemporal(r[nF]));
@@ -639,6 +648,12 @@ function layoutPanel(units: UnitGraphic[], rowsIn: Row[], rect: Rect, ctx: Ctx, 
 
 // ---------- Arc / pie (SCENEGRAPH.md §2: 4° polyline approximation) ----------
 function layoutArc(p: Prepared, rect: Rect, ctx: Ctx, opts?: { suppressLegend?: boolean }): SceneNode[] {
+  const arcTips = (Array.isArray(p.unit.encoding?.tooltip) ? p.unit.encoding.tooltip : p.unit.encoding?.tooltip ? [p.unit.encoding.tooltip] : [])
+    .filter((c): c is Channel => !!c && typeof c === "object" && !!(c as Channel).field);
+  const arcTooltip = (datum: Row) => arcTips.map((c) => {
+    const v = datum[c.field!];
+    return { label: (c.title ?? c.field) as string, value: typeof v === "number" ? formatValue(v, c.format, v) : String(v ?? "") };
+  });
   const { theme, measure } = ctx;
   const fs = theme.fontSize;
   const nodes: SceneNode[] = [];
@@ -667,7 +682,7 @@ function layoutArc(p: Prepared, rect: Rect, ctx: Ctx, opts?: { suppressLegend?: 
   for (const rrow of p.data.rows) {
     const frac = total > 0 ? num(rrow[thetaCh.field!]) / total : 0;
     const a1 = a + frac * Math.PI * 2;
-    nodes.push({ type: "path", d: arcPath(cx, cy, rInner, rOuter, a, a1), fill: p.mark.color ?? (colorField ? paletteFor(rrow[colorField]) : theme.hue), ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), meta: { role: "mark", datum: rrow, ...(selMeta ? { selection: selMeta, fields: selFields } : {}) } });
+    nodes.push({ type: "path", d: arcPath(cx, cy, rInner, rOuter, a, a1), fill: p.mark.color ?? (colorField ? paletteFor(rrow[colorField]) : theme.hue), ...(p.mark.opacity !== undefined ? { opacity: p.mark.opacity } : {}), meta: { role: "mark", ...(arcTips.length ? { tooltip: arcTooltip(rrow) } : {}), datum: rrow, ...(selMeta ? { selection: selMeta, fields: selFields } : {}) } });
     a = a1;
   }
   if (wantLegend) {

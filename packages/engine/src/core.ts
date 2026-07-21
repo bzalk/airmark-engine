@@ -3,9 +3,11 @@
 // Zero dependencies. No I/O, no Date.now, no Math.random, no locale.
 
 // ---------- Scene graph ----------
+export type TooltipEntry = { label: string; value: string };
 export type Meta = {
   role?: "mark" | "axis" | "grid" | "label" | "title";
   datum?: Record<string, unknown>;
+  tooltip?: TooltipEntry[];
   selection?: string;
   fields?: string[];
 };
